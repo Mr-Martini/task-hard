@@ -30,4 +30,15 @@ class HomeNotesRepositoryImpl implements HomeNotesRepository {
       return Left(CacheFailure());
     }
   }
+
+  @override
+  Either<Failure, HomeNotes> expireChecker(Iterable notes) {
+    try {
+      final list = dataSource.expireChecker(notes);
+      return Right(list);
+    } catch (e) {
+      print(e);
+      return Left(CacheFailure());
+    }
+  }
 }

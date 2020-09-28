@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +49,22 @@ class _TaskState extends State<Task> {
   Color color;
   String title;
   String note;
+  Timer timer;
 
   @override
   void initState() {
     super.initState();
+    timer = Timer.periodic(
+      Duration(seconds: 4),
+      (timer) {
+        BlocProvider.of<NoteBloc>(context).add(
+          WriteNoteTitle(
+            title: title,
+            key: widget.noteKey,
+          ),
+        );
+      },
+    );
     title = widget.title;
     note = widget.note;
     _titleController.text = widget.title;
@@ -62,6 +76,7 @@ class _TaskState extends State<Task> {
   void dispose() {
     _noteFocusNode.dispose();
     _titleFocusNode.dispose();
+    timer?.cancel();
     super.dispose();
   }
 
@@ -393,6 +408,9 @@ class _TaskState extends State<Task> {
                                 ),
                                 style: TextStyle(
                                   color: getFABchildColor(),
+                                  decoration: note.expired
+                                      ? TextDecoration.lineThrough
+                                      : TextDecoration.none,
                                 ),
                               ),
                               avatar: Icon(

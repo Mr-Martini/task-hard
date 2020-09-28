@@ -33,9 +33,13 @@ class TopMain extends StatelessWidget {
             darkTheme: state.theme.darkTheme,
           );
         } else if (state is Error) {
-          return Container();
+          return Container(
+            color: Colors.red,
+          );
         }
-        return Container();
+        return Container(
+          color: Colors.blue,
+        );
       },
     );
   }

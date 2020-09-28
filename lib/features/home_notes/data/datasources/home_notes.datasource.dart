@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 abstract class HomeNotesDataSource {
   HomeNotesModel getNotes();
   HomeNotesModel listen(Iterable<dynamic> notes);
+  HomeNotesModel expireChecker(Iterable<dynamic> notes);
 }
 
 class HomeNotesDataSourceImpl implements HomeNotesDataSource {
@@ -20,6 +21,16 @@ class HomeNotesDataSourceImpl implements HomeNotesDataSource {
 
   @override
   HomeNotesModel listen(Iterable notes) {
+    return HomeNotesModel.fromIterable(notes);
+  }
+
+  @override
+  HomeNotesModel expireChecker(Iterable notes) {
+    for (var note in notes) {
+      var aux = note;
+      aux['expired'] = true;
+      homeNotesBox.put(aux['key'], aux);
+    }
     return HomeNotesModel.fromIterable(notes);
   }
 }

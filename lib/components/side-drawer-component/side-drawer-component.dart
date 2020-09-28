@@ -98,6 +98,30 @@ class _DrawerComponentState extends State<DrawerComponent> {
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Opacity(
+              opacity: 0.7,
+              child: Text(
+                translate.tags,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {},
+            child: ListTile(
+              leading: Icon(Icons.label),
+              title: Text('example'),
+            ),
+          ),
+          InkWell(
+            onTap: () {},
+            child: ListTile(
+              leading: Icon(Icons.label),
+              title: Text('another example'),
+            ),
+          ),
+          Divider(),
           InkWell(
             onTap: () => Navigator.pop(context),
             child: AboutListTile(

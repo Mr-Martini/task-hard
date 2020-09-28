@@ -3,13 +3,19 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:task_hard/features/home_app_bar/data/datasources/home_app_local_data_source.dart';
+import 'package:task_hard/features/home_app_bar/domain/repositories/home_app_bar_repository.dart';
+import 'package:task_hard/features/home_app_bar/domain/usecases/add_note_usecase.dart';
+import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_bloc.dart';
 import 'package:task_hard/features/note/domain/usecases/archive_note_usecase.dart';
 
 import './features/time_preference/domain/usecases/time_preference_usecase_night.dart';
 import './features/time_preference/domain/usecases/time_preference_usecase_set_afternoon.dart';
+import 'features/home_app_bar/data/repositories/home_app_bar_repository_impl.dart';
 import 'features/home_notes/data/datasources/home_notes.datasource.dart';
 import 'features/home_notes/data/repositories/home_notes_repository_impl.dart';
 import 'features/home_notes/domain/repositories/home_notes_repository.dart';
+import 'features/home_notes/domain/usecases/expire_checker_usecase.dart';
 import 'features/home_notes/domain/usecases/get_notes_usecase.dart';
 import 'features/home_notes/domain/usecases/listen_notes_usecase.dart';
 import 'features/home_notes/presentation/bloc/homenotes_bloc.dart';
@@ -55,6 +61,7 @@ Future<void> init() async {
   await registerTimePreference();
   await registerTheme();
   await registerNote(key);
+  await registerHomeAppBar();
 }
 
 Future<void> registerHomeNotes(List key) async {
@@ -63,6 +70,7 @@ Future<void> registerHomeNotes(List key) async {
     () => HomenotesBloc(
       getNotes: sl(),
       listenNotes: sl(),
+      expireChecker: sl(),
     ),
   );
 
@@ -74,6 +82,11 @@ Future<void> registerHomeNotes(List key) async {
   );
   sl.registerLazySingleton(
     () => ListenNotesUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => ExpireCheckerUseCase(
       repository: sl(),
     ),
   );
@@ -346,4 +359,31 @@ Future<List> getEncKey() async {
     return key;
   }
   return key = List<int>.from(jsonDecode(keyAsString));
+}
+
+Future<void> registerHomeAppBar() async {
+  //Bloc state
+  sl.registerFactory(
+    () => HomeappbarBloc(
+      addNote: sl(),
+    ),
+  );
+
+  //usecase
+  sl.registerLazySingleton(
+    () => AddNoteUseCase(
+      repository: sl(),
+    ),
+  );
+
+  //repositories
+  sl.registerLazySingleton<HomeAppBarRepository>(
+    () => HomeAppBarRepositoryImpl(
+      dataSource: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<HomeAppBarLocalDataSource>(
+    () => HomeAppBarLocalDataSourceImpl(),
+  );
 }

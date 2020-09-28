@@ -28,7 +28,7 @@ class _DeciderState extends State<Decider> {
         return SharedAxisTransition(
           animation: primaryAnimation,
           secondaryAnimation: secondaryAnimation,
-          transitionType: SharedAxisTransitionType.horizontal,
+          transitionType: SharedAxisTransitionType.scaled,
           child: child,
         );
       },

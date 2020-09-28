@@ -153,21 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             physics: BouncingScrollPhysics(),
                             itemCount: data.length,
                             itemBuilder: (BuildContext context, int index) =>
-                                MaterialCard(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  TaskContainer.id,
-                                  arguments: Arguments(
-                                    key: data[index]['key'],
-                                    title: data[index]['title'],
-                                    note: data[index]['note'],
-                                  ),
-                                );
-                              },
-                              title: data[index]['title'],
-                              note: data[index]['note'],
-                            ),
+                                Container(),
                             staggeredTileBuilder: (int index) =>
                                 StaggeredTile.fit(vC.getCrossAxisCellCount),
                             mainAxisSpacing: 4.0,

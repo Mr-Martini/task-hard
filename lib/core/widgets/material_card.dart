@@ -6,10 +6,12 @@ class MaterialCard extends StatelessWidget {
   final String title;
   final String note;
   final String repeat;
-  final Function onTap;
+  final ValueChanged<bool> onTap;
+  final ValueChanged<bool> onLongPress;
   final DateTime reminder;
   final Color color;
   final bool expired;
+  final bool isSelected;
 
   const MaterialCard({
     Key key,
@@ -17,9 +19,11 @@ class MaterialCard extends StatelessWidget {
     @required this.note,
     @required this.repeat,
     @required this.onTap,
+    @required this.onLongPress,
     @required this.reminder,
     @required this.color,
     @required this.expired,
+    @required this.isSelected,
   }) : super(key: key);
 
   @override
@@ -40,14 +44,19 @@ class MaterialCard extends StatelessWidget {
         ),
       ),
       child: InkWell(
-        onTap: onTap,
+        onTap: () {
+          onTap(isSelected);
+        },
+        onLongPress: () {
+          onLongPress(isSelected);
+        },
         child: Container(
           constraints: BoxConstraints(
             maxHeight: 350,
             minHeight: 80,
           ),
           child: Card(
-            color: cardColor,
+            color: isSelected ? Colors.grey : cardColor,
             elevation: 4,
             clipBehavior: Clip.antiAlias,
             child: Column(

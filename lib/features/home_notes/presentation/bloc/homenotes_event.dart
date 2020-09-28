@@ -17,3 +17,12 @@ class ListenHomeNotes extends HomenotesEvent {
   @override
   List<Object> get props => [notes];
 }
+
+class ExpireChecker extends HomenotesEvent {
+  final Iterable<dynamic> notes;
+
+  ExpireChecker({@required this.notes});
+
+  @override
+  List<Object> get props => [notes];
+}
