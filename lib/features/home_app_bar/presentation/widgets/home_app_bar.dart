@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:task_hard/components/color-selector-component/color-selector-component.dart';
 import 'package:task_hard/core/Utils/alert_dialog.dart';
 import 'package:task_hard/core/Utils/home_selected_notes.dart';
+import 'package:task_hard/core/Utils/snackbar_context.dart';
 import 'package:task_hard/core/widgets/profile_icon_button.dart';
 import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_bloc.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
@@ -58,6 +59,24 @@ class _HomeAppBarState extends State<HomeAppBar>
           ..add(DeleteNotes(selectedNotes: selectedNotes))
           ..add(AddNote(selectedNotes: <Note>[]));
         provider.clear();
+        ShowSnackBar.show(
+          context: context,
+          title: widget.translate.done,
+          actionMessage: widget.translate.undo,
+          action: () {
+            BlocProvider.of<HomeappbarBloc>(context)
+              ..add(
+                UndoDeleteNotes(
+                  selectedNotes: selectedNotes,
+                ),
+              )
+              ..add(
+                AddNote(
+                  selectedNotes: <Note>[],
+                ),
+              );
+          },
+        );
         Navigator.pop(context);
       },
       raisedText: widget.translate.delete,

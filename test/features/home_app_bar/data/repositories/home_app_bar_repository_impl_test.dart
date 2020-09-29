@@ -81,4 +81,35 @@ void main() {
       expect(result, Right(modelForDelete));
     },
   );
+
+  final noteForUndoDelete = Note(
+    key: 'key',
+    title: 'title',
+    note: 'note',
+    color: Color(Colors.pink.value),
+    reminder: null,
+    reminderKey: 'key'.hashCode,
+    tags: [],
+    lastEdited: null,
+    repeat: null,
+    expired: null,
+  );
+
+  final modelForUndoDelete = HomeAppBarModel.fromList(<Note>[
+    noteForUndoDelete,
+  ]);
+
+  test(
+    '''should return HomeAppBarEntity with the 
+    specified notes when undoDelete is called''',
+    () {
+      when(dataSource.undoDeleteNotes(any)).thenReturn(modelForUndoDelete);
+
+      final result = impl.undoDelete(<Note>[noteForUndoDelete]);
+
+      verify(dataSource.undoDeleteNotes(<Note>[noteForUndoDelete]));
+      verifyNoMoreInteractions(dataSource);
+      expect(result, Right(modelForUndoDelete));
+    },
+  );
 }

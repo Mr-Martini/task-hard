@@ -9,4 +9,5 @@ abstract class HomeAppBarRepository {
   Either<Failure, HomeAppBarEntity> addNote(List<Note> notes);
   Either<Failure, HomeAppBarEntity> changeColor(Color color, List<Note> notes);
   Either<Failure, HomeAppBarEntity> deleteNotes(List<Note> notes);
+  Either<Failure, HomeAppBarEntity> undoDelete(List<Note> notes);
 }

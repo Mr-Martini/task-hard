@@ -47,7 +47,7 @@ class NoteModel extends Equatable implements Note {
       "key": key,
       "title": title,
       "note": note,
-      "color": color.value,
+      "color": color?.value,
       "reminder": reminder,
       "reminderKey": reminderKey,
       "tags": tags,

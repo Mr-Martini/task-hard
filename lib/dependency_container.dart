@@ -12,6 +12,7 @@ import 'features/home_app_bar/domain/repositories/home_app_bar_repository.dart';
 import 'features/home_app_bar/domain/usecases/add_note_usecase.dart';
 import 'features/home_app_bar/domain/usecases/change_color_usecase.dart';
 import 'features/home_app_bar/domain/usecases/delete_notes_usecase.dart';
+import 'features/home_app_bar/domain/usecases/undo_delete_usecase.dart';
 import 'features/home_app_bar/presentation/bloc/homeappbar_bloc.dart';
 import 'features/home_notes/data/datasources/home_notes.datasource.dart';
 import 'features/home_notes/data/repositories/home_notes_repository_impl.dart';
@@ -370,6 +371,7 @@ Future<void> registerHomeAppBar(List<int> key) async {
       addNote: sl(),
       changeColor: sl(),
       deleteNotes: sl(),
+      undoDelete: sl(),
     ),
   );
 
@@ -386,6 +388,11 @@ Future<void> registerHomeAppBar(List<int> key) async {
   );
   sl.registerLazySingleton(
     () => DeleteNotesAppBarUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => UndoDeleteNotesAppBarUseCase(
       repository: sl(),
     ),
   );

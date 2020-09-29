@@ -34,3 +34,12 @@ class DeleteNotes extends HomeappbarEvent {
   @override
   List<Object> get props => [selectedNotes];
 }
+
+class UndoDeleteNotes extends HomeappbarEvent {
+  final List<Note> selectedNotes;
+
+  UndoDeleteNotes({@required this.selectedNotes});
+
+  @override
+  List<Object> get props => [selectedNotes];
+}
