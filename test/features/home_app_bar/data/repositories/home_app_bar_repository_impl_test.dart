@@ -1,10 +1,11 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:task_hard/features/home_app_bar/data/datasources/home_app_local_data_source.dart';
 import 'package:task_hard/features/home_app_bar/data/model/home_app_bar_model.dart';
 import 'package:task_hard/features/home_app_bar/data/repositories/home_app_bar_repository_impl.dart';
-import 'package:task_hard/features/home_app_bar/domain/entities/home_app_bar_entity.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
 
 class MockLocalDataSource extends Mock implements HomeAppBarLocalDataSource {}
@@ -33,6 +34,36 @@ void main() {
       verify(dataSource.addNote(selectedNotes));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(model));
+    },
+  );
+
+  final List<Note> notes = <Note>[
+    Note(
+      key: 'key',
+      title: 'title',
+      note: 'note',
+      color: Color(Colors.pink.value),
+      reminder: null,
+      reminderKey: 'key'.hashCode,
+      tags: [],
+      lastEdited: null,
+      repeat: null,
+      expired: false,
+    ),
+  ];
+
+  final modelForChangeColor = HomeAppBarModel.fromList(notes);
+
+  test(
+    'should return HomeAppBarModel with the specified color on each note',
+    () {
+      when(dataSource.changeColor(any, any)).thenReturn(modelForChangeColor);
+
+      final result = impl.changeColor(Colors.pink, notes);
+
+      verify(dataSource.changeColor(notes, Colors.pink));
+      verifyNoMoreInteractions(dataSource);
+      expect(result, Right(modelForChangeColor));
     },
   );
 }

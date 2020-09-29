@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:task_hard/core/Utils/home_selected_notes.dart';
 import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_bloc.dart';
 import 'package:task_hard/features/home_app_bar/presentation/widgets/home_app_bar.dart';
 import 'package:task_hard/features/home_notes/presentation/widgets/home_floating_action_button.dart';
@@ -27,16 +29,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     S translate = S.of(context);
 
-    return BlocProvider(
-      create: (context) => sl<HomeappbarBloc>(),
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: HomeAppBar(),
-        drawer: DrawerComponent(),
-        body: HomeProvider(translate: translate, scaffoldKey: _scaffoldKey),
-        floatingActionButton: HomeFloatingActionButton(
-          translate: translate,
-          scaffoldKey: _scaffoldKey,
+    return ChangeNotifierProvider(
+      create: (_) => HomeSelectedNotes(),
+      child: BlocProvider(
+        create: (context) => sl<HomeappbarBloc>(),
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: HomeAppBar(),
+          drawer: DrawerComponent(),
+          body: HomeProvider(translate: translate, scaffoldKey: _scaffoldKey),
+          floatingActionButton: HomeFloatingActionButton(
+            translate: translate,
+            scaffoldKey: _scaffoldKey,
+          ),
         ),
       ),
     );

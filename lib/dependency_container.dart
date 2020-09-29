@@ -3,15 +3,15 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
-import 'package:task_hard/features/home_app_bar/data/datasources/home_app_local_data_source.dart';
-import 'package:task_hard/features/home_app_bar/domain/repositories/home_app_bar_repository.dart';
-import 'package:task_hard/features/home_app_bar/domain/usecases/add_note_usecase.dart';
-import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_bloc.dart';
-import 'package:task_hard/features/note/domain/usecases/archive_note_usecase.dart';
 
 import './features/time_preference/domain/usecases/time_preference_usecase_night.dart';
 import './features/time_preference/domain/usecases/time_preference_usecase_set_afternoon.dart';
+import 'features/home_app_bar/data/datasources/home_app_local_data_source.dart';
 import 'features/home_app_bar/data/repositories/home_app_bar_repository_impl.dart';
+import 'features/home_app_bar/domain/repositories/home_app_bar_repository.dart';
+import 'features/home_app_bar/domain/usecases/add_note_usecase.dart';
+import 'features/home_app_bar/domain/usecases/change_color_usecase.dart';
+import 'features/home_app_bar/presentation/bloc/homeappbar_bloc.dart';
 import 'features/home_notes/data/datasources/home_notes.datasource.dart';
 import 'features/home_notes/data/repositories/home_notes_repository_impl.dart';
 import 'features/home_notes/domain/repositories/home_notes_repository.dart';
@@ -22,6 +22,7 @@ import 'features/home_notes/presentation/bloc/homenotes_bloc.dart';
 import 'features/note/data/datasources/note_local_data_source.dart';
 import 'features/note/data/repositories/note_repository_impl.dart';
 import 'features/note/domain/repositories/note_repository.dart';
+import 'features/note/domain/usecases/archive_note_usecase.dart';
 import 'features/note/domain/usecases/copy_note_usecase.dart';
 import 'features/note/domain/usecases/delete_note.dart';
 import 'features/note/domain/usecases/delete_note_reminder_usecase.dart';
@@ -61,7 +62,7 @@ Future<void> init() async {
   await registerTimePreference();
   await registerTheme();
   await registerNote(key);
-  await registerHomeAppBar();
+  await registerHomeAppBar(key);
 }
 
 Future<void> registerHomeNotes(List key) async {
@@ -361,17 +362,23 @@ Future<List> getEncKey() async {
   return key = List<int>.from(jsonDecode(keyAsString));
 }
 
-Future<void> registerHomeAppBar() async {
+Future<void> registerHomeAppBar(List<int> key) async {
   //Bloc state
   sl.registerFactory(
     () => HomeappbarBloc(
       addNote: sl(),
+      changeColor: sl(),
     ),
   );
 
   //usecase
   sl.registerLazySingleton(
     () => AddNoteUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => ChangeColorUseCase(
       repository: sl(),
     ),
   );
@@ -383,7 +390,18 @@ Future<void> registerHomeAppBar() async {
     ),
   );
 
+  //dataSources
   sl.registerLazySingleton<HomeAppBarLocalDataSource>(
-    () => HomeAppBarLocalDataSourceImpl(),
+    () => HomeAppBarLocalDataSourceImpl(
+      noteBox: sl.get(
+        instanceName: 'home_notes_app_bar',
+      ),
+    ),
+  );
+
+  //external
+  sl.registerSingletonAsync(
+    () async => await Hive.openBox('notes', encryptionKey: key),
+    instanceName: 'home_notes_app_bar',
   );
 }

@@ -15,3 +15,13 @@ class AddNote extends HomeappbarEvent {
   @override
   List<Object> get props => [selectedNotes];
 }
+
+class ChangeColor extends HomeappbarEvent {
+  final List<Note> selectedNotes;
+  final Color color;
+
+  ChangeColor({@required this.selectedNotes, @required this.color});
+
+  @override
+  List<Object> get props => [selectedNotes, color];
+}

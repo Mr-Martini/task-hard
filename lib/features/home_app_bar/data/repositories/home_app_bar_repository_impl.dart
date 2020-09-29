@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import '../../../../core/error/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:task_hard/features/home_app_bar/data/datasources/home_app_local_data_source.dart';
@@ -15,6 +17,17 @@ class HomeAppBarRepositoryImpl implements HomeAppBarRepository {
   Either<Failure, HomeAppBarEntity> addNote(List<Note> notes) {
     try {
       final list = dataSource.addNote(notes);
+      return Right(list);
+    } catch (e) {
+      print(e);
+      return Left(CacheFailure());
+    }
+  }
+
+  @override
+  Either<Failure, HomeAppBarEntity> changeColor(Color color, List<Note> notes) {
+    try {
+      final list = dataSource.changeColor(notes, color);
       return Right(list);
     } catch (e) {
       print(e);
