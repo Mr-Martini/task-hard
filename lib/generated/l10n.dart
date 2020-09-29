@@ -2242,6 +2242,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Archive selected notes?`
+  String get archive_selected_notes {
+    return Intl.message(
+      'Archive selected notes?',
+      name: 'archive_selected_notes',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

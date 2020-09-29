@@ -33,16 +33,22 @@ class _HomePageState extends State<HomePage> {
       create: (_) => HomeSelectedNotes(),
       child: BlocProvider(
         create: (context) => sl<HomeappbarBloc>(),
-        child: Scaffold(
-          key: _scaffoldKey,
-          appBar: HomeAppBar(
-            translate: translate,
-          ),
-          drawer: DrawerComponent(),
-          body: HomeProvider(translate: translate, scaffoldKey: _scaffoldKey),
-          floatingActionButton: HomeFloatingActionButton(
-            translate: translate,
-            scaffoldKey: _scaffoldKey,
+        child: GestureDetector(
+          onTap: () {
+            Scaffold.of(context).hideCurrentSnackBar();
+          },
+          child: Scaffold(
+            key: _scaffoldKey,
+            appBar: HomeAppBar(
+              alertContext: context,
+              translate: translate,
+            ),
+            drawer: DrawerComponent(),
+            body: HomeProvider(translate: translate, scaffoldKey: _scaffoldKey),
+            floatingActionButton: HomeFloatingActionButton(
+              translate: translate,
+              scaffoldKey: _scaffoldKey,
+            ),
           ),
         ),
       ),

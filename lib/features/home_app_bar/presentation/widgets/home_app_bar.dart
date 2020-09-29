@@ -11,12 +11,17 @@ import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_blo
 import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/generated/l10n.dart';
 
-enum HomeAppBarPoUpMenuOption { change_color, delete }
+enum HomeAppBarPoUpMenuOption { change_color, delete, archive }
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final S translate;
+  final BuildContext alertContext;
 
-  HomeAppBar({Key key, @required this.translate}) : super(key: key);
+  HomeAppBar({
+    Key key,
+    @required this.translate,
+    @required this.alertContext,
+  }) : super(key: key);
 
   @override
   _HomeAppBarState createState() => _HomeAppBarState();
@@ -60,7 +65,7 @@ class _HomeAppBarState extends State<HomeAppBar>
           ..add(AddNote(selectedNotes: <Note>[]));
         provider.clear();
         ShowSnackBar.show(
-          context: context,
+          context: widget.alertContext,
           title: widget.translate.done,
           actionMessage: widget.translate.undo,
           action: () {
@@ -81,6 +86,35 @@ class _HomeAppBarState extends State<HomeAppBar>
       },
       raisedText: widget.translate.delete,
       icon: FontAwesomeIcons.trashAlt,
+    );
+  }
+
+  void archiveNotes() {
+    HomeSelectedNotes provider =
+        Provider.of<HomeSelectedNotes>(context, listen: false);
+    List<Note> selectedNotes = List<Note>.from(provider.getNotes);
+    ShowDialog.alertDialog(
+      context: context,
+      flatText: widget.translate.cancel,
+      title: widget.translate.archive_selected_notes,
+      raisedOnPressed: () {
+        BlocProvider.of<HomeappbarBloc>(context)
+          ..add(
+            ArchiveNotes(
+              selectedNotes: selectedNotes,
+            ),
+          )
+          ..add(
+            AddNote(
+              selectedNotes: <Note>[],
+            ),
+          );
+        provider.clear();
+        Navigator.pop(context);
+      },
+      raisedText: widget.translate.archive,
+      icon: Icons.archive,
+      material: true,
     );
   }
 
@@ -121,6 +155,9 @@ class _HomeAppBarState extends State<HomeAppBar>
         break;
       case HomeAppBarPoUpMenuOption.delete:
         deleteNotes();
+        break;
+      case HomeAppBarPoUpMenuOption.archive:
+        archiveNotes();
         break;
       default:
     }
@@ -194,6 +231,14 @@ class _HomeAppBarState extends State<HomeAppBar>
                       child: ListTile(
                         leading: Icon(Icons.delete),
                         title: Text(widget.translate.delete),
+                        subtitle: Divider(),
+                      ),
+                    ),
+                    PopupMenuItem<HomeAppBarPoUpMenuOption>(
+                      value: HomeAppBarPoUpMenuOption.archive,
+                      child: ListTile(
+                        leading: Icon(Icons.archive),
+                        title: Text(widget.translate.archive),
                         subtitle: Divider(),
                       ),
                     ),

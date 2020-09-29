@@ -53,6 +53,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "archiveMinu" : MessageLookupByLibrary.simpleMessage("arquivos"),
     "archive_note" : MessageLookupByLibrary.simpleMessage("Arquivar"),
     "archive_note_question" : MessageLookupByLibrary.simpleMessage("Arquivar nota?"),
+    "archive_selected_notes" : MessageLookupByLibrary.simpleMessage("Arquivar notas selectionadas?"),
     "archived" : MessageLookupByLibrary.simpleMessage("Arquivado"),
     "archived_notes" : MessageLookupByLibrary.simpleMessage("Notas arquivadas"),
     "archives" : MessageLookupByLibrary.simpleMessage("Arquivados"),

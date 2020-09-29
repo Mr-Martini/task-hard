@@ -56,4 +56,15 @@ class HomeAppBarRepositoryImpl implements HomeAppBarRepository {
       return Left(CacheFailure());
     }
   }
+
+  @override
+  Either<Failure, HomeAppBarEntity> archiveNotes(List<Note> notes) {
+    try {
+      final list = dataSource.archiveNotes(notes);
+      return Right(list);
+    } catch (e) {
+      print(e);
+      return Left(CacheFailure());
+    }
+  }
 }

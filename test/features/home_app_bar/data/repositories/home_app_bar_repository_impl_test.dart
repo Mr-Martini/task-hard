@@ -112,4 +112,34 @@ void main() {
       expect(result, Right(modelForUndoDelete));
     },
   );
+
+  final noteForArchiveNotes = Note(
+    key: 'key',
+    title: 'title',
+    note: 'note',
+    color: Color(Colors.pink.value),
+    reminder: null,
+    reminderKey: 'key'.hashCode,
+    tags: [],
+    lastEdited: null,
+    repeat: null,
+    expired: null,
+  );
+
+  final modelForArchiveNotes = HomeAppBarModel.fromList(<Note>[
+    noteForUndoDelete,
+  ]);
+
+  test(
+    'should return a empty instance of HomeAppBarEntity when archiveNote is called',
+    () {
+      when(dataSource.archiveNotes(any)).thenReturn(modelForArchiveNotes);
+
+      final result = impl.archiveNotes(<Note>[noteForArchiveNotes]);
+
+      verify(dataSource.archiveNotes(<Note>[noteForArchiveNotes]));
+      verifyNoMoreInteractions(dataSource);
+      expect(result, Right(modelForArchiveNotes));
+    },
+  );
 }

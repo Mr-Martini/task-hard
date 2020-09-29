@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:task_hard/features/home_app_bar/domain/usecases/archive_note_usecase.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../note/domain/entities/note.dart';
@@ -20,12 +21,14 @@ class HomeappbarBloc extends Bloc<HomeappbarEvent, HomeappbarState> {
   final AddNoteUseCase addNote;
   final ChangeColorUseCase changeColor;
   final DeleteNotesAppBarUseCase deleteNotes;
+  final ArchiveNoteAppBarUseCase archiveNote;
   final UndoDeleteNotesAppBarUseCase undoDelete;
 
   HomeappbarBloc({
     @required this.addNote,
     @required this.changeColor,
     @required this.deleteNotes,
+    @required this.archiveNote,
     @required this.undoDelete,
   }) : super(HomeappbarInitial());
 
@@ -54,6 +57,13 @@ class HomeappbarBloc extends Bloc<HomeappbarEvent, HomeappbarState> {
     } else if (event is UndoDeleteNotes) {
       final list = undoDelete(
         UndoDeleteNotesAppBarParams(
+          selectedNotes: event.selectedNotes,
+        ),
+      );
+      yield* _eitherFailureOrSuccess(list);
+    } else if (event is ArchiveNotes) {
+      final list = archiveNote(
+        ArchiveNoteAppBarParams(
           selectedNotes: event.selectedNotes,
         ),
       );
