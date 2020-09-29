@@ -66,4 +66,19 @@ void main() {
       expect(result, Right(modelForChangeColor));
     },
   );
+
+  final modelForDelete = HomeAppBarModel.fromList(<Note>[]);
+
+  test(
+    'should return HomeAppBarEntity with no notes when deleteNote is called',
+    () {
+      when(dataSource.deleteNotes(any)).thenReturn(modelForDelete);
+
+      final result = impl.deleteNotes(<Note>[]);
+
+      verify(dataSource.deleteNotes(<Note>[]));
+      verifyNoMoreInteractions(dataSource);
+      expect(result, Right(modelForDelete));
+    },
+  );
 }

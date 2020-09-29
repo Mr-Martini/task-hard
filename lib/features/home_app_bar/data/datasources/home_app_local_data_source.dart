@@ -7,6 +7,7 @@ import 'package:task_hard/features/note/domain/entities/note.dart';
 abstract class HomeAppBarLocalDataSource {
   HomeAppBarModel addNote(List<Note> selectedNotes);
   HomeAppBarModel changeColor(List<Note> notes, Color color);
+  HomeAppBarModel deleteNotes(List<Note> selectedNotes);
 }
 
 class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
@@ -30,5 +31,13 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
       noteBox.put(key, noteFromDB);
     }
     return HomeAppBarModel.fromList(newNotes);
+  }
+
+  @override
+  HomeAppBarModel deleteNotes(List<Note> selectedNotes) {
+    for (Note note in selectedNotes) {
+      noteBox.delete(note.key);
+    }
+    return HomeAppBarModel.fromList(<Note>[]);
   }
 }

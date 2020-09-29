@@ -35,7 +35,9 @@ class _HomePageState extends State<HomePage> {
         create: (context) => sl<HomeappbarBloc>(),
         child: Scaffold(
           key: _scaffoldKey,
-          appBar: HomeAppBar(),
+          appBar: HomeAppBar(
+            translate: translate,
+          ),
           drawer: DrawerComponent(),
           body: HomeProvider(translate: translate, scaffoldKey: _scaffoldKey),
           floatingActionButton: HomeFloatingActionButton(

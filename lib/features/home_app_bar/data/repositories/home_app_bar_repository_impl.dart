@@ -34,4 +34,15 @@ class HomeAppBarRepositoryImpl implements HomeAppBarRepository {
       return Left(CacheFailure());
     }
   }
+
+  @override
+  Either<Failure, HomeAppBarEntity> deleteNotes(List<Note> notes) {
+    try {
+      final list = dataSource.deleteNotes(notes);
+      return Right(list);
+    } catch (e) {
+      print(e);
+      return Left(CacheFailure());
+    }
+  }
 }

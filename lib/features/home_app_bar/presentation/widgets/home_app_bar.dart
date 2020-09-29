@@ -1,18 +1,21 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:task_hard/components/color-selector-component/color-selector-component.dart';
+import 'package:task_hard/core/Utils/alert_dialog.dart';
 import 'package:task_hard/core/Utils/home_selected_notes.dart';
 import 'package:task_hard/core/widgets/profile_icon_button.dart';
 import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_bloc.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/generated/l10n.dart';
 
-enum HomeAppBarPoUpMenuOption { change_color }
+enum HomeAppBarPoUpMenuOption { change_color, delete }
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
-  HomeAppBar({Key key}) : super(key: key);
+  final S translate;
+
+  HomeAppBar({Key key, @required this.translate}) : super(key: key);
 
   @override
   _HomeAppBarState createState() => _HomeAppBarState();
@@ -40,6 +43,26 @@ class _HomeAppBarState extends State<HomeAppBar>
   void dispose() {
     leadingAnimation.dispose();
     super.dispose();
+  }
+
+  void deleteNotes() {
+    HomeSelectedNotes provider =
+        Provider.of<HomeSelectedNotes>(context, listen: false);
+    List<Note> selectedNotes = List<Note>.from(provider.getNotes);
+    ShowDialog.alertDialog(
+      context: context,
+      flatText: widget.translate.cancel,
+      title: widget.translate.delete_selected_notes,
+      raisedOnPressed: () {
+        BlocProvider.of<HomeappbarBloc>(context)
+          ..add(DeleteNotes(selectedNotes: selectedNotes))
+          ..add(AddNote(selectedNotes: <Note>[]));
+        provider.clear();
+        Navigator.pop(context);
+      },
+      raisedText: widget.translate.delete,
+      icon: FontAwesomeIcons.trashAlt,
+    );
   }
 
   void showColorChooser() {
@@ -77,14 +100,15 @@ class _HomeAppBarState extends State<HomeAppBar>
       case HomeAppBarPoUpMenuOption.change_color:
         showColorChooser();
         break;
+      case HomeAppBarPoUpMenuOption.delete:
+        deleteNotes();
+        break;
       default:
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    S translate = S.of(context);
-
     return BlocBuilder<HomeappbarBloc, HomeappbarState>(
       builder: (context, state) {
         if (state is HomeappbarInitial) {
@@ -95,7 +119,7 @@ class _HomeAppBarState extends State<HomeAppBar>
             elevation: 0,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             title: Text(
-              translate.app_name,
+              widget.translate.app_name,
               style: TextStyle(
                 color: Theme.of(context).textTheme.headline6.color,
                 fontWeight: FontWeight.bold,
@@ -142,7 +166,15 @@ class _HomeAppBarState extends State<HomeAppBar>
                       value: HomeAppBarPoUpMenuOption.change_color,
                       child: ListTile(
                         leading: Icon(Icons.palette),
-                        title: Text(translate.change_color),
+                        title: Text(widget.translate.change_color),
+                        subtitle: Divider(),
+                      ),
+                    ),
+                    PopupMenuItem<HomeAppBarPoUpMenuOption>(
+                      value: HomeAppBarPoUpMenuOption.delete,
+                      child: ListTile(
+                        leading: Icon(Icons.delete),
+                        title: Text(widget.translate.delete),
                         subtitle: Divider(),
                       ),
                     ),
@@ -166,7 +198,7 @@ class _HomeAppBarState extends State<HomeAppBar>
             elevation: 0,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             title: Text(
-              translate.app_name,
+              widget.translate.app_name,
               style: TextStyle(
                 color: Theme.of(context).textTheme.headline6.color,
                 fontWeight: FontWeight.bold,
