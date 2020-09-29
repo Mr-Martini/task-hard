@@ -11,4 +11,5 @@ abstract class HomeAppBarRepository {
   Either<Failure, HomeAppBarEntity> deleteNotes(List<Note> notes);
   Either<Failure, HomeAppBarEntity> undoDelete(List<Note> notes);
   Either<Failure, HomeAppBarEntity> archiveNotes(List<Note> notes);
+  Either<Failure, HomeAppBarEntity> undoArchive(List<Note> notes);
 }

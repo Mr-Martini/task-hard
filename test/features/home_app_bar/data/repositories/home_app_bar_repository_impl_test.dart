@@ -142,4 +142,36 @@ void main() {
       expect(result, Right(modelForArchiveNotes));
     },
   );
+
+  final noteForUndoArchiveNotes = Note(
+    key: 'key',
+    title: 'title',
+    note: 'note',
+    color: Color(Colors.pink.value),
+    reminder: null,
+    reminderKey: 'key'.hashCode,
+    tags: [],
+    lastEdited: null,
+    repeat: null,
+    expired: null,
+  );
+
+  final modelForUndoArchiveNotes = HomeAppBarModel.fromList(<Note>[
+    noteForUndoDelete,
+  ]);
+
+  test(
+    '''should return HomeAppBarEntity with the 
+    specified notes when undoArchive is called''',
+    () {
+      when(dataSource.undoArchiveNotes(any))
+          .thenReturn(modelForUndoArchiveNotes);
+
+      final result = impl.undoArchive(<Note>[noteForUndoArchiveNotes]);
+
+      verify(dataSource.undoArchiveNotes(<Note>[noteForUndoArchiveNotes]));
+      verifyNoMoreInteractions(dataSource);
+      expect(result, Right(modelForUndoArchiveNotes));
+    },
+  );
 }

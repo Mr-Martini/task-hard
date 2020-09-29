@@ -111,6 +111,24 @@ class _HomeAppBarState extends State<HomeAppBar>
           );
         provider.clear();
         Navigator.pop(context);
+        ShowSnackBar.show(
+          context: widget.alertContext,
+          title: widget.translate.done,
+          actionMessage: widget.translate.undo,
+          action: () {
+            BlocProvider.of<HomeappbarBloc>(context)
+              ..add(
+                UndoArchiveNotes(
+                  selectedNotes: selectedNotes,
+                ),
+              )
+              ..add(
+                AddNote(
+                  selectedNotes: <Note>[],
+                ),
+              );
+          },
+        );
       },
       raisedText: widget.translate.archive,
       icon: Icons.archive,

@@ -9,6 +9,7 @@ abstract class HomeAppBarLocalDataSource {
   HomeAppBarModel changeColor(List<Note> notes, Color color);
   HomeAppBarModel deleteNotes(List<Note> selectedNotes);
   HomeAppBarModel undoDeleteNotes(List<Note> selectedNotes);
+  HomeAppBarModel undoArchiveNotes(List<Note> selectedNotes);
   HomeAppBarModel archiveNotes(List<Note> selectedNotes);
 }
 
@@ -58,5 +59,13 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
       noteBox.delete(note.key);
     }
     return HomeAppBarModel.fromList(<Note>[]);
+  }
+
+  @override
+  HomeAppBarModel undoArchiveNotes(List<Note> selectedNotes) {
+    for (NoteModel note in selectedNotes) {
+      noteBox.put(note.key, note.toMap());
+    }
+    return HomeAppBarModel.fromList(selectedNotes);
   }
 }
