@@ -12,6 +12,7 @@ abstract class HomeAppBarLocalDataSource {
   HomeAppBarModel undoDeleteNotes(List<Note> selectedNotes);
   HomeAppBarModel undoArchiveNotes(List<Note> selectedNotes);
   HomeAppBarModel archiveNotes(List<Note> selectedNotes);
+  HomeAppBarModel deleteReminder(List<Note> selectedNotes);
   HomeAppBarModel putReminder(
       List<Note> selectedNotes, DateTime scheduledDate, String repeat);
 }
@@ -84,6 +85,19 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
       noteBox.put(note.key, noteUpdated.toMap());
       ReminderController.scheduleNotification(note.key, note.title, note.note,
           note.reminderKey, scheduledDate, repeat);
+    }
+    return HomeAppBarModel.fromList(selectedNotes);
+  }
+
+  @override
+  HomeAppBarModel deleteReminder(List<Note> selectedNotes) {
+    for (NoteModel note in selectedNotes) {
+      var noteAsMap = note.toMap();
+      noteAsMap['reminder'] = null;
+      noteAsMap['expired'] = false;
+      NoteModel updatedNote = NoteModel.fromMap(noteAsMap);
+      noteBox.put(note.key, updatedNote.toMap());
+      ReminderController.cancel(note.reminderKey);
     }
     return HomeAppBarModel.fromList(selectedNotes);
   }

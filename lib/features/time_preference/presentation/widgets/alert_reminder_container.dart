@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_hard/core/Utils/alert_reminder_params.dart';
 
 import '../bloc/timepreference_bloc.dart';
 import 'alert_reminder.dart';
@@ -7,7 +8,7 @@ import 'alert_reminder.dart';
 class AlertReminderContainer extends StatelessWidget {
   final bool hasReminder;
   final Function deleteReminder;
-  final ValueChanged<List> updateReminder;
+  final ValueChanged<AlertReminderParams> updateReminder;
 
   AlertReminderContainer({
     @required this.hasReminder,

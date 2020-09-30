@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_hard/core/Utils/alert_reminder_params.dart';
 
 import '../../../../components/dropdown-menu-component/dropdown-menu-component.dart';
 import '../../../../components/text-components/text-generic.dart';
@@ -12,7 +13,7 @@ class AlertReminder extends StatefulWidget {
   final TimeOfDay nightTime;
   final bool hasReminder;
   final Function deleteReminder;
-  final ValueChanged<List<dynamic>> createReminder;
+  final ValueChanged<AlertReminderParams> createReminder;
 
   AlertReminder({
     @required this.hasReminder,
@@ -523,7 +524,10 @@ class _AlertReminderState extends State<AlertReminder> {
           actions: <Widget>[
             widget.hasReminder
                 ? FlatButton(
-                    onPressed: widget.deleteReminder,
+                    onPressed: () {
+                      widget.deleteReminder();
+                      Navigator.pop(context);
+                    },
                     child: TextGeneric(text: translate.delete),
                   )
                 : Container(),
@@ -534,7 +538,15 @@ class _AlertReminderState extends State<AlertReminder> {
             RaisedButton(
               onPressed: () {
                 if (hasError) return;
-                widget.createReminder([date, time, repeat]);
+                DateTime scheduledDate = DateTime(
+                    date.year, date.month, date.day, time.hour, time.minute, 0);
+                widget.createReminder(
+                  AlertReminderParams(
+                    scheduledDate: scheduledDate,
+                    repeat: repeat,
+                  ),
+                );
+                Navigator.pop(context);
               },
               child: TextGeneric(
                 text: translate.Ok,

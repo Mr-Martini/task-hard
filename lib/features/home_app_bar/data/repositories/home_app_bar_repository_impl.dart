@@ -91,4 +91,15 @@ class HomeAppBarRepositoryImpl implements HomeAppBarRepository {
       return Left(CacheFailure());
     }
   }
+
+  @override
+  Either<Failure, HomeAppBarEntity> deleteReminder(List<Note> notes) {
+    try {
+      final list = dataSource.deleteReminder(notes);
+      return Right(list);
+    } catch (e) {
+      print(e);
+      return Left(CacheFailure());
+    }
+  }
 }

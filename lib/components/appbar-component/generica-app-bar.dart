@@ -117,10 +117,7 @@ class _GenericAppBarState extends State<GenericAppBar> {
             context,
             hC,
           ),
-          updateReminder: (List<dynamic> values) {
-            nC.updateReminder(
-                sVC, values[0], values[1], context, values[2], hC);
-          },
+          updateReminder: (values) {},
         );
       },
     );

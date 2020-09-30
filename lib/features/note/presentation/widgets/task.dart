@@ -10,6 +10,7 @@ import 'package:task_hard/components/icon-components/icon-generic.dart';
 import 'package:task_hard/components/text-components/text-generic.dart';
 import 'package:task_hard/controllers/colors-controller/color-controller.dart';
 import 'package:task_hard/core/Utils/alert_dialog.dart';
+import 'package:task_hard/core/Utils/alert_reminder_params.dart';
 import 'package:task_hard/core/Utils/date_formater.dart';
 import 'package:task_hard/core/Utils/snackbar_context.dart';
 import 'package:task_hard/features/note/presentation/bloc/note_bloc.dart';
@@ -80,8 +81,8 @@ class _TaskState extends State<Task> {
     super.dispose();
   }
 
-  void updateReminder(DateTime reminder, TimeOfDay time, String repeat) {
-    Navigator.pop(context);
+  void updateReminder(DateTime reminder, String repeat) {
+    TimeOfDay time = TimeOfDay(hour: reminder.hour, minute: reminder.minute);
     BlocProvider.of<NoteBloc>(context).add(
       WriteNoteReminder(
         reminder: reminder,
@@ -549,10 +550,10 @@ class _TaskState extends State<Task> {
                               return AlertReminderContainer(
                                 hasReminder: reminder != null,
                                 deleteReminder: deleteReminder,
-                                updateReminder: (values) => updateReminder(
-                                  values[0],
-                                  values[1],
-                                  values[2],
+                                updateReminder: (AlertReminderParams params) =>
+                                    updateReminder(
+                                  params.scheduledDate,
+                                  params.repeat,
                                 ),
                               );
                             },

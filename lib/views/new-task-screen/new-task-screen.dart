@@ -981,16 +981,7 @@ class _NewTaskState extends State<NewTask> {
                                 hasReminder: hasReminder,
                                 deleteReminder: () =>
                                     deleteReminder(args.key, args.reminderKey),
-                                updateReminder: (List<dynamic> values) =>
-                                    createReminder(
-                                  args.key,
-                                  args.reminderKey,
-                                  values[0],
-                                  values[1],
-                                  values[2],
-                                  translate,
-                                  contextBuilder,
-                                ),
+                                updateReminder: (values) {},
                               );
                             },
                           );

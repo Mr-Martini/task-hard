@@ -76,3 +76,12 @@ class PutReminder extends HomeappbarEvent {
   @override
   List<Object> get props => [selectedNotes, scheduledDate, repeat];
 }
+
+class DeleteReminder extends HomeappbarEvent {
+  final List<Note> selectedNotes;
+
+  DeleteReminder({@required this.selectedNotes});
+
+  @override
+  List<Object> get props => [selectedNotes];
+}

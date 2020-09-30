@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:task_hard/components/color-selector-component/color-selector-component.dart';
 import 'package:task_hard/core/Utils/alert_dialog.dart';
+import 'package:task_hard/core/Utils/alert_reminder_params.dart';
 import 'package:task_hard/core/Utils/home_selected_notes.dart';
 import 'package:task_hard/core/Utils/snackbar_context.dart';
 import 'package:task_hard/core/widgets/profile_icon_button.dart';
@@ -64,19 +65,23 @@ class _HomeAppBarState extends State<HomeAppBar>
       builder: (_) {
         return AlertReminderContainer(
           hasReminder: hasReminder,
-          deleteReminder: () {},
-          updateReminder: (List<dynamic> values) {
-            DateTime date = values[0];
-            TimeOfDay time = values[1];
-            DateTime scheduledDate = DateTime(
-                date.year, date.month, date.day, time.hour, time.minute, 0);
-            String repeat = values[2];
+          deleteReminder: () {
+            BlocProvider.of<HomeappbarBloc>(context)
+              ..add(
+                DeleteReminder(
+                  selectedNotes: selectedNotes,
+                ),
+              )
+              ..add(AddNote(selectedNotes: <Note>[]));
+            provider.clear();
+          },
+          updateReminder: (AlertReminderParams params) {
             BlocProvider.of<HomeappbarBloc>(context)
               ..add(
                 PutReminder(
                   selectedNotes: selectedNotes,
-                  scheduledDate: scheduledDate,
-                  repeat: repeat,
+                  scheduledDate: params.scheduledDate,
+                  repeat: params.repeat,
                 ),
               )
               ..add(AddNote(selectedNotes: <Note>[]));

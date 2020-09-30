@@ -212,4 +212,34 @@ void main() {
       expect(result, Right(modelForPutReminder));
     },
   );
+
+  final noteForDeleteReminder = Note(
+    key: null,
+    title: null,
+    note: null,
+    color: null,
+    reminder: null,
+    reminderKey: null,
+    tags: null,
+    lastEdited: null,
+    repeat: null,
+    expired: null,
+  );
+
+  final modelForDeleteReminder =
+      HomeAppBarModel.fromList(<Note>[noteForDeleteReminder]);
+
+  test(
+    '''should return HomeAppBarEntity with the 
+    specified notes when deleteReminder is called''',
+    () {
+      when(dataSource.deleteReminder(any)).thenReturn(modelForDeleteReminder);
+
+      final result = impl.deleteReminder(<Note>[noteForDeleteReminder]);
+
+      verify(dataSource.deleteReminder(<Note>[noteForDeleteReminder]));
+      verifyNoMoreInteractions(dataSource);
+      expect(result, Right(modelForDeleteReminder));
+    },
+  );
 }
