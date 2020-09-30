@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:task_hard/features/home_app_bar/domain/usecases/archive_note_usecase.dart';
+import 'package:task_hard/features/home_app_bar/domain/usecases/put_reminder_usecase.dart';
 import 'package:task_hard/features/home_app_bar/domain/usecases/undo_archive_usecase.dart';
 
 import '../../../../core/error/failures.dart';
@@ -24,6 +25,7 @@ class HomeappbarBloc extends Bloc<HomeappbarEvent, HomeappbarState> {
   final DeleteNotesAppBarUseCase deleteNotes;
   final ArchiveNoteAppBarUseCase archiveNote;
   final UndoArchiveAppBarUseCase undoArchive;
+  final PutReminderAppBarUseCase putReminder;
   final UndoDeleteNotesAppBarUseCase undoDelete;
 
   HomeappbarBloc({
@@ -31,6 +33,7 @@ class HomeappbarBloc extends Bloc<HomeappbarEvent, HomeappbarState> {
     @required this.changeColor,
     @required this.deleteNotes,
     @required this.archiveNote,
+    @required this.putReminder,
     @required this.undoArchive,
     @required this.undoDelete,
   }) : super(HomeappbarInitial());
@@ -75,6 +78,18 @@ class HomeappbarBloc extends Bloc<HomeappbarEvent, HomeappbarState> {
       final list = undoArchive(
         UndoArchiveAppBarParams(
           selectedNotes: event.selectedNotes,
+        ),
+      );
+      yield* _eitherFailureOrSuccess(list);
+    } else if (event is PutReminder) {
+      final List<Note> selectedNotes = event.selectedNotes;
+      final DateTime scheduledDate = event.scheduledDate;
+      final String repeat = event.repeat;
+      final list = putReminder(
+        PutReminderAppBarParams(
+          selectedNotes: selectedNotes,
+          scheduledDate: scheduledDate,
+          repeat: repeat,
         ),
       );
       yield* _eitherFailureOrSuccess(list);

@@ -61,3 +61,18 @@ class UndoArchiveNotes extends HomeappbarEvent {
   @override
   List<Object> get props => [selectedNotes];
 }
+
+class PutReminder extends HomeappbarEvent {
+  final List<Note> selectedNotes;
+  final DateTime scheduledDate;
+  final String repeat;
+
+  PutReminder({
+    @required this.selectedNotes,
+    @required this.scheduledDate,
+    @required this.repeat,
+  });
+
+  @override
+  List<Object> get props => [selectedNotes, scheduledDate, repeat];
+}

@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +10,7 @@ import 'package:task_hard/core/Utils/snackbar_context.dart';
 import 'package:task_hard/core/widgets/profile_icon_button.dart';
 import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_bloc.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
+import 'package:task_hard/features/time_preference/presentation/widgets/alert_reminder_container.dart';
 import 'package:task_hard/generated/l10n.dart';
 
 enum HomeAppBarPoUpMenuOption { change_color, delete, archive }
@@ -49,6 +51,40 @@ class _HomeAppBarState extends State<HomeAppBar>
   void dispose() {
     leadingAnimation.dispose();
     super.dispose();
+  }
+
+  void showReminder() {
+    HomeSelectedNotes provider =
+        Provider.of<HomeSelectedNotes>(context, listen: false);
+    List<Note> selectedNotes = List<Note>.from(provider.getNotes);
+    bool hasReminder = selectedNotes.any((element) => element.reminder != null);
+    showModal(
+      context: context,
+      configuration: FadeScaleTransitionConfiguration(),
+      builder: (_) {
+        return AlertReminderContainer(
+          hasReminder: hasReminder,
+          deleteReminder: () {},
+          updateReminder: (List<dynamic> values) {
+            DateTime date = values[0];
+            TimeOfDay time = values[1];
+            DateTime scheduledDate = DateTime(
+                date.year, date.month, date.day, time.hour, time.minute, 0);
+            String repeat = values[2];
+            BlocProvider.of<HomeappbarBloc>(context)
+              ..add(
+                PutReminder(
+                  selectedNotes: selectedNotes,
+                  scheduledDate: scheduledDate,
+                  repeat: repeat,
+                ),
+              )
+              ..add(AddNote(selectedNotes: <Note>[]));
+            provider.clear();
+          },
+        );
+      },
+    );
   }
 
   void deleteNotes() {
@@ -230,7 +266,7 @@ class _HomeAppBarState extends State<HomeAppBar>
               actions: [
                 IconButton(
                   icon: Icon(Icons.add_alert),
-                  onPressed: () {},
+                  onPressed: showReminder,
                 ),
                 PopupMenuButton<HomeAppBarPoUpMenuOption>(
                   onSelected: onSelected,

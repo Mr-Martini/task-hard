@@ -12,4 +12,6 @@ abstract class HomeAppBarRepository {
   Either<Failure, HomeAppBarEntity> undoDelete(List<Note> notes);
   Either<Failure, HomeAppBarEntity> archiveNotes(List<Note> notes);
   Either<Failure, HomeAppBarEntity> undoArchive(List<Note> notes);
+  Either<Failure, HomeAppBarEntity> putReminder(
+      List<Note> notes, DateTime scheduledDate, String repeat);
 }

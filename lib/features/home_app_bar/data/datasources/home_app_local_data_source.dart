@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
+import 'package:task_hard/controllers/reminder-controller/reminder-controller.dart';
 import 'package:task_hard/features/home_app_bar/data/model/home_app_bar_model.dart';
 import 'package:task_hard/features/note/data/model/note_model.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
@@ -11,6 +12,8 @@ abstract class HomeAppBarLocalDataSource {
   HomeAppBarModel undoDeleteNotes(List<Note> selectedNotes);
   HomeAppBarModel undoArchiveNotes(List<Note> selectedNotes);
   HomeAppBarModel archiveNotes(List<Note> selectedNotes);
+  HomeAppBarModel putReminder(
+      List<Note> selectedNotes, DateTime scheduledDate, String repeat);
 }
 
 class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
@@ -65,6 +68,22 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
   HomeAppBarModel undoArchiveNotes(List<Note> selectedNotes) {
     for (NoteModel note in selectedNotes) {
       noteBox.put(note.key, note.toMap());
+    }
+    return HomeAppBarModel.fromList(selectedNotes);
+  }
+
+  @override
+  HomeAppBarModel putReminder(
+      List<Note> selectedNotes, DateTime scheduledDate, String repeat) {
+    for (NoteModel note in selectedNotes) {
+      var noteAsMap = note.toMap();
+      noteAsMap['reminder'] = scheduledDate;
+      noteAsMap['expired'] = false;
+      noteAsMap['repeat'] = repeat;
+      NoteModel noteUpdated = NoteModel.fromMap(noteAsMap);
+      noteBox.put(note.key, noteUpdated.toMap());
+      ReminderController.scheduleNotification(note.key, note.title, note.note,
+          note.reminderKey, scheduledDate, repeat);
     }
     return HomeAppBarModel.fromList(selectedNotes);
   }

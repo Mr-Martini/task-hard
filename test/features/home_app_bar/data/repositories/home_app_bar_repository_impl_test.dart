@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:task_hard/controllers/repeat-controller/repeat-controller.dart';
 import 'package:task_hard/features/home_app_bar/data/datasources/home_app_local_data_source.dart';
 import 'package:task_hard/features/home_app_bar/data/model/home_app_bar_model.dart';
 import 'package:task_hard/features/home_app_bar/data/repositories/home_app_bar_repository_impl.dart';
@@ -172,6 +173,43 @@ void main() {
       verify(dataSource.undoArchiveNotes(<Note>[noteForUndoArchiveNotes]));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForUndoArchiveNotes));
+    },
+  );
+
+  final reminder = DateTime.now();
+  final repeat = Repeat.NO_REPEAT;
+
+  final noteForPutReminder = Note(
+    key: 'key',
+    title: 'title',
+    note: 'note',
+    color: Color(Colors.pink.value),
+    reminder: reminder,
+    reminderKey: 'key'.hashCode,
+    tags: [],
+    lastEdited: null,
+    repeat: repeat,
+    expired: null,
+  );
+
+  final modelForPutReminder = HomeAppBarModel.fromList(<Note>[
+    noteForUndoDelete,
+  ]);
+
+  test(
+    '''should return HomeAppBarEntity with the 
+    specified notes when putReminder is called''',
+    () {
+      when(dataSource.putReminder(any, any, any))
+          .thenReturn(modelForPutReminder);
+
+      final result =
+          impl.putReminder(<Note>[noteForPutReminder], reminder, repeat);
+
+      verify(
+          dataSource.putReminder(<Note>[noteForPutReminder], reminder, repeat));
+      verifyNoMoreInteractions(dataSource);
+      expect(result, Right(modelForPutReminder));
     },
   );
 }
