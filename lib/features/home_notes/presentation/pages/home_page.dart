@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:task_hard/core/Utils/home_selected_notes.dart';
 import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_bloc.dart';
 import 'package:task_hard/features/home_app_bar/presentation/widgets/home_app_bar.dart';
+import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart';
 import 'package:task_hard/features/home_notes/presentation/widgets/home_floating_action_button.dart';
 import 'package:task_hard/features/home_notes/presentation/widgets/home_provider.dart';
 
@@ -31,8 +32,15 @@ class _HomePageState extends State<HomePage> {
 
     return ChangeNotifierProvider(
       create: (_) => HomeSelectedNotes(),
-      child: BlocProvider(
-        create: (context) => sl<HomeappbarBloc>(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => sl<HomeappbarBloc>(),
+          ),
+          BlocProvider(
+            create: (context) => sl<HomenotesBloc>(),
+          ),
+        ],
         child: GestureDetector(
           onTap: () {
             Scaffold.of(context).hideCurrentSnackBar();

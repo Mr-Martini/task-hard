@@ -54,63 +54,60 @@ class _HomeProviderState extends State<HomeProvider> {
   Widget build(BuildContext context) {
     sN = Provider.of<HomeSelectedNotes>(context, listen: false);
 
-    return BlocProvider(
-      create: (context) => sl<hN.HomenotesBloc>(),
-      child: BlocBuilder<hN.HomenotesBloc, hN.HomenotesState>(
-        builder: (context, state) {
-          if (state is hN.HomenotesInitial) {
-            BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
-          } else if (state is hN.Loaded) {
-            if (state.notes.notes.isEmpty) {
-              return EmptyFolder(
-                androidIcon: Icons.note,
-                title: widget.translate.empty_home_notes,
-                iOSIcon: Icons.note,
-                toolTip: widget.translate.notes,
-              );
-            }
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: StaggeredGridView.countBuilder(
-                staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-                mainAxisSpacing: 4.0,
-                crossAxisSpacing: 4.0,
-                scrollDirection: Axis.vertical,
-                physics: BouncingScrollPhysics(),
-                itemCount: state.notes.notes.length,
-                crossAxisCount: 2,
-                itemBuilder: (BuildContext context, int index) {
-                  var note = state.notes.notes[index];
-                  return MaterialCardAppBarContainer(
-                    note: note,
-                    onTap: (bool isSelected) {
-                      if (sN.getNotes.isEmpty) {
-                        Navigator.pushNamed(
-                          context,
-                          TaskContainer.id,
-                          arguments: Arguments(
-                            title: note.title,
-                            note: note.note,
-                            color: note.color ?? Theme.of(context).primaryColor,
-                            key: note.key,
-                            scaffoldKey: widget._scaffoldKey,
-                          ),
-                        );
-                      } else {
-                        addOrRemoveNote(isSelected, note);
-                      }
-                    },
-                    onLongPress: (bool isSelected) {
-                      addOrRemoveNote(isSelected, note);
-                    },
-                  );
-                },
-              ),
+    return BlocBuilder<hN.HomenotesBloc, hN.HomenotesState>(
+      builder: (context, state) {
+        if (state is hN.HomenotesInitial) {
+          BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
+        } else if (state is hN.Loaded) {
+          if (state.notes.notes.isEmpty) {
+            return EmptyFolder(
+              androidIcon: Icons.note,
+              title: widget.translate.empty_home_notes,
+              iOSIcon: Icons.note,
+              toolTip: widget.translate.notes,
             );
           }
-          return Container();
-        },
-      ),
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: StaggeredGridView.countBuilder(
+              staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+              mainAxisSpacing: 4.0,
+              crossAxisSpacing: 4.0,
+              scrollDirection: Axis.vertical,
+              physics: BouncingScrollPhysics(),
+              itemCount: state.notes.notes.length,
+              crossAxisCount: 2,
+              itemBuilder: (BuildContext context, int index) {
+                var note = state.notes.notes[index];
+                return MaterialCardAppBarContainer(
+                  note: note,
+                  onTap: (bool isSelected) {
+                    if (sN.getNotes.isEmpty) {
+                      Navigator.pushNamed(
+                        context,
+                        TaskContainer.id,
+                        arguments: Arguments(
+                          title: note.title,
+                          note: note.note,
+                          color: note.color ?? Theme.of(context).primaryColor,
+                          key: note.key,
+                          scaffoldKey: widget._scaffoldKey,
+                        ),
+                      );
+                    } else {
+                      addOrRemoveNote(isSelected, note);
+                    }
+                  },
+                  onLongPress: (bool isSelected) {
+                    addOrRemoveNote(isSelected, note);
+                  },
+                );
+              },
+            ),
+          );
+        }
+        return Container();
+      },
     );
   }
 }

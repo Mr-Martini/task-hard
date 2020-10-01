@@ -3,18 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:task_hard/components/color-selector-component/color-selector-component.dart';
-import 'package:task_hard/core/Utils/alert_dialog.dart';
-import 'package:task_hard/core/Utils/alert_reminder_params.dart';
-import 'package:task_hard/core/Utils/home_selected_notes.dart';
-import 'package:task_hard/core/Utils/snackbar_context.dart';
-import 'package:task_hard/core/widgets/profile_icon_button.dart';
-import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_bloc.dart';
+import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart'
+    as hN;
 import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/features/time_preference/presentation/widgets/alert_reminder_container.dart';
 import 'package:task_hard/generated/l10n.dart';
 
-enum HomeAppBarPoUpMenuOption { change_color, delete, archive }
+import '../../../../components/color-selector-component/color-selector-component.dart';
+import '../../../../core/Utils/alert_dialog.dart';
+import '../../../../core/Utils/alert_reminder_params.dart';
+import '../../../../core/Utils/home_selected_notes.dart';
+import '../../../../core/Utils/snackbar_context.dart';
+import '../../../../core/widgets/profile_icon_button.dart';
+import '../bloc/homeappbar_bloc.dart';
+
+enum HomeAppBarPoUpMenuOption { change_color, delete, archive, select_all }
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final S translate;
@@ -52,6 +55,27 @@ class _HomeAppBarState extends State<HomeAppBar>
   void dispose() {
     leadingAnimation.dispose();
     super.dispose();
+  }
+
+  List<Note> getAllNotes() {
+    hN.HomenotesState state = BlocProvider.of<hN.HomenotesBloc>(context).state;
+
+    if (state is hN.HomenotesInitial) {
+      return <Note>[];
+    } else if (state is hN.Loaded) {
+      Provider.of<HomeSelectedNotes>(context, listen: false).setList =
+          List<Note>.from(state.notes.notes);
+      return state.notes.notes;
+    }
+    return <Note>[];
+  }
+
+  void selectAll() {
+    BlocProvider.of<HomeappbarBloc>(context).add(
+      AddNote(
+        selectedNotes: getAllNotes(),
+      ),
+    );
   }
 
   void showReminder() {
@@ -218,6 +242,9 @@ class _HomeAppBarState extends State<HomeAppBar>
       case HomeAppBarPoUpMenuOption.archive:
         archiveNotes();
         break;
+      case HomeAppBarPoUpMenuOption.select_all:
+        selectAll();
+        break;
       default:
     }
   }
@@ -298,6 +325,14 @@ class _HomeAppBarState extends State<HomeAppBar>
                       child: ListTile(
                         leading: Icon(Icons.archive),
                         title: Text(widget.translate.archive),
+                        subtitle: Divider(),
+                      ),
+                    ),
+                    PopupMenuItem<HomeAppBarPoUpMenuOption>(
+                      value: HomeAppBarPoUpMenuOption.select_all,
+                      child: ListTile(
+                        leading: Icon(Icons.select_all),
+                        title: Text(widget.translate.select_all),
                         subtitle: Divider(),
                       ),
                     ),
