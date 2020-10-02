@@ -58,6 +58,12 @@ import 'features/time_preference/domain/usecases/time_preference_usecase_morning
 import 'features/time_preference/domain/usecases/time_preference_usecase_set_noon.dart';
 import 'features/time_preference/domain/usecases/time_preference_usecase_set_preference_morning.dart';
 import 'features/time_preference/presentation/bloc/timepreference_bloc.dart';
+import 'features/visualization_option/data/dataSources/visualization_option_local_data_source.dart';
+import 'features/visualization_option/data/repositories/visualization_option_repository_impl.dart';
+import 'features/visualization_option/domain/repositories/visualization_option_repository.dart';
+import 'features/visualization_option/domain/usecases/get_visualization_option_usecase.dart';
+import 'features/visualization_option/domain/usecases/set_visualization_option.dart';
+import 'features/visualization_option/presentation/bloc/visualizationoption_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -69,6 +75,7 @@ Future<void> init() async {
   await registerTheme();
   await registerNote(key);
   await registerHomeAppBar(key);
+  await registerVisualizationOption();
 }
 
 Future<void> registerHomeNotes(List key) async {
@@ -445,5 +452,46 @@ Future<void> registerHomeAppBar(List<int> key) async {
   sl.registerSingletonAsync(
     () async => await Hive.openBox('notes', encryptionKey: key),
     instanceName: 'home_notes_app_bar',
+  );
+}
+
+Future<void> registerVisualizationOption() async {
+  //bloc
+  sl.registerFactory(
+    () => VisualizationOptionBloc(
+      getVisualizationOption: sl(),
+      setVisualizationOption: sl(),
+    ),
+  );
+
+  //usecases
+  sl.registerLazySingleton(
+    () => GetVisualizationOptionUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => SetVisualizationOptionUseCase(
+      repository: sl(),
+    ),
+  );
+
+  //repositories
+  sl.registerLazySingleton<VisualizationOptionRepository>(
+    () => VisualizationOptionRepositoryImpl(
+      dataSource: sl(),
+    ),
+  );
+
+  //datasources
+  sl.registerLazySingleton<VisualizationOptionLocalDataSource>(
+    () => VisualizationOptionLocalDataSourceImpl(
+      box: sl.get(instanceName: 'visu_type'),
+    ),
+  );
+
+  sl.registerSingletonAsync(
+    () async => await Hive.openBox('visu_type'),
+    instanceName: 'visu_type',
   );
 }

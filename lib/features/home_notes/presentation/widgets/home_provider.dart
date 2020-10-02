@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:task_hard/core/Utils/home_selected_notes.dart';
+import 'package:task_hard/features/visualization_option/presentation/bloc/visualizationoption_bloc.dart';
+import 'package:task_hard/features/visualization_option/presentation/widgets/staggered_grid_view.dart';
 
 import '../../../../components/empty-folder-component/empty-folder.dart';
 import '../../../../core/Utils/arguments.dart';
@@ -69,14 +71,8 @@ class _HomeProviderState extends State<HomeProvider> {
           }
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: StaggeredGridView.countBuilder(
-              staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-              mainAxisSpacing: 4.0,
-              crossAxisSpacing: 4.0,
-              scrollDirection: Axis.vertical,
-              physics: BouncingScrollPhysics(),
+            child: CustomStaggeredGridView(
               itemCount: state.notes.notes.length,
-              crossAxisCount: 2,
               itemBuilder: (BuildContext context, int index) {
                 var note = state.notes.notes[index];
                 return MaterialCardAppBarContainer(

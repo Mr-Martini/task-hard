@@ -95,9 +95,11 @@ class _ThemeListTileState extends State<ThemeListTile> {
       title: TextGeneric(text: translate.theme),
       trailing: FlatButton(
         onPressed: () => _onPressed(translate),
-        child: TextGeneric(
-          text: _getThemeName(widget.pref, translate),
-          color: Theme.of(context).buttonColor,
+        child: Text(
+          _getThemeName(widget.pref, translate),
+          style: TextStyle(
+            color: Theme.of(context).buttonColor,
+          ),
         ),
       ),
     );

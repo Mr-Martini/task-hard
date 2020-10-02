@@ -19,6 +19,7 @@ import 'features/taged_notes_home/presentation/bloc/tagednoteshomebloc_bloc.dart
 import 'features/theme/presentation/bloc/theme_bloc.dart';
 import 'features/theme/presentation/widgets/top_main.dart';
 import 'features/time_preference/presentation/bloc/timepreference_bloc.dart';
+import 'features/visualization_option/presentation/bloc/visualizationoption_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -107,6 +108,9 @@ class _TaskHardState extends State<TaskHard> with WidgetsBindingObserver {
         ),
         BlocProvider(
           create: (_) => sl<TagednoteshomeblocBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<VisualizationOptionBloc>(),
         ),
       ],
       child: TopMain(),
