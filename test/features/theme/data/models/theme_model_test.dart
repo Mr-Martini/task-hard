@@ -7,19 +7,14 @@ void main() {
   test(
     'shoud return the [themeModel] when theme model facotry is called',
     () {
-      Color pink = Colors.pink;
-
       themePreference dark = themePreference.dark;
 
-      Map<String, dynamic> map = {
-        'color': pink.toString(),
-        'theme': dark.toString(),
-      };
+      Map<String, dynamic> map = {'color': 'blue', 'theme': dark.toString()};
 
       final themeModel = ThemeModel(
         themeData: null,
         darkTheme: ThemeData.dark().copyWith(
-          buttonColor: pink,
+          buttonColor: Colors.blue,
           textTheme: Typography.whiteRedmond,
           appBarTheme: AppBarTheme(
             iconTheme: IconThemeData(
@@ -27,7 +22,7 @@ void main() {
             ),
           ),
         ),
-        mainColor: pink,
+        mainColor: Colors.blue,
         preference: themePreference.dark.toString(),
       );
 
@@ -40,18 +35,17 @@ void main() {
   test(
     'should return a valid json for a model',
     () {
-      Color pink = Colors.pink;
       themePreference dark = themePreference.dark;
 
       final themeModel = ThemeModel(
         themeData: null,
-        darkTheme: ThemeData.dark().copyWith(buttonColor: pink),
-        mainColor: pink,
+        darkTheme: ThemeData.dark().copyWith(buttonColor: Colors.blue),
+        mainColor: Colors.blue,
         preference: themePreference.dark.toString(),
       );
 
       Map<String, dynamic> map = {
-        'color': pink.toString(),
+        'color': 'blue',
         'theme': dark.toString(),
       };
 

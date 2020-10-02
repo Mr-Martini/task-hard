@@ -16,5 +16,5 @@ class ThemeEntity extends Equatable {
   });
 
   @override
-  List<Object> get props => [themeData, darkTheme, mainColor, preference];
+  List<Object> get props => [themeData, mainColor, darkTheme, preference];
 }

@@ -1,14 +1,16 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_hard/components/decider-component/decider-component.dart';
-import 'package:task_hard/controllers/search-screen-focus/search-screen-focus.dart';
-import 'package:task_hard/controllers/selectedValues-controller/selected-values-controller.dart';
-import 'dart:io';
-import 'package:task_hard/generated/l10n.dart';
 import 'package:provider/provider.dart';
-import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../components/decider-component/decider-component.dart';
 import '../../controllers/database-controller/hive-controller.dart';
+import '../../controllers/search-screen-focus/search-screen-focus.dart';
+import '../../controllers/selectedValues-controller/selected-values-controller.dart';
+import '../../generated/l10n.dart';
 
 class MainScreen extends StatefulWidget {
   static const String id = 'main_screen';
@@ -92,9 +94,7 @@ class _MainScreenState extends State<MainScreen> {
           onTap: (int index) => _onScreenTapped(index, sIC),
           elevation: 12,
           backgroundColor: Theme.of(context).primaryColor,
-          selectedItemColor: Theme.of(context).primaryColor == Colors.white
-              ? Theme.of(context).buttonColor
-              : Colors.white,
+          selectedItemColor: Theme.of(context).buttonColor,
           unselectedItemColor: Colors.grey[500],
         ),
       );

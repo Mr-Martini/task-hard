@@ -20,11 +20,10 @@ void main() {
   );
 
   final expectedModel = ThemeModel(
-    themeData: null,
-    darkTheme: null,
-    mainColor: Colors.blue,
-    preference: null,
-  );
+      themeData: null,
+      darkTheme: null,
+      preference: null,
+      mainColor: Colors.blue);
 
   test(
     'should return [Right<ThemeEntity>] when setMainColor is called',

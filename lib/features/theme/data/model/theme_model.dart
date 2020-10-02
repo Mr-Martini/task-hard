@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:task_hard/core/Utils/accent_colors.dart';
 import 'package:task_hard/features/theme/domain/entities/theme_entity.dart';
 
 class ThemeModel extends Equatable implements ThemeEntity {
@@ -23,88 +24,62 @@ class ThemeModel extends Equatable implements ThemeEntity {
       return null;
     }
 
-    Map<String, Color> _getHiveColor = {
-      Colors.blue.toString(): Colors.blue,
-      Colors.orange.toString(): Colors.orange,
-      Colors.green.toString(): Colors.green,
-      Colors.red.toString(): Colors.red,
-      Colors.deepPurple.toString(): Colors.deepPurple,
-      Colors.purple.toString(): Colors.purple,
-      Colors.amber.toString(): Colors.amber,
-      Colors.teal.toString(): Colors.teal,
-      Colors.pink.toString(): Colors.pink,
-      Colors.black38.toString(): Colors.black38
-    };
-
     String hiveColor = map['color'];
     themePreference preference = _fromString(map['theme']);
-    Color color = _getHiveColor[hiveColor];
+    final Color lightColor = AccentColors.getLightColor(hiveColor);
+    final Color darkColor = AccentColors.getDarkColor(hiveColor);
+
+    ThemeData lightTheme = ThemeData.light().copyWith(
+      buttonColor: lightColor,
+      primaryColor: Colors.white,
+      textTheme: Typography.blackRedmond,
+      appBarTheme: AppBarTheme(
+        iconTheme: IconThemeData(
+          color: Typography.blackRedmond.headline6.color,
+        ),
+      ),
+    );
+
+    ThemeData darkTheme = ThemeData.dark().copyWith(
+      buttonColor: darkColor,
+      textTheme: Typography.whiteRedmond,
+      appBarTheme: AppBarTheme(
+        iconTheme: IconThemeData(
+          color: Typography.whiteRedmond.headline6.color,
+        ),
+      ),
+    );
 
     switch (preference) {
       case themePreference.automatic:
         return ThemeModel(
-          themeData: ThemeData().copyWith(
-            buttonColor: color,
-            primaryColor: Colors.white,
-            textTheme: Typography.blackRedmond,
-            appBarTheme: AppBarTheme(
-              iconTheme: IconThemeData(
-                color: Typography.blackRedmond.headline6.color,
-              ),
-            ),
-          ),
-          darkTheme: ThemeData.dark().copyWith(
-            buttonColor: color,
-            textTheme: Typography.whiteRedmond,
-            appBarTheme: AppBarTheme(
-              iconTheme: IconThemeData(
-                color: Typography.whiteRedmond.headline6.color,
-              ),
-            ),
-          ),
-          mainColor: color,
+          themeData: lightTheme,
+          darkTheme: darkTheme,
+          mainColor: lightColor,
           preference: preference.toString(),
         );
         break;
       case themePreference.light:
         return ThemeModel(
-          themeData: ThemeData.light().copyWith(
-            buttonColor: color,
-            primaryColor: Colors.white,
-            textTheme: Typography.blackRedmond,
-            appBarTheme: AppBarTheme(
-              iconTheme: IconThemeData(
-                color: Typography.blackRedmond.headline6.color,
-              ),
-            ),
-          ),
+          themeData: lightTheme,
           darkTheme: null,
-          mainColor: color,
+          mainColor: lightColor,
           preference: preference.toString(),
         );
         break;
       case themePreference.dark:
         return ThemeModel(
-          darkTheme: ThemeData.dark().copyWith(
-            buttonColor: color,
-            textTheme: Typography.whiteRedmond,
-            appBarTheme: AppBarTheme(
-              iconTheme: IconThemeData(
-                color: Typography.whiteRedmond.headline6.color,
-              ),
-            ),
-          ),
+          darkTheme: darkTheme,
           themeData: null,
-          mainColor: color,
+          mainColor: darkColor,
           preference: preference.toString(),
         );
         break;
       default:
         return ThemeModel(
-          themeData: ThemeData()
-              .copyWith(buttonColor: color, primaryColor: Colors.white),
-          darkTheme: ThemeData.dark().copyWith(buttonColor: color),
-          mainColor: color,
+          themeData: lightTheme,
+          darkTheme: darkTheme,
+          mainColor: lightColor,
           preference: preference.toString(),
         );
     }
@@ -123,12 +98,12 @@ class ThemeModel extends Equatable implements ThemeEntity {
 
     return <String, dynamic>{
       'theme': preference.toString(),
-      'color': mainColor.toString(),
+      'color': AccentColors.getColorName(mainColor),
     };
   }
 
   @override
-  List<Object> get props => [themeData, darkTheme, mainColor, preference];
+  List<Object> get props => [themeData, mainColor, darkTheme, preference];
 }
 
 enum themePreference { dark, light, automatic }

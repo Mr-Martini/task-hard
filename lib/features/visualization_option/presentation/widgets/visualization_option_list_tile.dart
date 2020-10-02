@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_hard/core/Utils/visualization_type.dart';
@@ -13,8 +14,9 @@ class VisualizationOptionListTile extends StatelessWidget {
   }) : super(key: key);
 
   void showAlert(BuildContext context, int type) {
-    showDialog(
+    showModal(
       context: context,
+      configuration: FadeScaleTransitionConfiguration(),
       builder: (context) {
         return AlertVisualizationOption(translate: translate, type: type);
       },
@@ -35,8 +37,8 @@ class VisualizationOptionListTile extends StatelessWidget {
               type == VisualizationType.grid ? Icons.grid_on : Icons.list,
             ),
             title: Text(translate.view_style),
-            trailing: InkWell(
-              onTap: () => showAlert(context, type),
+            trailing: FlatButton(
+              onPressed: () => showAlert(context, type),
               child: Text(
                 type == VisualizationType.grid
                     ? translate.staggered

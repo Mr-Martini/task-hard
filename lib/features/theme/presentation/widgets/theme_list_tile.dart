@@ -1,8 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_hard/features/theme/presentation/bloc/theme_bloc.dart';
+import 'package:task_hard/features/theme/presentation/widgets/theme_alert_dialog.dart';
 
 import '../../../../components/icon-components/icon-generic.dart';
 import '../../../../components/text-components/text-generic.dart';
@@ -19,54 +18,12 @@ class ThemeListTile extends StatefulWidget {
 }
 
 class _ThemeListTileState extends State<ThemeListTile> {
-  void _changeTheme(String value) {
-    themePreference preference;
-    for (themePreference status in themePreference.values) {
-      if (status.toString() == value) {
-        preference = status;
-      }
-    }
-    BlocProvider.of<ThemeBloc>(context).add(SetTheme(preference: preference));
-    Navigator.pop(context);
-  }
-
   void _onPressed(S translate) {
     showModal(
       context: context,
-      builder: (context) => AlertDialog(
-        title: TextGeneric(text: translate.choose_a_option),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Radio(
-                activeColor: Theme.of(context).buttonColor,
-                value: themePreference.automatic.toString(),
-                groupValue: widget.pref,
-                onChanged: _changeTheme,
-              ),
-              title: TextGeneric(text: translate.automatic),
-            ),
-            ListTile(
-              leading: Radio(
-                activeColor: Theme.of(context).buttonColor,
-                value: themePreference.light.toString(),
-                groupValue: widget.pref,
-                onChanged: _changeTheme,
-              ),
-              title: TextGeneric(text: translate.light),
-            ),
-            ListTile(
-              leading: Radio(
-                activeColor: Theme.of(context).buttonColor,
-                value: themePreference.dark.toString(),
-                groupValue: widget.pref,
-                onChanged: _changeTheme,
-              ),
-              title: TextGeneric(text: translate.dark),
-            ),
-          ],
-        ),
+      builder: (context) => ThemeAlertDialog(
+        translate: translate,
+        pref: widget.pref,
       ),
     );
   }

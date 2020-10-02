@@ -20,7 +20,7 @@ void main() {
 
   final expectedModel = ThemeModel(
     themeData: ThemeData.light().copyWith(
-      buttonColor: Colors.pink,
+      buttonColor: Colors.blue,
       primaryColor: Colors.white,
       textTheme: Typography.blackRedmond,
       appBarTheme: AppBarTheme(
@@ -30,13 +30,13 @@ void main() {
       ),
     ),
     preference: themePreference.light.toString(),
+    mainColor: Colors.blue,
     darkTheme: null,
-    mainColor: Colors.pink,
   );
 
   final model = <String, dynamic>{
     "theme": themePreference.automatic.toString(),
-    "color": Colors.pink.toString()
+    "color": 'blue'
   };
   test(
     'should return ThemeEntity with the specified theme',
@@ -51,7 +51,7 @@ void main() {
 
   final expectedColorModel = ThemeModel(
     themeData: ThemeData().copyWith(
-      buttonColor: Colors.red,
+      buttonColor: Colors.blue,
       primaryColor: Colors.white,
       textTheme: Typography.blackRedmond,
       appBarTheme: AppBarTheme(
@@ -61,8 +61,9 @@ void main() {
       ),
     ),
     preference: themePreference.automatic.toString(),
+    mainColor: Colors.blue,
     darkTheme: ThemeData.dark().copyWith(
-      buttonColor: Colors.red,
+      buttonColor: Colors.blue,
       textTheme: Typography.whiteRedmond,
       appBarTheme: AppBarTheme(
         iconTheme: IconThemeData(
@@ -70,12 +71,11 @@ void main() {
         ),
       ),
     ),
-    mainColor: Colors.red,
   );
 
   final colorModel = {
     'theme': themePreference.automatic.toString(),
-    'color': Colors.red.toString(),
+    'color': 'blue',
   };
   test(
     'should return ThemeEntity with the specified color',

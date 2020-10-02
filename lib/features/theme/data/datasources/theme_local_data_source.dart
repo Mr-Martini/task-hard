@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:task_hard/core/Utils/accent_colors.dart';
 import 'package:task_hard/features/theme/data/model/theme_model.dart';
 import 'package:meta/meta.dart';
 
@@ -64,7 +65,7 @@ class ThemeLocalDataSourceImpl implements ThemeLocalDataSource {
   ThemeModel setColor(Color color) {
     dynamic map = themeBox.get(THEME_BOX);
 
-    map['color'] = color.toString();
+    map['color'] = AccentColors.getColorName(color);
 
     themeBox.put(THEME_BOX, map);
 
