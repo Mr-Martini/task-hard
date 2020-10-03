@@ -1,23 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:task_hard/components/appbar-component/generica-app-bar.dart';
-import 'package:task_hard/components/empty-folder-component/empty-folder.dart';
-import 'package:task_hard/components/icon-components/icon-generic.dart';
-import 'package:task_hard/components/side-drawer-component/side-drawer-component.dart';
-import 'package:task_hard/controllers/common/notifications-common.dart';
-import 'package:task_hard/controllers/common/sort-timestamp.dart';
-import 'package:task_hard/controllers/database-controller/hive-controller.dart';
-import 'package:task_hard/controllers/selectedValues-controller/selected-values-controller.dart';
-import 'package:task_hard/controllers/view-controller/view-controller.dart';
-import 'package:task_hard/core/widgets/material_card.dart';
-import 'package:task_hard/features/note/presentation/pages/task_container.dart';
-import 'package:task_hard/views/new-task-screen/new-task-screen.dart';
-import 'package:provider/provider.dart';
-import 'package:task_hard/generated/l10n.dart';
-import 'package:uuid/uuid.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../components/appbar-component/generica-app-bar.dart';
+import '../../components/empty-folder-component/empty-folder.dart';
+import '../../components/icon-components/icon-generic.dart';
+import '../../controllers/common/notifications-common.dart';
+import '../../controllers/common/sort-timestamp.dart';
+import '../../controllers/database-controller/hive-controller.dart';
+import '../../controllers/selectedValues-controller/selected-values-controller.dart';
+import '../../controllers/view-controller/view-controller.dart';
+import '../../core/widgets/side-drawer-component.dart';
+import '../../generated/l10n.dart';
+import '../new-task-screen/new-task-screen.dart';
 
 class Arguments {
   final String key;

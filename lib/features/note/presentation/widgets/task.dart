@@ -14,6 +14,9 @@ import 'package:task_hard/core/Utils/alert_reminder_params.dart';
 import 'package:task_hard/core/Utils/date_formater.dart';
 import 'package:task_hard/core/Utils/snackbar_context.dart';
 import 'package:task_hard/features/note/presentation/bloc/note_bloc.dart';
+import 'package:task_hard/features/note/presentation/widgets/add_tag.dart';
+import 'package:task_hard/features/note/presentation/widgets/note_tags.dart';
+import 'package:task_hard/features/note/presentation/widgets/task_reminder.dart';
 import 'package:task_hard/features/time_preference/presentation/widgets/alert_reminder_container.dart';
 import 'package:task_hard/generated/l10n.dart';
 import 'package:uuid/uuid.dart';
@@ -58,12 +61,17 @@ class _TaskState extends State<Task> {
     timer = Timer.periodic(
       Duration(seconds: 4),
       (timer) {
-        BlocProvider.of<NoteBloc>(context).add(
-          WriteNoteTitle(
-            title: title,
-            key: widget.noteKey,
-          ),
-        );
+        if (reminder != null) {
+          DateTime now = DateTime.now();
+          if (reminder.isBefore(now)) {
+            BlocProvider.of<NoteBloc>(context).add(
+              WriteNoteColor(
+                color: color,
+                key: widget.noteKey,
+              ),
+            );
+          }
+        }
       },
     );
     title = widget.title;
@@ -274,6 +282,10 @@ class _TaskState extends State<Task> {
           appBar: AppBar(
             elevation: 0,
             leading: BackButton(),
+            title: NoteTags(
+              chipBackgroundColor: getFABcolor(),
+              textColor: getFABchildColor(),
+            ),
             actions: [
               IconButton(
                 icon: Icon(Icons.archive),
@@ -381,50 +393,12 @@ class _TaskState extends State<Task> {
                   SizedBox(
                     height: 16,
                   ),
-                  BlocBuilder<NoteBloc, NoteState>(
-                    builder: (context, state) {
-                      if (state is NoteInitial) {
-                        BlocProvider.of<NoteBloc>(context).add(
-                          GetNoteByKey(
-                            key: widget.noteKey,
-                          ),
-                        );
-                      }
-                      if (state is Loaded) {
-                        if (state.note == null) return Container();
-                        if (state.note.reminder == null) return Container();
-                        var note = state.note;
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Chip(
-                              backgroundColor: getFABcolor(),
-                              clipBehavior: Clip.antiAlias,
-                              label: Text(
-                                DateFormater.format(
-                                  context: context,
-                                  translate: translate,
-                                  date: note.reminder,
-                                  repeat: note.repeat,
-                                ),
-                                style: TextStyle(
-                                  color: getFABchildColor(),
-                                  decoration: note.expired
-                                      ? TextDecoration.lineThrough
-                                      : TextDecoration.none,
-                                ),
-                              ),
-                              avatar: Icon(
-                                Icons.alarm,
-                                color: getFABchildColor(),
-                              ),
-                            ),
-                          ],
-                        );
-                      }
-                      return Container();
-                    },
-                  )
+                  TaskReminder(
+                    noteKey: widget.noteKey,
+                    fabChildColor: getFABchildColor(),
+                    fabColor: getFABcolor(),
+                    translate: translate,
+                  ),
                 ],
               ),
             ),
@@ -461,6 +435,10 @@ class _TaskState extends State<Task> {
                       InkWell(
                         onTap: () {
                           Navigator.pop(context);
+                          showModal(
+                            context: context,
+                            builder: (context) => AddTag(),
+                          );
                         },
                         child: ListTile(
                           title: TextGeneric(text: translate.add_a_tag),

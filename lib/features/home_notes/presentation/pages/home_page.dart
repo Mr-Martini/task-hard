@@ -9,7 +9,7 @@ import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.d
 import 'package:task_hard/features/home_notes/presentation/widgets/home_floating_action_button.dart';
 import 'package:task_hard/features/home_notes/presentation/widgets/home_provider.dart';
 
-import '../../../../components/side-drawer-component/side-drawer-component.dart';
+import '../../../../core/widgets/side-drawer-component.dart';
 
 import '../../../../dependency_container.dart';
 import '../../../../generated/l10n.dart';
