@@ -11,7 +11,6 @@ import 'package:task_hard/components/text-components/text-generic.dart';
 import 'package:task_hard/controllers/colors-controller/color-controller.dart';
 import 'package:task_hard/core/Utils/alert_dialog.dart';
 import 'package:task_hard/core/Utils/alert_reminder_params.dart';
-import 'package:task_hard/core/Utils/date_formater.dart';
 import 'package:task_hard/core/Utils/snackbar_context.dart';
 import 'package:task_hard/features/note/presentation/bloc/note_bloc.dart';
 import 'package:task_hard/features/note/presentation/widgets/add_tag.dart';
@@ -65,8 +64,7 @@ class _TaskState extends State<Task> {
           DateTime now = DateTime.now();
           if (reminder.isBefore(now)) {
             BlocProvider.of<NoteBloc>(context).add(
-              WriteNoteColor(
-                color: color,
+              GetNoteByKey(
                 key: widget.noteKey,
               ),
             );
@@ -104,7 +102,6 @@ class _TaskState extends State<Task> {
   }
 
   void deleteReminder() {
-    Navigator.pop(context);
     BlocProvider.of<NoteBloc>(context).add(
       DeleteNoteReminder(
         key: widget.noteKey,
@@ -173,6 +170,14 @@ class _TaskState extends State<Task> {
         );
         break;
     }
+  }
+
+  bool hasReminder() {
+    NoteState state = BlocProvider.of<NoteBloc>(context).state;
+    if (state is Loaded) {
+      return state.note?.reminder != null;
+    }
+    return false;
   }
 
   void archiveNote(S translate) {
@@ -526,7 +531,7 @@ class _TaskState extends State<Task> {
                             context: context,
                             builder: (context) {
                               return AlertReminderContainer(
-                                hasReminder: reminder != null,
+                                hasReminder: hasReminder(),
                                 deleteReminder: deleteReminder,
                                 updateReminder: (AlertReminderParams params) =>
                                     updateReminder(

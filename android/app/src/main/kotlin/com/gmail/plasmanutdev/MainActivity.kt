@@ -12,7 +12,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import com.google.gson.Gson
 import io.flutter.embedding.android.FlutterActivity
@@ -189,14 +188,8 @@ class MainActivity : FlutterActivity() {
 
         enableReceiver()
 
-        val scheduledDate = Calendar.getInstance().apply {
-            timeInMillis = time
-        }
-
         val calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, scheduledDate.get(Calendar.HOUR_OF_DAY))
-            set(Calendar.MINUTE, scheduledDate.get(Calendar.MINUTE))
+            timeInMillis = time
         }
 
         if (alarmIntent != null && alarmManager != null) {
@@ -221,7 +214,7 @@ class MainActivity : FlutterActivity() {
         notificationIntent.putExtra("notification", buildNotification(title, message, id))
 
         val calendar: Calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
+            timeInMillis = time
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
         }
@@ -255,23 +248,17 @@ class MainActivity : FlutterActivity() {
 
 
         val calendar: Calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.DAY_OF_WEEK, day)
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
+            timeInMillis = time
         }
 
         val alarmIntent = PendingIntent.getBroadcast(this, id, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
 
-
-        val weekly = 7L * 24L * 60L * 60L * 1000L
-
         enableReceiver()
 
         if (alarmManager != null && alarmIntent != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, weekly, alarmIntent)
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
         }
 
         val gson = Gson()
@@ -294,8 +281,9 @@ class MainActivity : FlutterActivity() {
         if (alarmManager != null && pendingIntent != null) {
             alarmManager.cancel(pendingIntent)
         }
-
-        SharedPrefs(this).delete(id)
+        val sharedPrefs = SharedPrefs(this)
+        val notification = sharedPrefs.getNotification(id)
+        sharedPrefs.delete(id)
     }
 
     private fun getAlarmIntent(): Intent {

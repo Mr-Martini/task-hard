@@ -11,7 +11,6 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
-import android.os.SystemClock
 import android.util.Log
 import androidx.core.app.JobIntentService
 import androidx.core.app.NotificationCompat
@@ -93,16 +92,8 @@ class ReScheduledNotificationsService : JobIntentService() {
             return
         } else {
             calendar.apply {
-                timeInMillis = System.currentTimeMillis()
-                set(Calendar.HOUR_OF_DAY, scheduledDate.get(Calendar.HOUR_OF_DAY))
-                set(Calendar.MINUTE, scheduledDate.get(Calendar.MINUTE))
+                timeInMillis = time
             }
-        }
-
-        calendar.apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, scheduledDate.get(Calendar.HOUR_OF_DAY))
-            set(Calendar.MINUTE, scheduledDate.get(Calendar.MINUTE))
         }
 
         val notificationIntent = Intent(context, NotificationReceiver::class.java)
@@ -124,7 +115,6 @@ class ReScheduledNotificationsService : JobIntentService() {
     private fun dailyNotification(title: String, message: String, id: Int, hour: Int, minute: Int, time: Long, context: Context) {
 
         val calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
         }
@@ -132,7 +122,7 @@ class ReScheduledNotificationsService : JobIntentService() {
         val now = Calendar.getInstance()
 
         if (calendar.before(now)) {
-            calendar.add(Calendar.DAY_OF_MONTH,1)
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
 
         val notificationIntent = Intent(context, NotificationReceiver::class.java)
@@ -153,17 +143,23 @@ class ReScheduledNotificationsService : JobIntentService() {
 
     private fun weeklyNotification(title: String, message: String, id: Int, hour: Int, minute: Int, day: Int, time: Long, context: Context) {
 
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
+        val calendar = Calendar.getInstance()
+
+        while (calendar.get(Calendar.DAY_OF_WEEK) != day) {
+            calendar.add(Calendar.DAY_OF_WEEK, 1)
+        }
+
+
+        calendar.apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
-            set(Calendar.DAY_OF_WEEK, day)
         }
+
 
         val now = Calendar.getInstance()
 
         if (calendar.before(now)) {
-            calendar.add(Calendar.DAY_OF_MONTH,7)
+            calendar.add(Calendar.DAY_OF_MONTH, 7)
         }
 
         val notificationIntent = Intent(context, NotificationReceiver::class.java)
@@ -175,10 +171,8 @@ class ReScheduledNotificationsService : JobIntentService() {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
 
-        val weekly = 7L * 24L * 60L * 60L * 1000L
-
         if (alarmManager != null && alarmIntent != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, weekly, alarmIntent)
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
         }
     }
 

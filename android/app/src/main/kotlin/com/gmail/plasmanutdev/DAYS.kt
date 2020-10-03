@@ -9,5 +9,5 @@ enum class DAYS(val convert: Int) {
     WEDNESDAY(Calendar.WEDNESDAY),
     THURSDAY(Calendar.THURSDAY),
     FRIDAY(Calendar.FRIDAY),
-    SATURDAY(Calendar.FRIDAY)
+    SATURDAY(Calendar.SATURDAY)
 }

@@ -87,6 +87,8 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
 
     noteBox.put(key, note);
 
+    ReminderController.cancel(key.hashCode);
+
     return NoteModel.fromMap(note);
   }
 

@@ -97,7 +97,7 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
       noteAsMap['expired'] = false;
       NoteModel updatedNote = NoteModel.fromMap(noteAsMap);
       noteBox.put(note.key, updatedNote.toMap());
-      ReminderController.cancel(note.reminderKey);
+      ReminderController.cancel(note.reminderKey ?? note.key.hashCode);
     }
     return HomeAppBarModel.fromList(selectedNotes);
   }

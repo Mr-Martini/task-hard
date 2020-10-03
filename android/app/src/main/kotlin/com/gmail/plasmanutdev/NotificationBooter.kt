@@ -7,7 +7,6 @@ import android.content.Intent
 class NotificationBooter : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent?) {
-
         if (intent != null) {
             when (intent.action) {
                 Intent.ACTION_BOOT_COMPLETED -> {

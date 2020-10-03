@@ -37,7 +37,7 @@ abstract class Days {
       'Fri': _friday,
       'sex': _friday,
       'Sat': _saturday,
-      'sab': _saturday,
+      'sáb': _saturday,
     };
     return days[day];
   }
