@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:task_hard/generated/l10n.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_hard/features/note/presentation/bloc/note_bloc.dart';
+
+import '../../../../dependency_container.dart';
+import '../../../../generated/l10n.dart';
+import 'add_note_body.dart';
 
 class AddTag extends StatefulWidget {
   AddTag({Key key}) : super(key: key);
@@ -36,47 +41,53 @@ class _AddTagState extends State<AddTag> {
       onTap: () {
         _focusNode.unfocus();
       },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.close),
-            onPressed: () => Navigator.pop(context),
-          ),
-          title: Container(
-            height: 40,
-            child: TextField(
-              focusNode: _focusNode,
-              textAlignVertical: TextAlignVertical.center,
-              onChanged: onChanged,
-              cursorColor: Theme.of(context).buttonColor,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 1,
+      child: BlocProvider(
+        create: (context) => sl<NoteBloc>(),
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () => Navigator.pop(context),
+            ),
+            title: Container(
+              height: 40,
+              child: TextField(
+                focusNode: _focusNode,
+                textAlignVertical: TextAlignVertical.center,
+                onChanged: onChanged,
+                cursorColor: Theme.of(context).buttonColor,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      width: 1,
+                    ),
                   ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey,
-                    width: 1,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
                   ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).buttonColor,
-                    width: 2,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).buttonColor,
+                      width: 2,
+                    ),
                   ),
                 ),
               ),
             ),
+            actions: [
+              FlatButton(
+                textColor: Theme.of(context).buttonColor,
+                onPressed: () {},
+                child: Text(translate.add),
+              ),
+            ],
           ),
-          actions: [
-            FlatButton(
-              textColor: Theme.of(context).buttonColor,
-              onPressed: () {},
-              child: Text(translate.add),
-            ),
-          ],
+          body: AddTagBody(
+            translate: translate,
+          ),
         ),
       ),
     );

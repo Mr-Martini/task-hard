@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,9 +21,12 @@ import 'features/theme/presentation/bloc/theme_bloc.dart';
 import 'features/theme/presentation/widgets/top_main.dart';
 import 'features/time_preference/presentation/bloc/timepreference_bloc.dart';
 import 'features/visualization_option/presentation/bloc/visualizationoption_bloc.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
   LicenseRegistry.addLicense(() async* {
     final license = await rootBundle.loadString('google_fonts/LICENSE.txt');

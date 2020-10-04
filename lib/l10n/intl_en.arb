@@ -220,5 +220,6 @@
   "should_tagged_notes_appear_home_subtitle": "Should tagged notes apear on home screen?",
   "choose_a_option": "Choose a option",
   "move_note_to_trash": "Move note to trash?",
-  "archive_selected_notes": "Archive selected notes?"
+  "archive_selected_notes": "Archive selected notes?",
+  "empty_note_discarted": "Empty note discarted"
 }

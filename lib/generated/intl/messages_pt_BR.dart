@@ -106,6 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "eight" : MessageLookupByLibrary.simpleMessage("Oito"),
     "eight_am" : MessageLookupByLibrary.simpleMessage("8:00 AM"),
     "empty_home_notes" : MessageLookupByLibrary.simpleMessage("Toque no botão flutuante para criar uma nota"),
+    "empty_note_discarted" : MessageLookupByLibrary.simpleMessage("Nota vazia descartada"),
     "empty_notes" : MessageLookupByLibrary.simpleMessage("Nenhuma nota criada"),
     "empty_trash" : MessageLookupByLibrary.simpleMessage("Lixeira está vazia"),
     "feb" : MessageLookupByLibrary.simpleMessage("Fev"),

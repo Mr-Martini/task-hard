@@ -220,5 +220,6 @@
   "should_tagged_notes_appear_home_subtitle": "Notas marcadas devem aparecer na tela inicial?",
   "choose_a_option": "Escolha uma opção",
   "move_note_to_trash": "Mover nota para lixeira?",
-  "archive_selected_notes": "Arquivar notas selectionadas?"
+  "archive_selected_notes": "Arquivar notas selectionadas?",
+  "empty_note_discarted": "Nota vazia descartada"
 }

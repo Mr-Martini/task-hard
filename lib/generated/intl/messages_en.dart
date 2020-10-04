@@ -106,6 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "eight" : MessageLookupByLibrary.simpleMessage("Eight"),
     "eight_am" : MessageLookupByLibrary.simpleMessage("8:00 AM"),
     "empty_home_notes" : MessageLookupByLibrary.simpleMessage("Create a note tapping in the floating button"),
+    "empty_note_discarted" : MessageLookupByLibrary.simpleMessage("Empty note discarted"),
     "empty_notes" : MessageLookupByLibrary.simpleMessage("Empty"),
     "empty_trash" : MessageLookupByLibrary.simpleMessage("Trash is empty"),
     "feb" : MessageLookupByLibrary.simpleMessage("Feb"),

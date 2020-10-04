@@ -2252,6 +2252,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Empty note discarted`
+  String get empty_note_discarted {
+    return Intl.message(
+      'Empty note discarted',
+      name: 'empty_note_discarted',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

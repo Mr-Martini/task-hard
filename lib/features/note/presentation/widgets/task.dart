@@ -11,6 +11,7 @@ import 'package:task_hard/components/text-components/text-generic.dart';
 import 'package:task_hard/controllers/colors-controller/color-controller.dart';
 import 'package:task_hard/core/Utils/alert_dialog.dart';
 import 'package:task_hard/core/Utils/alert_reminder_params.dart';
+import 'package:task_hard/core/Utils/input_validation.dart';
 import 'package:task_hard/core/Utils/snackbar_context.dart';
 import 'package:task_hard/features/note/presentation/bloc/note_bloc.dart';
 import 'package:task_hard/features/note/presentation/widgets/add_tag.dart';
@@ -148,6 +149,14 @@ class _TaskState extends State<Task> {
           icon: Icons.copy,
           raisedText: translate.Ok,
           raisedOnPressed: () {
+            if (InputValidation.isEmpty(title) &&
+                InputValidation.isEmpty(note)) {
+              Navigator.pop(context);
+              ShowSnackBar.show(
+                  context: context, title: translate.note_is_empty);
+
+              return;
+            }
             String key = Uuid().v4();
             BlocProvider.of<NoteBloc>(context).add(
               CopyNote(
@@ -259,285 +268,263 @@ class _TaskState extends State<Task> {
   Widget build(BuildContext context) {
     S translate = S.of(context);
 
-    return GestureDetector(
-      onTap: () {
-        _noteFocusNode.unfocus();
-        _titleFocusNode.unfocus();
-        Scaffold.of(context).hideCurrentSnackBar();
+    return WillPopScope(
+      onWillPop: () async {
+        if (InputValidation.isEmpty(title) && InputValidation.isEmpty(note)) {
+          BlocProvider.of<NoteBloc>(context)
+            ..add(
+              DeleteNoteReminder(
+                key: widget.noteKey,
+              ),
+            )
+            ..add(
+              DeleteNote(
+                key: widget.noteKey,
+              ),
+            );
+          ShowSnackBar.show(
+            title: translate.empty_note_discarted,
+            context: widget.scaffoldKey.currentContext,
+          );
+        }
+        return true;
       },
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          floatingActionButtonTheme: FloatingActionButtonThemeData(
-            backgroundColor: getFABcolor(),
-          ),
-          scaffoldBackgroundColor: getScaffoldColor(),
-          iconTheme: IconThemeData(
-            color: getIconsColor(),
-          ),
-          appBarTheme: AppBarTheme(
-            color: getScaffoldColor(),
+      child: GestureDetector(
+        onTap: () {
+          _noteFocusNode.unfocus();
+          _titleFocusNode.unfocus();
+          Scaffold.of(context).hideCurrentSnackBar();
+        },
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+              backgroundColor: getFABcolor(),
+            ),
+            scaffoldBackgroundColor: getScaffoldColor(),
             iconTheme: IconThemeData(
               color: getIconsColor(),
             ),
-          ),
-          bottomAppBarColor: getScaffoldColor(),
-          textTheme: getTextColor(),
-        ),
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            leading: BackButton(),
-            title: NoteTags(
-              chipBackgroundColor: getFABcolor(),
-              textColor: getFABchildColor(),
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.archive),
-                onPressed: () => archiveNote(translate),
+            appBarTheme: AppBarTheme(
+              color: getScaffoldColor(),
+              iconTheme: IconThemeData(
+                color: getIconsColor(),
               ),
-              PopupMenuButton(
-                onSelected: (option) => onSelected(option, translate),
-                itemBuilder: (BuildContext context) {
-                  Color textColor =
-                      Theme.of(context).primaryColor == Colors.white
-                          ? Typography.blackRedmond.bodyText1.color
-                          : Typography.whiteRedmond.bodyText1.color;
+            ),
+            bottomAppBarColor: getScaffoldColor(),
+            textTheme: getTextColor(),
+          ),
+          child: Scaffold(
+            appBar: AppBar(
+              elevation: 0,
+              leading: BackButton(),
+              title: NoteTags(
+                chipBackgroundColor: getFABcolor(),
+                textColor: getFABchildColor(),
+              ),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.archive),
+                  onPressed: () => archiveNote(translate),
+                ),
+                PopupMenuButton(
+                  onSelected: (option) => onSelected(option, translate),
+                  itemBuilder: (BuildContext context) {
+                    Color textColor =
+                        Theme.of(context).primaryColor == Colors.white
+                            ? Typography.blackRedmond.bodyText1.color
+                            : Typography.whiteRedmond.bodyText1.color;
 
-                  return <PopupMenuEntry<options>>[
-                    PopupMenuItem<options>(
-                      value: options.createACopy,
-                      child: ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.copy,
-                          color: textColor,
-                        ),
-                        title: Text(
-                          translate.create_copy,
-                          style: TextStyle(
-                            color: textColor,
-                          ),
-                        ),
-                        subtitle: Divider(),
-                      ),
-                    ),
-                    PopupMenuItem<options>(
-                      value: options.delete,
-                      child: ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.trashAlt,
-                          color: textColor,
-                        ),
-                        title: Text(
-                          translate.delete,
-                          style: TextStyle(
-                            color: textColor,
-                          ),
-                        ),
-                        subtitle: Divider(),
-                      ),
-                    ),
-                  ];
-                },
-              ),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  TextField(
-                    textCapitalization: TextCapitalization.sentences,
-                    style: TextStyle(
-                      fontSize: 25,
-                    ),
-                    autofocus: false,
-                    autocorrect: true,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    onSubmitted: (value) {
-                      _noteFocusNode.requestFocus();
-                    },
-                    controller: _titleController,
-                    decoration: InputDecoration(
-                      hintText: translate.note_title,
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 25,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    onChanged: onChangedTitle,
-                    minLines: 1,
-                    maxLines: null,
-                  ),
-                  Divider(),
-                  TextField(
-                    textCapitalization: TextCapitalization.sentences,
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                    autofocus: false,
-                    autocorrect: true,
-                    focusNode: _noteFocusNode,
-                    controller: _noteController,
-                    onChanged: onChangedNote,
-                    textInputAction: TextInputAction.newline,
-                    decoration: InputDecoration(
-                      hintText: translate.note_note,
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    minLines: 1,
-                    maxLines: null,
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  TaskReminder(
-                    noteKey: widget.noteKey,
-                    fabChildColor: getFABchildColor(),
-                    fabColor: getFABcolor(),
-                    translate: translate,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              showModalBottomSheet(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.circular(20),
-                  ),
-                ),
-                context: context,
-                builder: (BuildContext context) => Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () {},
+                    return <PopupMenuEntry<options>>[
+                      PopupMenuItem<options>(
+                        value: options.createACopy,
                         child: ListTile(
-                          title: TextGeneric(text: translate.voice_recording),
                           leading: Icon(
-                            Icons.keyboard_voice,
+                            FontAwesomeIcons.copy,
+                            color: textColor,
                           ),
-                          subtitle: TextGeneric(
-                            text: translate.attach_voice_record,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      Divider(),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                          showModal(
-                            context: context,
-                            builder: (context) => AddTag(),
-                          );
-                        },
-                        child: ListTile(
-                          title: TextGeneric(text: translate.add_a_tag),
-                          leading: IconGeneric(
-                            androidIcon: Icons.label,
-                            iOSIcon: CupertinoIcons.tag_solid,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-            child: IconGeneric(
-              androidIcon: Icons.add,
-              iOSIcon: CupertinoIcons.add_circled_solid,
-              semanticLabel: translate.add,
-              toolTip: translate.add,
-              color: getFABchildColor(),
-            ),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          bottomNavigationBar: BottomAppBar(
-            clipBehavior: Clip.antiAlias,
-            shape: CircularNotchedRectangle(),
-            notchMargin: 8,
-            elevation: 12,
-            child: Container(
-              height: kBottomNavigationBarHeight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Flexible(
-                    child: InkResponse(
-                      radius: 40,
-                      containedInkWell: false,
-                      onTap: () {
-                        showModalBottomSheet(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8),
-                              topRight: Radius.circular(8),
+                          title: Text(
+                            translate.create_copy,
+                            style: TextStyle(
+                              color: textColor,
                             ),
                           ),
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return ColorSelector(
-                              onTap: changeColor,
+                          subtitle: Divider(),
+                        ),
+                      ),
+                      PopupMenuItem<options>(
+                        value: options.delete,
+                        child: ListTile(
+                          leading: Icon(
+                            FontAwesomeIcons.trashAlt,
+                            color: textColor,
+                          ),
+                          title: Text(
+                            translate.delete,
+                            style: TextStyle(
+                              color: textColor,
+                            ),
+                          ),
+                          subtitle: Divider(),
+                        ),
+                      ),
+                    ];
+                  },
+                ),
+              ],
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    TextField(
+                      textCapitalization: TextCapitalization.sentences,
+                      style: TextStyle(
+                        fontSize: 25,
+                      ),
+                      autofocus: false,
+                      autocorrect: true,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (value) {
+                        _noteFocusNode.requestFocus();
+                      },
+                      controller: _titleController,
+                      decoration: InputDecoration(
+                        hintText: translate.note_title,
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontSize: 25,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      onChanged: onChangedTitle,
+                      minLines: 1,
+                      maxLines: null,
+                    ),
+                    Divider(),
+                    TextField(
+                      textCapitalization: TextCapitalization.sentences,
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                      autofocus: false,
+                      autocorrect: true,
+                      focusNode: _noteFocusNode,
+                      controller: _noteController,
+                      onChanged: onChangedNote,
+                      textInputAction: TextInputAction.newline,
+                      decoration: InputDecoration(
+                        hintText: translate.note_note,
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      minLines: 1,
+                      maxLines: null,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    TaskReminder(
+                      noteKey: widget.noteKey,
+                      fabChildColor: getFABchildColor(),
+                      fabColor: getFABcolor(),
+                      translate: translate,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(20),
+                      topLeft: Radius.circular(20),
+                    ),
+                  ),
+                  context: context,
+                  builder: (BuildContext context) => Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: () {},
+                          child: ListTile(
+                            title: TextGeneric(text: translate.voice_recording),
+                            leading: Icon(
+                              Icons.keyboard_voice,
+                            ),
+                            subtitle: TextGeneric(
+                              text: translate.attach_voice_record,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        Divider(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                            showModal(
+                              context: context,
+                              builder: (context) => AddTag(),
                             );
                           },
-                        );
-                      },
-                      child: Container(
-                        constraints: BoxConstraints(
-                          minWidth: 60,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Icon(
-                              Icons.palette,
+                          child: ListTile(
+                            title: TextGeneric(text: translate.add_a_tag),
+                            leading: IconGeneric(
+                              androidIcon: Icons.label,
+                              iOSIcon: CupertinoIcons.tag_solid,
                             ),
-                            Text(
-                              translate.color,
-                              overflow: TextOverflow.visible,
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                  Container(),
-                  Builder(
-                    builder: (BuildContext contextBuilder) => Flexible(
+                );
+              },
+              child: IconGeneric(
+                androidIcon: Icons.add,
+                iOSIcon: CupertinoIcons.add_circled_solid,
+                semanticLabel: translate.add,
+                toolTip: translate.add,
+                color: getFABchildColor(),
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            bottomNavigationBar: BottomAppBar(
+              clipBehavior: Clip.antiAlias,
+              shape: CircularNotchedRectangle(),
+              notchMargin: 8,
+              elevation: 12,
+              child: Container(
+                height: kBottomNavigationBarHeight,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Flexible(
                       child: InkResponse(
-                        containedInkWell: false,
                         radius: 40,
-                        onTap: () async {
-                          showModal(
-                            configuration: FadeScaleTransitionConfiguration(),
+                        containedInkWell: false,
+                        onTap: () {
+                          showModalBottomSheet(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                topRight: Radius.circular(8),
+                              ),
+                            ),
+                            isScrollControlled: true,
                             context: context,
-                            builder: (context) {
-                              return AlertReminderContainer(
-                                hasReminder: hasReminder(),
-                                deleteReminder: deleteReminder,
-                                updateReminder: (AlertReminderParams params) =>
-                                    updateReminder(
-                                  params.scheduledDate,
-                                  params.repeat,
-                                ),
+                            builder: (BuildContext context) {
+                              return ColorSelector(
+                                onTap: changeColor,
                               );
                             },
                           );
@@ -550,22 +537,67 @@ class _TaskState extends State<Task> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
                               Icon(
-                                Icons.add_alert,
+                                Icons.palette,
                               ),
                               Text(
-                                translate.alarm,
+                                translate.color,
                                 overflow: TextOverflow.visible,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
+                                style: TextStyle(fontSize: 14),
                               ),
                             ],
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Container(),
+                    Builder(
+                      builder: (BuildContext contextBuilder) => Flexible(
+                        child: InkResponse(
+                          containedInkWell: false,
+                          radius: 40,
+                          onTap: () async {
+                            showModal(
+                              configuration: FadeScaleTransitionConfiguration(),
+                              context: context,
+                              builder: (context) {
+                                return AlertReminderContainer(
+                                  hasReminder: hasReminder(),
+                                  deleteReminder: deleteReminder,
+                                  updateReminder:
+                                      (AlertReminderParams params) =>
+                                          updateReminder(
+                                    params.scheduledDate,
+                                    params.repeat,
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            constraints: BoxConstraints(
+                              minWidth: 60,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.add_alert,
+                                ),
+                                Text(
+                                  translate.alarm,
+                                  overflow: TextOverflow.visible,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
