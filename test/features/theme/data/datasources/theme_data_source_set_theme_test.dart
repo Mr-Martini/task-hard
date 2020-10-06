@@ -77,14 +77,4 @@ void main() {
     'theme': themePreference.automatic.toString(),
     'color': 'blue',
   };
-  test(
-    'should return ThemeEntity with the specified color',
-    () {
-      when(mockBox.get(any)).thenReturn(colorModel);
-
-      final result = dataSource.setColor(Colors.red);
-
-      expect(result, expectedColorModel);
-    },
-  );
 }

@@ -97,6 +97,7 @@ class _HomeAppBarState extends State<HomeAppBar>
                 ),
               )
               ..add(AddNote(selectedNotes: <Note>[]));
+            BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
             provider.clear();
           },
           updateReminder: (AlertReminderParams params) {
@@ -109,6 +110,7 @@ class _HomeAppBarState extends State<HomeAppBar>
                 ),
               )
               ..add(AddNote(selectedNotes: <Note>[]));
+            BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
             provider.clear();
           },
         );
@@ -128,6 +130,7 @@ class _HomeAppBarState extends State<HomeAppBar>
         BlocProvider.of<HomeappbarBloc>(context)
           ..add(DeleteNotes(selectedNotes: selectedNotes))
           ..add(AddNote(selectedNotes: <Note>[]));
+        BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
         provider.clear();
         ShowSnackBar.show(
           context: widget.alertContext,
@@ -145,6 +148,7 @@ class _HomeAppBarState extends State<HomeAppBar>
                   selectedNotes: <Note>[],
                 ),
               );
+            BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
           },
         );
         Navigator.pop(context);
@@ -174,6 +178,7 @@ class _HomeAppBarState extends State<HomeAppBar>
               selectedNotes: <Note>[],
             ),
           );
+        BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
         provider.clear();
         Navigator.pop(context);
         ShowSnackBar.show(
@@ -192,6 +197,7 @@ class _HomeAppBarState extends State<HomeAppBar>
                   selectedNotes: <Note>[],
                 ),
               );
+            BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
           },
         );
       },
@@ -224,6 +230,7 @@ class _HomeAppBarState extends State<HomeAppBar>
                 color: color,
               ))
               ..add(AddNote(selectedNotes: <Note>[]));
+            BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
             provider.clear();
           },
         );

@@ -5,21 +5,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:task_hard/components/color-selector-component/color-selector-component.dart';
-import 'package:task_hard/components/icon-components/icon-generic.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
-import 'package:task_hard/controllers/colors-controller/color-controller.dart';
-import 'package:task_hard/core/Utils/alert_dialog.dart';
-import 'package:task_hard/core/Utils/alert_reminder_params.dart';
-import 'package:task_hard/core/Utils/input_validation.dart';
-import 'package:task_hard/core/Utils/snackbar_context.dart';
+import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart'
+    as hN;
 import 'package:task_hard/features/note/presentation/bloc/note_bloc.dart';
 import 'package:task_hard/features/note/presentation/widgets/add_tag.dart';
-import 'package:task_hard/features/note/presentation/widgets/note_tags.dart';
-import 'package:task_hard/features/note/presentation/widgets/task_reminder.dart';
+import 'package:task_hard/features/note_reminder/presentation/bloc/notereminder_bloc.dart'
+    as nR;
+import 'package:task_hard/features/note_reminder/presentation/widgets/note_reminder.dart';
+import 'package:task_hard/features/note_tags/presentation/widgets/note_tags.dart';
 import 'package:task_hard/features/time_preference/presentation/widgets/alert_reminder_container.dart';
 import 'package:task_hard/generated/l10n.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../../../components/color-selector-component/color-selector-component.dart';
+import '../../../../components/icon-components/icon-generic.dart';
+import '../../../../components/text-components/text-generic.dart';
+import '../../../../controllers/colors-controller/color-controller.dart';
+import '../../../../core/Utils/alert_dialog.dart';
+import '../../../../core/Utils/alert_reminder_params.dart';
+import '../../../../core/Utils/input_validation.dart';
+import '../../../../core/Utils/snackbar_context.dart';
 
 enum options { createACopy, delete }
 
@@ -53,26 +58,10 @@ class _TaskState extends State<Task> {
   Color color;
   String title;
   String note;
-  Timer timer;
 
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(
-      Duration(seconds: 4),
-      (timer) {
-        if (reminder != null) {
-          DateTime now = DateTime.now();
-          if (reminder.isBefore(now)) {
-            BlocProvider.of<NoteBloc>(context).add(
-              GetNoteByKey(
-                key: widget.noteKey,
-              ),
-            );
-          }
-        }
-      },
-    );
     title = widget.title;
     note = widget.note;
     _titleController.text = widget.title;
@@ -84,7 +73,6 @@ class _TaskState extends State<Task> {
   void dispose() {
     _noteFocusNode.dispose();
     _titleFocusNode.dispose();
-    timer?.cancel();
     super.dispose();
   }
 
@@ -100,12 +88,22 @@ class _TaskState extends State<Task> {
         message: note,
       ),
     );
+    BlocProvider.of<nR.NoteReminderBloc>(context).add(
+      nR.GetNoteReminder(
+        noteKey: widget.noteKey,
+      ),
+    );
   }
 
   void deleteReminder() {
     BlocProvider.of<NoteBloc>(context).add(
       DeleteNoteReminder(
         key: widget.noteKey,
+      ),
+    );
+    BlocProvider.of<nR.NoteReminderBloc>(context).add(
+      nR.GetNoteReminder(
+        noteKey: widget.noteKey,
       ),
     );
   }
@@ -135,6 +133,8 @@ class _TaskState extends State<Task> {
           raisedOnPressed: () {
             BlocProvider.of<NoteBloc>(context)
                 .add(DeleteNote(key: widget.noteKey));
+            BlocProvider.of<hN.HomenotesBloc>(widget.scaffoldKey.currentContext)
+                .add(hN.GetHomeNotes());
             Navigator.pop(context);
             Navigator.pop(context);
           },
@@ -166,6 +166,8 @@ class _TaskState extends State<Task> {
                 color: color,
               ),
             );
+            BlocProvider.of<hN.HomenotesBloc>(widget.scaffoldKey.currentContext)
+                .add(hN.GetHomeNotes());
             Navigator.pop(context);
             ShowSnackBar.show(
               context: context,
@@ -182,9 +184,10 @@ class _TaskState extends State<Task> {
   }
 
   bool hasReminder() {
-    NoteState state = BlocProvider.of<NoteBloc>(context).state;
-    if (state is Loaded) {
-      return state.note?.reminder != null;
+    nR.NoteReminderState state =
+        BlocProvider.of<nR.NoteReminderBloc>(context).state;
+    if (state is nR.Loaded) {
+      return state.reminder != null;
     }
     return false;
   }
@@ -202,6 +205,8 @@ class _TaskState extends State<Task> {
             key: widget.noteKey,
           ),
         );
+        BlocProvider.of<hN.HomenotesBloc>(widget.scaffoldKey.currentContext)
+            .add(hN.GetHomeNotes());
         Navigator.pop(context);
         Navigator.pop(context);
       },
@@ -221,6 +226,26 @@ class _TaskState extends State<Task> {
     BlocProvider.of<NoteBloc>(context).add(
       WriteNoteTitle(title: value, key: widget.noteKey),
     );
+  }
+
+  void updateReminderOnExit() {
+    BlocProvider.of<NoteBloc>(context).add(GetNoteByKey(key: widget.noteKey));
+    NoteState state = BlocProvider.of<NoteBloc>(context).state;
+    if (state is Loaded) {
+      DateTime reminder = state.note?.reminder;
+      if (reminder == null) return;
+      TimeOfDay time = TimeOfDay(hour: reminder.hour, minute: reminder.minute);
+      BlocProvider.of<NoteBloc>(context).add(
+        WriteNoteReminder(
+          reminder: state.note.reminder,
+          time: time,
+          repeat: state.note.repeat,
+          key: widget.noteKey,
+          title: state.note.title,
+          message: state.note.note,
+        ),
+      );
+    }
   }
 
   Color getFABcolor() {
@@ -286,6 +311,10 @@ class _TaskState extends State<Task> {
             title: translate.empty_note_discarted,
             context: widget.scaffoldKey.currentContext,
           );
+        } else {
+          updateReminderOnExit();
+          BlocProvider.of<hN.HomenotesBloc>(widget.scaffoldKey.currentContext)
+              .add(hN.GetHomeNotes());
         }
         return true;
       },
@@ -320,6 +349,7 @@ class _TaskState extends State<Task> {
               title: NoteTags(
                 chipBackgroundColor: getFABcolor(),
                 textColor: getFABchildColor(),
+                noteKey: widget.noteKey,
               ),
               actions: [
                 IconButton(

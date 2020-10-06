@@ -24,7 +24,6 @@ class HomenotesBloc extends Bloc<HomenotesEvent, HomenotesState> {
   final ListenNotesUseCase listenNotes;
   final ExpireCheckerUseCase expireChecker;
 
-  ValueListenable _subscription;
   Timer _timer;
 
   HomenotesBloc({
@@ -38,8 +37,6 @@ class HomenotesBloc extends Bloc<HomenotesEvent, HomenotesState> {
     HomenotesEvent event,
   ) async* {
     if (event is GetHomeNotes) {
-      _subscription = Hive.box('notes').listenable();
-      _subscription.addListener(_listener);
       _expireChecker();
       final list = getNotes(NoParams());
       yield* _eitherFailureOrSuccess(list);
@@ -61,10 +58,12 @@ class HomenotesBloc extends Bloc<HomenotesEvent, HomenotesState> {
   }
 
   void _expireChecker() {
+    _timer?.cancel();
     _timer = Timer.periodic(
       Duration(seconds: 4),
-      (timer) {
-        Box<dynamic> box = _subscription.value;
+      (timer) async {
+        await Hive.openBox('notes');
+        Box<dynamic> box = Hive.box('notes');
         Iterable<dynamic> notes = box.values;
         Iterable<dynamic> filtered = notes.where(
           (element) {
@@ -80,20 +79,15 @@ class HomenotesBloc extends Bloc<HomenotesEvent, HomenotesState> {
         );
         if (filtered.isNotEmpty) {
           add(ExpireChecker(notes: filtered));
+          add(GetHomeNotes());
         }
       },
     );
   }
 
-  void _listener() {
-    Box<dynamic> box = _subscription.value;
-    add(ListenHomeNotes(notes: box.values));
-  }
-
   @override
   Future<void> close() {
     _timer?.cancel();
-    _subscription.removeListener(_listener);
     return super.close();
   }
 }

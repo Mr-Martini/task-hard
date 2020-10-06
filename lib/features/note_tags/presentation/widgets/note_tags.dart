@@ -1,26 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_hard/features/note/presentation/bloc/note_bloc.dart';
+
+import '../bloc/notetags_bloc.dart';
 
 class NoteTags extends StatelessWidget {
   final Color chipBackgroundColor;
   final Color textColor;
+  final String noteKey;
   const NoteTags({
     Key key,
     @required this.chipBackgroundColor,
     @required this.textColor,
+    @required this.noteKey,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NoteBloc, NoteState>(
+    return BlocBuilder<NoteTagsBloc, NoteTagsState>(
       builder: (context, state) {
+        if (state is NoteTagsInitial) {
+          BlocProvider.of<NoteTagsBloc>(context).add(
+            GetTags(
+              noteKey: noteKey,
+            ),
+          );
+        }
         if (state is Loaded) {
-          var note = state.note;
-          if (note == null || note.tags == null) return Container();
-          if (note.tags.isEmpty) return Container();
-          List tags = note.tags;
+          List<String> tags = state.tags;
+
+          if (tags.isEmpty) {
+            return Container();
+          }
+
           String tagText = tags.join(', ');
+
           return Chip(
             backgroundColor: chipBackgroundColor,
             label: Text(

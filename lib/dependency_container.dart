@@ -38,6 +38,16 @@ import 'features/note/domain/usecases/write_note_content_usecase.dart';
 import 'features/note/domain/usecases/write_note_reminder_usecase.dart';
 import 'features/note/domain/usecases/write_note_title_usecase.dart';
 import 'features/note/presentation/bloc/note_bloc.dart';
+import 'features/note_reminder/data/datasources/note_reminder_local_data_source.dart';
+import 'features/note_reminder/data/repositories/note_reminder_repository_impl.dart';
+import 'features/note_reminder/domain/repositories/note_reminder_repository.dart';
+import 'features/note_reminder/domain/usecases/get_reminder_usecase.dart';
+import 'features/note_reminder/presentation/bloc/notereminder_bloc.dart';
+import 'features/note_tags/data/datasources/note_tags_local_data_source.dart';
+import 'features/note_tags/data/repositories/note_tags_repository_impl.dart';
+import 'features/note_tags/domain/repositories/note_tags_repository.dart';
+import 'features/note_tags/domain/usecases/get_tags_usecase.dart';
+import 'features/note_tags/presentation/bloc/notetags_bloc.dart';
 import 'features/taged_notes_home/data/datasources/taged_notes_home_local_data_source.dart';
 import 'features/taged_notes_home/data/repositories/taged_notes_home_repository_impl.dart';
 import 'features/taged_notes_home/domain/repositories/taged_notes_home_repository.dart';
@@ -76,6 +86,8 @@ Future<void> init() async {
   await registerNote(key);
   await registerHomeAppBar(key);
   await registerVisualizationOption();
+  await registerNoteReminder(key);
+  await registerNoteTags(key);
 }
 
 Future<void> registerHomeNotes(List key) async {
@@ -493,5 +505,77 @@ Future<void> registerVisualizationOption() async {
   sl.registerSingletonAsync(
     () async => await Hive.openBox('visu_type'),
     instanceName: 'visu_type',
+  );
+}
+
+Future<void> registerNoteReminder(List<int> key) async {
+  //bloc
+  sl.registerFactory(
+    () => NoteReminderBloc(
+      getNoteReminder: sl(),
+    ),
+  );
+
+  //usecases
+  sl.registerLazySingleton(
+    () => GetNoteReminderUseCase(
+      repository: sl(),
+    ),
+  );
+
+  //repositories
+  sl.registerLazySingleton<NoteReminderRepository>(
+    () => NoteReminderRepositoryImpl(
+      dataSource: sl(),
+    ),
+  );
+
+  //dataSources
+  sl.registerLazySingleton<NoteReminderLocalDataSource>(
+    () => NoteReminderLocalDataSourceImpl(
+      box: sl.get(instanceName: 'note_reminder'),
+    ),
+  );
+
+  //external
+  sl.registerSingletonAsync(
+    () async => Hive.openBox('notes', encryptionKey: key),
+    instanceName: 'note_reminder',
+  );
+}
+
+Future<void> registerNoteTags(List<int> key) {
+  //bloc
+  sl.registerFactory(
+    () => NoteTagsBloc(
+      getNoteTags: sl(),
+    ),
+  );
+
+  //usecases
+  sl.registerLazySingleton(
+    () => GetNoteTagsUseCase(
+      repository: sl(),
+    ),
+  );
+
+  //repositories
+  sl.registerLazySingleton<NoteTagsRepository>(
+    () => NoteTagsRepositoryImpl(
+      dataSource: sl(),
+    ),
+  );
+
+  //datasources
+  sl.registerLazySingleton<NoteTagsLocalDataSource>(
+    () => NoteTagsLocalDataSourceImpl(
+      box: sl.get(instanceName: 'note_tags'),
+    ),
+  );
+
+  //external
+  sl.registerSingletonAsync(
+    () async => await Hive.openBox('notes', encryptionKey: key),
+    instanceName: 'note_tags',
   );
 }

@@ -88,6 +88,7 @@ class _HomeProviderState extends State<HomeProvider> {
                           color: note.color ?? Theme.of(context).primaryColor,
                           key: note.key,
                           scaffoldKey: widget._scaffoldKey,
+                          context: context,
                         ),
                       );
                     } else {

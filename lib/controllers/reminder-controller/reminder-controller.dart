@@ -58,7 +58,7 @@ abstract class ReminderController {
       } on PlatformException catch (e) {
         debugPrint(e.toString());
       }
-    } else {
+    } else if (repeat == Repeat.WEEKLY_REPEAT) {
       if (scheduledDate.isBefore(now)) {
         int hour = scheduledDate.hour;
         int minute = scheduledDate.minute;

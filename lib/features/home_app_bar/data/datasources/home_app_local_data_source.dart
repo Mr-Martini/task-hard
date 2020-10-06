@@ -44,6 +44,7 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
   HomeAppBarModel deleteNotes(List<Note> selectedNotes) {
     for (Note note in selectedNotes) {
       noteBox.delete(note.key);
+      ReminderController.cancel(note.key.hashCode);
     }
     return HomeAppBarModel.fromList(<Note>[]);
   }
@@ -52,6 +53,8 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
   HomeAppBarModel undoDeleteNotes(List<Note> selectedNotes) {
     for (NoteModel note in selectedNotes) {
       noteBox.put(note.key, note.toMap());
+      ReminderController.scheduleNotification(note.key, note.title, note.note,
+          note.key.hashCode, note.reminder, note.repeat);
     }
     return HomeAppBarModel.fromList(selectedNotes);
   }

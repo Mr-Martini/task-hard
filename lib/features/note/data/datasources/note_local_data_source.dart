@@ -98,6 +98,8 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
 
     noteBox.delete(key);
 
+    ReminderController.cancel(key.hashCode);
+
     //TODO: put not on delete_notes box
 
     return NoteModel.fromMap(note);
