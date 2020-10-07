@@ -54,6 +54,14 @@ import 'features/taged_notes_home/domain/repositories/taged_notes_home_repositor
 import 'features/taged_notes_home/domain/usecases/taged_notes_home_get_preference.dart';
 import 'features/taged_notes_home/domain/usecases/taged_notes_home_set_preferences.dart';
 import 'features/taged_notes_home/presentation/bloc/tagednoteshomebloc_bloc.dart';
+import 'features/tags/data/datasources/tags_local_data_source.dart';
+import 'features/tags/data/repositories/tags_repository_impl.dart';
+import 'features/tags/domain/repositories/tags_repository.dart';
+import 'features/tags/domain/usecases/add_tag_on_note.dart';
+import 'features/tags/domain/usecases/get_only_tags_usecase.dart';
+import 'features/tags/domain/usecases/get_tags_usecase.dart';
+import 'features/tags/domain/usecases/remove_tag_from_note_usecase.dart';
+import 'features/tags/presentation/bloc/tags_bloc.dart';
 import 'features/theme/data/datasources/theme_local_data_source.dart';
 import 'features/theme/data/repositories/theme_repository_impl.dart';
 import 'features/theme/domain/repositories/theme_repository.dart';
@@ -88,6 +96,62 @@ Future<void> init() async {
   await registerVisualizationOption();
   await registerNoteReminder(key);
   await registerNoteTags(key);
+  await registerTags();
+}
+
+Future<void> registerTags() async {
+  //bloc
+  sl.registerFactory(
+    () => TagsBloc(
+      getTags: sl(),
+      addTagOnNote: sl(),
+      removeTagFromNote: sl(),
+      getOnlyTags: sl(),
+    ),
+  );
+
+  //usecases
+  sl.registerLazySingleton(
+    () => GetTagsUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => AddTagOnNoteUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => RemoveTagFromNoteUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => GetOnlyTagsUseCases(
+      repository: sl(),
+    ),
+  );
+
+  //repositories
+  sl.registerLazySingleton<TagsRepository>(
+    () => TagsRepositoryImpl(
+      dataSource: sl(),
+    ),
+  );
+
+  //datasources
+  sl.registerLazySingleton<TagsLocalDataSouce>(
+    () => TagsLocalDataSouceImpl(
+      box: sl.get(instanceName: 'tags_box'),
+      noteBox: sl.get(instanceName: 'home_notes'),
+    ),
+  );
+
+  //external
+  sl.registerSingletonAsync(
+    () async => await Hive.openBox('tags_box'),
+    instanceName: 'tags_box',
+  );
 }
 
 Future<void> registerHomeNotes(List key) async {

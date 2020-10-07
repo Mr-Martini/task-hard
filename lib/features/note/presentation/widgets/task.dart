@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart'
     as hN;
 import 'package:task_hard/features/note/presentation/bloc/note_bloc.dart';
-import 'package:task_hard/features/note/presentation/widgets/add_tag.dart';
+import 'package:task_hard/features/tags/presentation/widgets/add_tag.dart';
 import 'package:task_hard/features/note_reminder/presentation/bloc/notereminder_bloc.dart'
     as nR;
 import 'package:task_hard/features/note_reminder/presentation/widgets/note_reminder.dart';
@@ -293,6 +293,8 @@ class _TaskState extends State<Task> {
   Widget build(BuildContext context) {
     S translate = S.of(context);
 
+    final BuildContext blocsContext = context;
+
     return WillPopScope(
       onWillPop: () async {
         if (InputValidation.isEmpty(title) && InputValidation.isEmpty(note)) {
@@ -502,7 +504,10 @@ class _TaskState extends State<Task> {
                             Navigator.pop(context);
                             showModal(
                               context: context,
-                              builder: (context) => AddTag(),
+                              builder: (context) => AddTag(
+                                blocsContext: blocsContext,
+                                noteKey: widget.noteKey,
+                              ),
                             );
                           },
                           child: ListTile(

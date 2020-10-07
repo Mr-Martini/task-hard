@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:task_hard/components/icon-components/icon-generic.dart';
 import 'package:task_hard/components/text-components/text-generic.dart';
+import 'package:task_hard/features/tags/presentation/widgets/tag_list_drawer.dart';
 import 'package:task_hard/generated/l10n.dart';
 import 'package:task_hard/views/archive-screen/archive-screen.dart';
 import 'package:task_hard/views/feedback-screen/feedback-screen.dart';
@@ -98,29 +99,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Opacity(
-              opacity: 0.7,
-              child: Text(
-                translate.tags,
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {},
-            child: ListTile(
-              leading: Icon(Icons.label),
-              title: Text('example'),
-            ),
-          ),
-          InkWell(
-            onTap: () {},
-            child: ListTile(
-              leading: Icon(Icons.label),
-              title: Text('another example'),
-            ),
-          ),
+          TagsListDrawer(),
           Divider(),
           InkWell(
             onTap: () => Navigator.pop(context),
