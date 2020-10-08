@@ -27,11 +27,22 @@ class MaterialCard extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       itemCount: note.tags.length,
       itemBuilder: (context, index) {
+        Color cardColor =
+            note.color ?? Theme.of(context).scaffoldBackgroundColor;
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Chip(
-              label: Text(note.tags[index]),
+              elevation: 8,
+              backgroundColor: isSelected ? Colors.grey : cardColor,
+              label: Text(
+                note.tags[index],
+                style: TextStyle(
+                  color: cardColor == Colors.white
+                      ? Typography.blackRedmond.bodyText1.color
+                      : Typography.whiteRedmond.bodyText1.color,
+                ),
+              ),
             ),
           ],
         );
