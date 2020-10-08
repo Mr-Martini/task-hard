@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart';
+import 'package:task_hard/features/note/domain/entities/note.dart';
+import 'package:task_hard/features/tags/presentation/bloc/tags_bloc.dart';
 
 import '../../../../generated/l10n.dart';
 
 class TagsListAppBar extends StatefulWidget implements PreferredSizeWidget {
   final BuildContext selectedNotesContext;
+  final List<Note> notes;
   TagsListAppBar({
     Key key,
     @required this.selectedNotesContext,
+    @required this.notes,
   }) : super(key: key);
 
   @override
@@ -20,11 +24,20 @@ class TagsListAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _TagsListAppBarState extends State<TagsListAppBar> {
   FocusNode _focusNode;
+  TextEditingController _controller;
   String _text;
 
   void onAdd() {
+    _controller.clear();
     _focusNode.unfocus();
-    BlocProvider.of<HomenotesBloc>(context).add(GetHomeNotes());
+    BlocProvider.of<TagsBloc>(context).add(
+      AddTagOnList(
+        tagName: _text.trim(),
+        notes: widget.notes,
+      ),
+    );
+    BlocProvider.of<HomenotesBloc>(widget.selectedNotesContext)
+        .add(GetHomeNotes());
   }
 
   void onChanged(String newText) {
@@ -45,12 +58,14 @@ class _TagsListAppBarState extends State<TagsListAppBar> {
   @override
   void initState() {
     _focusNode = FocusNode();
+    _controller = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     _focusNode.dispose();
+    _controller.dispose();
     super.dispose();
   }
 

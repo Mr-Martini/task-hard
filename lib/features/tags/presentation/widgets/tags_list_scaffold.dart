@@ -26,6 +26,7 @@ class _TagsListScaffoldState extends State<TagsListScaffold> {
       create: (context) => sl<TagsBloc>(),
       child: Scaffold(
         appBar: TagsListAppBar(
+          notes: widget.notes,
           selectedNotesContext: widget.selectedNotesContext,
         ),
         body: TagsListBody(
