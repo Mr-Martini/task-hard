@@ -7,9 +7,12 @@ import 'package:flutter/foundation.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
+import '../../../note/domain/entities/note.dart';
 import '../../domain/entities/tags.dart';
+import '../../domain/usecases/add_tag_on_list.dart';
 import '../../domain/usecases/add_tag_on_note.dart';
 import '../../domain/usecases/get_only_tags_usecase.dart';
+import '../../domain/usecases/get_tag_for_list_usecase.dart';
 import '../../domain/usecases/get_tags_usecase.dart';
 import '../../domain/usecases/remove_tag_from_note_usecase.dart';
 
@@ -20,11 +23,15 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
   final GetTagsUseCase getTags;
   final GetOnlyTagsUseCases getOnlyTags;
   final AddTagOnNoteUseCase addTagOnNote;
+  final AddTagOnListUseCase addTagOnList;
+  final GetTagForListUseCase getTagForList;
   final RemoveTagFromNoteUseCase removeTagFromNote;
   TagsBloc({
     @required this.getTags,
     @required this.getOnlyTags,
     @required this.addTagOnNote,
+    @required this.addTagOnList,
+    @required this.getTagForList,
     @required this.removeTagFromNote,
   }) : super(TagsInitial());
 
@@ -54,6 +61,21 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     } else if (event is GetOnlyTags) {
       final tagEntity = getOnlyTags(NoParams());
       yield* _eitherLoadOrError(tagEntity);
+    } else if (event is AddTagOnList) {
+      final tagEntity = addTagOnList(
+        AddTagOnListParams(
+          notes: event.notes,
+          tagName: event.tagName,
+        ),
+      );
+      yield* _eitherLoadOrError(tagEntity);
+    } else if (event is GetTagForList) {
+      final tagEntity = getTagForList(
+        GetTagForListParams(
+          notes: event.notes,
+        ),
+      );
+      yield* _eitherLoadOrError(tagEntity);
     }
   }
 
@@ -64,6 +86,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
       (tags) => Loaded(
         tags: tags.tags,
         noteTags: tags.noteTags,
+        noteList: tags.noteList,
       ),
     );
   }

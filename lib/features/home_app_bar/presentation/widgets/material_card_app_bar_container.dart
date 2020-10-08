@@ -24,37 +24,22 @@ class MaterialCardAppBarContainer extends StatelessWidget {
           var notes = state.selectedNotes.selectedNotes;
           if (notes.contains(note)) {
             return MaterialCard(
-              title: note.title,
-              note: note.note,
-              repeat: note.repeat,
+              note: note,
               onTap: onTap,
               onLongPress: onLongPress,
-              reminder: note.reminder,
-              color: note.color,
-              expired: note.expired,
               isSelected: true,
             );
           }
           return MaterialCard(
-            title: note.title,
-            note: note.note,
-            repeat: note.repeat,
+            note: note,
             onTap: onTap,
-            reminder: note.reminder,
-            color: note.color,
-            expired: note.expired,
             isSelected: false,
             onLongPress: onLongPress,
           );
         }
         return MaterialCard(
-          title: note.title,
-          note: note.note,
-          repeat: note.repeat,
+          note: note,
           onTap: onTap,
-          reminder: note.reminder,
-          color: note.color,
-          expired: note.expired,
           isSelected: false,
           onLongPress: onLongPress,
         );

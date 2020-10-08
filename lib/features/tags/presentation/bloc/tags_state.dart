@@ -12,11 +12,16 @@ class TagsInitial extends TagsState {}
 class Loaded extends TagsState {
   final List<String> tags;
   final List<String> noteTags;
+  final List<Note> noteList;
 
-  Loaded({@required this.tags, @required this.noteTags});
+  Loaded({
+    @required this.tags,
+    @required this.noteTags,
+    @required this.noteList,
+  });
 
   @override
-  List<Object> get props => [tags, noteTags];
+  List<Object> get props => [tags, noteTags, noteList];
 }
 
 class Error extends TagsState {

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart'
     as hN;
 import 'package:task_hard/features/note/domain/entities/note.dart';
+import 'package:task_hard/features/tags/presentation/widgets/tags_list_scaffold.dart';
 import 'package:task_hard/features/time_preference/presentation/widgets/alert_reminder_container.dart';
 import 'package:task_hard/generated/l10n.dart';
 
@@ -17,7 +18,13 @@ import '../../../../core/Utils/snackbar_context.dart';
 import '../../../../core/widgets/profile_icon_button.dart';
 import '../bloc/homeappbar_bloc.dart';
 
-enum HomeAppBarPoUpMenuOption { change_color, delete, archive, select_all }
+enum HomeAppBarPoUpMenuOption {
+  change_color,
+  delete,
+  archive,
+  select_all,
+  tags
+}
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final S translate;
@@ -68,6 +75,27 @@ class _HomeAppBarState extends State<HomeAppBar>
       return state.notes.notes;
     }
     return <Note>[];
+  }
+
+  void manageTags() {
+    HomeSelectedNotes provider =
+        Provider.of<HomeSelectedNotes>(context, listen: false);
+    List<Note> selectedNotes = List<Note>.from(provider.getNotes);
+    provider.clear();
+    BlocProvider.of<HomeappbarBloc>(context).add(
+      AddNote(
+        selectedNotes: <Note>[],
+      ),
+    );
+    showModal(
+      context: context,
+      builder: (_) {
+        return TagsListScaffold(
+          selectedNotesContext: context,
+          notes: selectedNotes,
+        );
+      },
+    );
   }
 
   void selectAll() {
@@ -252,6 +280,9 @@ class _HomeAppBarState extends State<HomeAppBar>
       case HomeAppBarPoUpMenuOption.select_all:
         selectAll();
         break;
+      case HomeAppBarPoUpMenuOption.tags:
+        manageTags();
+        break;
       default:
     }
   }
@@ -340,6 +371,14 @@ class _HomeAppBarState extends State<HomeAppBar>
                       child: ListTile(
                         leading: Icon(Icons.select_all),
                         title: Text(widget.translate.select_all),
+                        subtitle: Divider(),
+                      ),
+                    ),
+                    PopupMenuItem<HomeAppBarPoUpMenuOption>(
+                      value: HomeAppBarPoUpMenuOption.tags,
+                      child: ListTile(
+                        leading: Icon(Icons.label),
+                        title: Text(widget.translate.tags),
                         subtitle: Divider(),
                       ),
                     ),

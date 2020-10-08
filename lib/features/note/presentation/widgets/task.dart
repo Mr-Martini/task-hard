@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart'
     as hN;
 import 'package:task_hard/features/note/presentation/bloc/note_bloc.dart';
-import 'package:task_hard/features/tags/presentation/widgets/add_tag.dart';
+import 'package:task_hard/features/tags/presentation/widgets/add_tag_on_note.dart';
 import 'package:task_hard/features/note_reminder/presentation/bloc/notereminder_bloc.dart'
     as nR;
 import 'package:task_hard/features/note_reminder/presentation/widgets/note_reminder.dart';

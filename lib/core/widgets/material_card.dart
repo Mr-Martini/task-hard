@@ -1,30 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:task_hard/core/Utils/date_formater.dart';
+import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/generated/l10n.dart';
 
 class MaterialCard extends StatelessWidget {
-  final String title;
-  final String note;
-  final String repeat;
   final ValueChanged<bool> onTap;
   final ValueChanged<bool> onLongPress;
-  final DateTime reminder;
-  final Color color;
-  final bool expired;
   final bool isSelected;
+  final Note note;
 
   const MaterialCard({
     Key key,
-    @required this.title,
     @required this.note,
-    @required this.repeat,
     @required this.onTap,
     @required this.onLongPress,
-    @required this.reminder,
-    @required this.color,
-    @required this.expired,
     @required this.isSelected,
   }) : super(key: key);
+
+  Widget buildTags() {
+    if (note.tags == null || note.tags.isEmpty) {
+      return Container();
+    }
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: note.tags.length,
+      itemBuilder: (context, index) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Chip(
+              label: Text(note.tags[index]),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +45,7 @@ class MaterialCard extends StatelessWidget {
 
     const double opacity = 0.7;
 
-    Color cardColor = color ?? Theme.of(context).primaryColor;
+    Color cardColor = note.color ?? Theme.of(context).primaryColor;
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -61,15 +74,14 @@ class MaterialCard extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ListTile(
                   title: Text(
-                    title ?? '',
+                    note.title ?? '',
                     maxLines: 2,
                   ),
-                  subtitle: reminder != null
+                  subtitle: note.reminder != null
                       ? Column(
                           children: [
                             SizedBox(
@@ -94,11 +106,11 @@ class MaterialCard extends StatelessWidget {
                                       DateFormater.format(
                                         context: context,
                                         translate: translate,
-                                        date: reminder,
-                                        repeat: repeat,
+                                        date: note.reminder,
+                                        repeat: note.repeat,
                                       ),
                                       style: TextStyle(
-                                        decoration: expired
+                                        decoration: note.expired
                                             ? TextDecoration.lineThrough
                                             : TextDecoration.none,
                                       ),
@@ -118,12 +130,13 @@ class MaterialCard extends StatelessWidget {
                     child: Opacity(
                       opacity: opacity,
                       child: Text(
-                        note ?? '',
+                        note.note ?? '',
                         overflow: TextOverflow.fade,
                       ),
                     ),
                   ),
                 ),
+                buildTags(),
                 ButtonBar(
                   alignment: MainAxisAlignment.start,
                 ),

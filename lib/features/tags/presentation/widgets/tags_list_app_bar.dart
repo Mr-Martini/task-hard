@@ -1,43 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_hard/features/note_tags/presentation/bloc/notetags_bloc.dart'
-    as nT;
-import 'package:task_hard/features/tags/presentation/bloc/tags_bloc.dart';
-import 'package:task_hard/generated/l10n.dart';
+import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart';
 
-class AddTagAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final String noteKey;
-  final BuildContext blocsContext;
-  AddTagAppBar({
+import '../../../../generated/l10n.dart';
+
+class TagsListAppBar extends StatefulWidget implements PreferredSizeWidget {
+  final BuildContext selectedNotesContext;
+  TagsListAppBar({
     Key key,
-    @required this.noteKey,
-    @required this.blocsContext,
+    @required this.selectedNotesContext,
   }) : super(key: key);
 
   @override
-  _AddTagAppBarState createState() => _AddTagAppBarState();
+  _TagsListAppBarState createState() => _TagsListAppBarState();
 
   @override
   Size get preferredSize => Size.fromHeight(55);
 }
 
-class _AddTagAppBarState extends State<AddTagAppBar> {
+class _TagsListAppBarState extends State<TagsListAppBar> {
   FocusNode _focusNode;
   String _text;
 
   void onAdd() {
     _focusNode.unfocus();
-    BlocProvider.of<TagsBloc>(context).add(
-      AddTagOnNote(
-        tagName: _text.trim(),
-        noteKey: widget.noteKey,
-      ),
-    );
-    BlocProvider.of<nT.NoteTagsBloc>(widget.blocsContext).add(
-      nT.GetTags(
-        noteKey: widget.noteKey,
-      ),
-    );
+    BlocProvider.of<HomenotesBloc>(context).add(GetHomeNotes());
   }
 
   void onChanged(String newText) {

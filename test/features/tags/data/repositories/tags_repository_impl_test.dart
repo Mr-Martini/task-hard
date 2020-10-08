@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:task_hard/core/usecases/usecases.dart';
+import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/features/tags/data/datasources/tags_local_data_source.dart';
 import 'package:task_hard/features/tags/data/model/tags_model.dart';
 import 'package:task_hard/features/tags/data/repositories/tags_repository_impl.dart';
@@ -19,7 +19,8 @@ void main() {
     },
   );
 
-  final model = TagsModel(tags: <String>[], noteTags: <String>[]);
+  final model =
+      TagsModel(tags: <String>[], noteTags: <String>[], noteList: <Note>[]);
 
   test(
     'should return Right<TagsModel> when getTags is called',
@@ -34,8 +35,8 @@ void main() {
     },
   );
 
-  final modelForAddTagOnNote =
-      TagsModel(tags: <String>['car'], noteTags: <String>['car']);
+  final modelForAddTagOnNote = TagsModel(
+      tags: <String>['car'], noteTags: <String>['car'], noteList: <Note>[]);
 
   test(
     'should return Right<TagsModel> with the correct data when addTagOnNote is called',
@@ -51,7 +52,9 @@ void main() {
   );
 
   final modelForRemove = TagsModel(
-      tags: <String>['car', 'plane'], noteTags: <String>['car', 'plane']);
+      tags: <String>['car', 'plane'],
+      noteTags: <String>['car', 'plane'],
+      noteList: <Note>[]);
   test(
     'should return Right<TagsModel> with the correct data when removeTagFromNote is called',
     () {
@@ -62,6 +65,21 @@ void main() {
       verify(dataSource.removeTagFronNote('noteKey', 'plane'));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForRemove));
+    },
+  );
+
+  final modelForAddTagList =
+      TagsModel(tags: <String>[], noteTags: <String>[], noteList: <Note>[]);
+  test(
+    'should return Right<TagsModel> with the correct data when addTagOnList is called',
+    () {
+      when(dataSource.addTagOnList(any, any)).thenReturn(modelForAddTagList);
+
+      final result = impl.addTagOnList(<Note>[], 'tagName');
+
+      verify(dataSource.addTagOnList(<Note>[], 'tagName'));
+      verifyNoMoreInteractions(dataSource);
+      expect(result, Right(modelForAddTagList));
     },
   );
 }

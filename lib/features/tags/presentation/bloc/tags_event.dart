@@ -16,6 +16,15 @@ class GetTags extends TagsEvent {
   List<Object> get props => [noteKey];
 }
 
+class GetTagForList extends TagsEvent {
+  final List<Note> notes;
+
+  GetTagForList({@required this.notes});
+
+  @override
+  List<Object> get props => [notes];
+}
+
 class GetOnlyTags extends TagsEvent {}
 
 class AddTagOnNote extends TagsEvent {
@@ -26,6 +35,16 @@ class AddTagOnNote extends TagsEvent {
 
   @override
   List<Object> get props => [noteKey, tagName];
+}
+
+class AddTagOnList extends TagsEvent {
+  final String tagName;
+  final List<Note> notes;
+
+  AddTagOnList({@required this.tagName, @required this.notes});
+
+  @override
+  List<Object> get props => [notes, tagName];
 }
 
 class RemoveTagFromNote extends TagsEvent {

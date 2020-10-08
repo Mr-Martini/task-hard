@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
+import 'package:task_hard/features/note/data/model/note_model.dart';
+import 'package:task_hard/features/note/domain/entities/note.dart';
 
 import '../model/tags_model.dart';
 
@@ -8,7 +10,9 @@ const String tagsKey = 'tags_key';
 abstract class TagsLocalDataSouce {
   TagsModel getTags(String noteKey);
   TagsModel getOnlyTags();
+  TagsModel getTagForList(List<Note> notes);
   TagsModel addTagOnNote(String noteKey, String tagName);
+  TagsModel addTagOnList(List<Note> notes, String tagName);
   TagsModel removeTagFronNote(String noteKey, String tagName);
 }
 
@@ -22,7 +26,11 @@ class TagsLocalDataSouceImpl implements TagsLocalDataSouce {
   TagsModel getTags(String noteKey) {
     final tagsFromDB = box.values;
     final note = noteBox.get(noteKey, defaultValue: {});
-    return TagsModel.fromIterable(tagsFromDB, note);
+    return TagsModel.fromIterable(
+      tagsFromDB,
+      note,
+      <Note>[],
+    );
   }
 
   @override
@@ -39,7 +47,7 @@ class TagsLocalDataSouceImpl implements TagsLocalDataSouce {
       box.put(tagName, tagName);
     }
     final tagsFromDB = box.values;
-    return TagsModel.fromIterable(tagsFromDB, note);
+    return TagsModel.fromIterable(tagsFromDB, note, <Note>[]);
   }
 
   @override
@@ -50,12 +58,45 @@ class TagsLocalDataSouceImpl implements TagsLocalDataSouce {
     note['tags'] = List<dynamic>.from(tags);
     noteBox.put(noteKey, note);
     final tagsFromDB = box.values;
-    return TagsModel.fromIterable(tagsFromDB, note);
+    return TagsModel.fromIterable(tagsFromDB, note, <Note>[]);
   }
 
   @override
   TagsModel getOnlyTags() {
     final tagsFromDB = box.values;
-    return TagsModel.fromIterable(tagsFromDB, {});
+    return TagsModel.fromIterable(tagsFromDB, {}, <Note>[]);
+  }
+
+  @override
+  TagsModel addTagOnList(List<Note> notes, String tagName) {
+    final tag = box.get(tagName, defaultValue: null);
+    if (tag == null) {
+      box.put(tagName, tagName);
+    }
+    List<Note> aux = List<Note>.from(notes);
+    for (Note note in notes) {
+      var noteFromDB = noteBox.get(note.key, defaultValue: {});
+      List<String> tagsOnNote =
+          List<String>.from(noteFromDB['tags'] ?? <String>[]);
+      if (!tagsOnNote.contains(tagName)) {
+        int index = notes.indexOf(note);
+        tagsOnNote.add(tagName);
+        noteFromDB['tags'] = tagsOnNote;
+        aux[index] = NoteModel.fromMap(noteFromDB);
+        noteBox.put(note.key, noteFromDB);
+      }
+    }
+    return TagsModel.fromIterable(box.values, {}, aux);
+  }
+
+  @override
+  TagsModel getTagForList(List<Note> notes) {
+    final tags = box.values;
+    final selectedNotes = <Note>[];
+    for (var note in notes) {
+      final map = noteBox.get(note.key, defaultValue: {});
+      selectedNotes.add(NoteModel.fromMap(map));
+    }
+    return TagsModel.fromIterable(tags, {}, selectedNotes);
   }
 }

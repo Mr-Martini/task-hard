@@ -57,8 +57,10 @@ import 'features/taged_notes_home/presentation/bloc/tagednoteshomebloc_bloc.dart
 import 'features/tags/data/datasources/tags_local_data_source.dart';
 import 'features/tags/data/repositories/tags_repository_impl.dart';
 import 'features/tags/domain/repositories/tags_repository.dart';
+import 'features/tags/domain/usecases/add_tag_on_list.dart';
 import 'features/tags/domain/usecases/add_tag_on_note.dart';
 import 'features/tags/domain/usecases/get_only_tags_usecase.dart';
+import 'features/tags/domain/usecases/get_tag_for_list_usecase.dart';
 import 'features/tags/domain/usecases/get_tags_usecase.dart';
 import 'features/tags/domain/usecases/remove_tag_from_note_usecase.dart';
 import 'features/tags/presentation/bloc/tags_bloc.dart';
@@ -107,6 +109,8 @@ Future<void> registerTags() async {
       addTagOnNote: sl(),
       removeTagFromNote: sl(),
       getOnlyTags: sl(),
+      addTagOnList: sl(),
+      getTagForList: sl(),
     ),
   );
 
@@ -128,6 +132,16 @@ Future<void> registerTags() async {
   );
   sl.registerLazySingleton(
     () => GetOnlyTagsUseCases(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => AddTagOnListUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => GetTagForListUseCase(
       repository: sl(),
     ),
   );

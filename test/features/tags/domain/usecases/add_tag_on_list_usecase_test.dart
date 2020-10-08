@@ -4,33 +4,34 @@ import 'package:mockito/mockito.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/features/tags/domain/entities/tags.dart';
 import 'package:task_hard/features/tags/domain/repositories/tags_repository.dart';
-import 'package:task_hard/features/tags/domain/usecases/add_tag_on_note.dart';
+import 'package:task_hard/features/tags/domain/usecases/add_tag_on_list.dart';
 
-class MockTagsRepository extends Mock implements TagsRepository {}
+class MockRepository extends Mock implements TagsRepository {}
 
 void main() {
-  MockTagsRepository repository;
-  AddTagOnNoteUseCase useCase;
+  MockRepository repository;
+  AddTagOnListUseCase useCase;
 
   setUp(
     () {
-      repository = MockTagsRepository();
-      useCase = AddTagOnNoteUseCase(repository: repository);
+      repository = MockRepository();
+      useCase = AddTagOnListUseCase(repository: repository);
     },
   );
 
   final model =
       TagsEntity(tags: <String>[], noteTags: <String>[], noteList: <Note>[]);
-
+  final String tagName = 'car';
+  final notes = <Note>[];
   test(
-    'should return Right<TagsEntity> when AddTagOnNoteUseCase is called',
+    'should return Right<TagsEntity> when useCase is called',
     () {
-      when(repository.addTagOnNote(any, any)).thenReturn(Right(model));
+      when(repository.addTagOnList(any, any)).thenReturn(Right(model));
 
       final result =
-          useCase(AddTagOnNoteParams(tagName: 'null', noteKey: 'null'));
+          useCase(AddTagOnListParams(notes: notes, tagName: tagName));
 
-      verify(repository.addTagOnNote('null', 'null'));
+      verify(repository.addTagOnList(notes, tagName));
       verifyNoMoreInteractions(repository);
       expect(result, Right(model));
     },
