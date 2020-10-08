@@ -62,6 +62,7 @@ import 'features/tags/domain/usecases/add_tag_on_note.dart';
 import 'features/tags/domain/usecases/get_only_tags_usecase.dart';
 import 'features/tags/domain/usecases/get_tag_for_list_usecase.dart';
 import 'features/tags/domain/usecases/get_tags_usecase.dart';
+import 'features/tags/domain/usecases/remove_tag_from_list_usecase.dart';
 import 'features/tags/domain/usecases/remove_tag_from_note_usecase.dart';
 import 'features/tags/presentation/bloc/tags_bloc.dart';
 import 'features/theme/data/datasources/theme_local_data_source.dart';
@@ -111,6 +112,7 @@ Future<void> registerTags() async {
       getOnlyTags: sl(),
       addTagOnList: sl(),
       getTagForList: sl(),
+      removeTagFromList: sl(),
     ),
   );
 
@@ -142,6 +144,11 @@ Future<void> registerTags() async {
   );
   sl.registerLazySingleton(
     () => GetTagForListUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => RemoveTagFromListUseCase(
       repository: sl(),
     ),
   );

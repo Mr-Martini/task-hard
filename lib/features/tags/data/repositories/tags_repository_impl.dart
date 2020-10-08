@@ -78,4 +78,16 @@ class TagsRepositoryImpl implements TagsRepository {
       return Left(CacheFailure());
     }
   }
+
+  @override
+  Either<Failure, TagsEntity> removeTagFromList(
+      List<Note> notes, String tagName) {
+    try {
+      final tagEntity = dataSource.removeTagFromList(notes, tagName);
+      return Right(tagEntity);
+    } catch (e) {
+      print(e);
+      return Left(CacheFailure());
+    }
+  }
 }

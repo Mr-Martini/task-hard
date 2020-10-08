@@ -32,6 +32,13 @@ class _TagsListBodyState extends State<TagsListBody> {
           notes: List<Note>.from(notes),
         ),
       );
+    } else {
+      BlocProvider.of<TagsBloc>(context).add(
+        RemoveTagFromList(
+          tagName: tagName,
+          notes: List<Note>.from(notes),
+        ),
+      );
     }
     BlocProvider.of<hN.HomenotesBloc>(widget.selectedNotesContext)
         .add(hN.GetHomeNotes());

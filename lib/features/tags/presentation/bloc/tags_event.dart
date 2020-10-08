@@ -56,3 +56,13 @@ class RemoveTagFromNote extends TagsEvent {
   @override
   List<Object> get props => [noteKey, tagName];
 }
+
+class RemoveTagFromList extends TagsEvent {
+  final String tagName;
+  final List<Note> notes;
+
+  RemoveTagFromList({@required this.tagName, @required this.notes});
+
+  @override
+  List<Object> get props => [notes, tagName];
+}

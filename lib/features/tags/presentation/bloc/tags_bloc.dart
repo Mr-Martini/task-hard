@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:task_hard/features/tags/domain/usecases/remove_tag_from_list_usecase.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
@@ -26,6 +27,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
   final AddTagOnListUseCase addTagOnList;
   final GetTagForListUseCase getTagForList;
   final RemoveTagFromNoteUseCase removeTagFromNote;
+  final RemoveTagFromListUseCase removeTagFromList;
   TagsBloc({
     @required this.getTags,
     @required this.getOnlyTags,
@@ -33,6 +35,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     @required this.addTagOnList,
     @required this.getTagForList,
     @required this.removeTagFromNote,
+    @required this.removeTagFromList,
   }) : super(TagsInitial());
 
   @override
@@ -73,6 +76,14 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
       final tagEntity = getTagForList(
         GetTagForListParams(
           notes: event.notes,
+        ),
+      );
+      yield* _eitherLoadOrError(tagEntity);
+    } else if (event is RemoveTagFromList) {
+      final tagEntity = removeTagFromList(
+        RemoveTagFromListParams(
+          notes: event.notes,
+          tagName: event.tagName,
         ),
       );
       yield* _eitherLoadOrError(tagEntity);

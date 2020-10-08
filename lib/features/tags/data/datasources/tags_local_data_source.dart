@@ -1,8 +1,8 @@
 import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
-import 'package:task_hard/features/note/data/model/note_model.dart';
-import 'package:task_hard/features/note/domain/entities/note.dart';
 
+import '../../../note/data/model/note_model.dart';
+import '../../../note/domain/entities/note.dart';
 import '../model/tags_model.dart';
 
 const String tagsKey = 'tags_key';
@@ -14,6 +14,7 @@ abstract class TagsLocalDataSouce {
   TagsModel addTagOnNote(String noteKey, String tagName);
   TagsModel addTagOnList(List<Note> notes, String tagName);
   TagsModel removeTagFronNote(String noteKey, String tagName);
+  TagsModel removeTagFromList(List<Note> notes, String tagName);
 }
 
 class TagsLocalDataSouceImpl implements TagsLocalDataSouce {
@@ -98,5 +99,20 @@ class TagsLocalDataSouceImpl implements TagsLocalDataSouce {
       selectedNotes.add(NoteModel.fromMap(map));
     }
     return TagsModel.fromIterable(tags, {}, selectedNotes);
+  }
+
+  @override
+  TagsModel removeTagFromList(List<Note> notes, String tagName) {
+    final tagsFromDB = box.values;
+    List<Note> aux = <Note>[];
+    for (Note note in notes) {
+      List<String> tags = List<String>.from(note.tags);
+      tags.remove(tagName);
+      var noteFromDB = noteBox.get(note.key, defaultValue: {});
+      noteFromDB['tags'] = List<dynamic>.from(tags);
+      aux.add(NoteModel.fromMap(noteFromDB));
+      noteBox.put(note.key, noteFromDB);
+    }
+    return TagsModel.fromIterable(tagsFromDB, {}, aux);
   }
 }

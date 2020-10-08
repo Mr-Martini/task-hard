@@ -82,4 +82,21 @@ void main() {
       expect(result, Right(modelForAddTagList));
     },
   );
+
+  final modelForRemoveTagFromList =
+      TagsModel(tags: <String>[], noteTags: <String>[], noteList: <Note>[]);
+
+  test(
+    'should return Right<TagsModel> with the correct data when removeTagFromList is called',
+    () {
+      when(dataSource.removeTagFromList(any, any))
+          .thenReturn(modelForRemoveTagFromList);
+
+      final result = impl.removeTagFromList(<Note>[], 'tagName');
+
+      verify(dataSource.removeTagFromList(<Note>[], 'tagName'));
+      verifyNoMoreInteractions(dataSource);
+      expect(result, Right(modelForRemoveTagFromList));
+    },
+  );
 }
