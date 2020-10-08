@@ -118,6 +118,7 @@ class ScheduleNotificationOnReceiveService : JobIntentService() {
         calendar.apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
         }
 
         calendar.add(Calendar.DAY_OF_MONTH, 7)

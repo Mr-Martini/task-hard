@@ -228,26 +228,6 @@ class _TaskState extends State<Task> {
     );
   }
 
-  void updateReminderOnExit() {
-    BlocProvider.of<NoteBloc>(context).add(GetNoteByKey(key: widget.noteKey));
-    NoteState state = BlocProvider.of<NoteBloc>(context).state;
-    if (state is Loaded) {
-      DateTime reminder = state.note?.reminder;
-      if (reminder == null) return;
-      TimeOfDay time = TimeOfDay(hour: reminder.hour, minute: reminder.minute);
-      BlocProvider.of<NoteBloc>(context).add(
-        WriteNoteReminder(
-          reminder: state.note.reminder,
-          time: time,
-          repeat: state.note.repeat,
-          key: widget.noteKey,
-          title: state.note.title,
-          message: state.note.note,
-        ),
-      );
-    }
-  }
-
   Color getFABcolor() {
     if (color == cC.getDark || color == cC.getWhite) {
       return Theme.of(context).buttonColor;
@@ -314,7 +294,6 @@ class _TaskState extends State<Task> {
             context: widget.scaffoldKey.currentContext,
           );
         } else {
-          updateReminderOnExit();
           BlocProvider.of<hN.HomenotesBloc>(widget.scaffoldKey.currentContext)
               .add(hN.GetHomeNotes());
         }

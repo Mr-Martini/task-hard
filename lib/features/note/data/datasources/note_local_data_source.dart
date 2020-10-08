@@ -137,6 +137,9 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
     note['lastEdited'] = DateTime.now();
     note['key'] = key;
 
+    ReminderController.scheduleNotification(key, note['title'], note['note'],
+        key.hashCode, note['reminder'], note['repeat']);
+
     return note;
   }
 
@@ -146,6 +149,9 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
     note['title'] = value;
     note['lastEdited'] = DateTime.now();
     note['key'] = key;
+
+    ReminderController.scheduleNotification(key, note['title'], note['note'],
+        key.hashCode, note['reminder'], note['repeat']);
 
     return note;
   }

@@ -190,6 +190,7 @@ class MainActivity : FlutterActivity() {
 
         val calendar = Calendar.getInstance().apply {
             timeInMillis = time
+            set(Calendar.SECOND, 0)
         }
 
         if (alarmIntent != null && alarmManager != null) {
@@ -217,6 +218,7 @@ class MainActivity : FlutterActivity() {
             timeInMillis = time
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
         }
 
         val alarmIntent = PendingIntent.getBroadcast(this, id, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -249,6 +251,7 @@ class MainActivity : FlutterActivity() {
 
         val calendar: Calendar = Calendar.getInstance().apply {
             timeInMillis = time
+            set(Calendar.SECOND, 0)
         }
 
         val alarmIntent = PendingIntent.getBroadcast(this, id, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)

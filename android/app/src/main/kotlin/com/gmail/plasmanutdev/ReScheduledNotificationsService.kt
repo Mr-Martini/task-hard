@@ -84,6 +84,7 @@ class ReScheduledNotificationsService : JobIntentService() {
 
         val scheduledDate = Calendar.getInstance().apply {
             timeInMillis = time
+            set(Calendar.SECOND, 0)
         }
 
         val calendar = Calendar.getInstance()
@@ -117,6 +118,7 @@ class ReScheduledNotificationsService : JobIntentService() {
         val calendar = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
         }
 
         val now = Calendar.getInstance()
@@ -153,6 +155,7 @@ class ReScheduledNotificationsService : JobIntentService() {
         calendar.apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
         }
 
 
