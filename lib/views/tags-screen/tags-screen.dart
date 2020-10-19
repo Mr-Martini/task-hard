@@ -3,20 +3,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
-import 'package:task_hard/components/appbar-component/tags-screen-app-bar.dart';
-import 'package:task_hard/components/edit-tag-component/update-tag-info.dart';
-import 'package:task_hard/components/empty-folder-component/empty-folder.dart';
-import 'package:task_hard/components/icon-components/icon-generic.dart';
-import 'package:task_hard/components/tag-bubble-component/tag-buble-component.dart';
-import 'package:task_hard/controllers/common/search-algorithm.dart';
-import 'package:task_hard/controllers/database-controller/hive-controller.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:task_hard/controllers/selectedValues-controller/selected-values-controller.dart';
-import 'package:task_hard/generated/l10n.dart';
-import 'package:task_hard/views/home-screen/home-screen.dart';
-import 'package:task_hard/views/tags-screen/tag-screen.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../components/appbar-component/tags-screen-app-bar.dart';
+import '../../components/edit-tag-component/update-tag-info.dart';
+import '../../components/empty-folder-component/empty-folder.dart';
+import '../../components/icon-components/icon-generic.dart';
+import '../../components/tag-bubble-component/tag-buble-component.dart';
+import '../../controllers/common/search-algorithm.dart';
+import '../../controllers/database-controller/hive-controller.dart';
+import '../../controllers/selectedValues-controller/selected-values-controller.dart';
+import '../../generated/l10n.dart';
+import '../home-screen/home-screen.dart';
+import 'tag-screen.dart';
 
 class TagsScreen extends StatefulWidget {
   static const String id = 'tags_screen';

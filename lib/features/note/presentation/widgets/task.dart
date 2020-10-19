@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +6,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart'
     as hN;
 import 'package:task_hard/features/note/presentation/bloc/note_bloc.dart';
-import 'package:task_hard/features/tags/presentation/widgets/add_tag_on_note.dart';
 import 'package:task_hard/features/note_reminder/presentation/bloc/notereminder_bloc.dart'
     as nR;
 import 'package:task_hard/features/note_reminder/presentation/widgets/note_reminder.dart';
 import 'package:task_hard/features/note_tags/presentation/widgets/note_tags.dart';
+import 'package:task_hard/features/tags/presentation/widgets/add_tag_on_note.dart';
 import 'package:task_hard/features/time_preference/presentation/widgets/alert_reminder_container.dart';
 import 'package:task_hard/generated/l10n.dart';
 import 'package:uuid/uuid.dart';
@@ -25,6 +23,7 @@ import '../../../../core/Utils/alert_dialog.dart';
 import '../../../../core/Utils/alert_reminder_params.dart';
 import '../../../../core/Utils/input_validation.dart';
 import '../../../../core/Utils/snackbar_context.dart';
+import '../../../../core/Utils/write_on.dart';
 
 enum options { createACopy, delete }
 
@@ -33,6 +32,7 @@ class Task extends StatefulWidget {
   final String note;
   final Color color;
   final String noteKey;
+  final WriteOn box;
   final GlobalKey<ScaffoldState> scaffoldKey;
 
   Task({
@@ -41,6 +41,7 @@ class Task extends StatefulWidget {
     @required this.note,
     @required this.color,
     @required this.noteKey,
+    @required this.box,
     @required this.scaffoldKey,
   }) : super(key: key);
 
@@ -86,6 +87,7 @@ class _TaskState extends State<Task> {
         key: widget.noteKey,
         title: title,
         message: note,
+        box: widget.box,
       ),
     );
     BlocProvider.of<nR.NoteReminderBloc>(context).add(
@@ -99,6 +101,7 @@ class _TaskState extends State<Task> {
     BlocProvider.of<NoteBloc>(context).add(
       DeleteNoteReminder(
         key: widget.noteKey,
+        box: widget.box,
       ),
     );
     BlocProvider.of<nR.NoteReminderBloc>(context).add(
@@ -114,6 +117,7 @@ class _TaskState extends State<Task> {
       WriteNoteColor(
         color: newColor,
         key: widget.noteKey,
+        box: widget.box,
       ),
     );
     setState(() {
@@ -132,7 +136,7 @@ class _TaskState extends State<Task> {
           raisedText: translate.Ok,
           raisedOnPressed: () {
             BlocProvider.of<NoteBloc>(context)
-                .add(DeleteNote(key: widget.noteKey));
+                .add(DeleteNote(key: widget.noteKey, box: widget.box));
             BlocProvider.of<hN.HomenotesBloc>(widget.scaffoldKey.currentContext)
                 .add(hN.GetHomeNotes());
             Navigator.pop(context);
@@ -164,6 +168,7 @@ class _TaskState extends State<Task> {
                 title: title,
                 content: note,
                 color: color,
+                box: widget.box,
               ),
             );
             BlocProvider.of<hN.HomenotesBloc>(widget.scaffoldKey.currentContext)
@@ -174,7 +179,12 @@ class _TaskState extends State<Task> {
               title: translate.copy_created,
               actionMessage: translate.undo,
               action: () {
-                BlocProvider.of<NoteBloc>(context).add(DeleteNote(key: key));
+                BlocProvider.of<NoteBloc>(context).add(
+                  DeleteNote(
+                    key: key,
+                    box: widget.box,
+                  ),
+                );
               },
             );
           },
@@ -203,6 +213,7 @@ class _TaskState extends State<Task> {
         BlocProvider.of<NoteBloc>(context).add(
           ArchiveNote(
             key: widget.noteKey,
+            box: widget.box,
           ),
         );
         BlocProvider.of<hN.HomenotesBloc>(widget.scaffoldKey.currentContext)
@@ -217,14 +228,14 @@ class _TaskState extends State<Task> {
   void onChangedNote(String value) {
     note = value;
     BlocProvider.of<NoteBloc>(context).add(
-      WriteNoteContent(content: value, key: widget.noteKey),
+      WriteNoteContent(content: value, key: widget.noteKey, box: widget.box),
     );
   }
 
   void onChangedTitle(String value) {
     title = value;
     BlocProvider.of<NoteBloc>(context).add(
-      WriteNoteTitle(title: value, key: widget.noteKey),
+      WriteNoteTitle(title: value, key: widget.noteKey, box: widget.box),
     );
   }
 
@@ -282,11 +293,13 @@ class _TaskState extends State<Task> {
             ..add(
               DeleteNoteReminder(
                 key: widget.noteKey,
+                box: widget.box,
               ),
             )
             ..add(
               DeleteNote(
                 key: widget.noteKey,
+                box: widget.box,
               ),
             );
           ShowSnackBar.show(

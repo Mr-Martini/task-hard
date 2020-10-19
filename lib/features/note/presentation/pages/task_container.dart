@@ -38,6 +38,7 @@ class TaskContainer extends StatelessWidget {
           color: args.color,
           noteKey: args.key,
           scaffoldKey: args.scaffoldKey,
+          box: args.box,
         ),
       ),
     );

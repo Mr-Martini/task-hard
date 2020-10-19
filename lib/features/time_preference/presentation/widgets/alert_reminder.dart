@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:task_hard/core/Utils/alert_reminder_params.dart';
 
 import '../../../../components/dropdown-menu-component/dropdown-menu-component.dart';
 import '../../../../components/text-components/text-generic.dart';
 import '../../../../controllers/repeat-controller/repeat-controller.dart';
+import '../../../../core/Utils/alert_reminder_params.dart';
 import '../../../../generated/l10n.dart';
 
 class AlertReminder extends StatefulWidget {

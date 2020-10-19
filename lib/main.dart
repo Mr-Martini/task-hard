@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,16 +13,15 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import './dependency_container.dart' as di;
 import 'controllers/selectedValues-controller/selected-values-controller.dart';
 import 'controllers/view-controller/view-controller.dart';
+import 'dependency_container.dart' as di;
 import 'dependency_container.dart';
 import 'features/taged_notes_home/presentation/bloc/tagednoteshomebloc_bloc.dart';
 import 'features/theme/presentation/bloc/theme_bloc.dart';
 import 'features/theme/presentation/widgets/top_main.dart';
 import 'features/time_preference/presentation/bloc/timepreference_bloc.dart';
 import 'features/visualization_option/presentation/bloc/visualizationoption_bloc.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

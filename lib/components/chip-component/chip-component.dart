@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
+
+import '../text-components/text-generic.dart';
 
 class ChipWithBottomSheet extends StatelessWidget {
   final String label;

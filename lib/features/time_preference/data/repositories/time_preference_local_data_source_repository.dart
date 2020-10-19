@@ -1,10 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/core/error/failures.dart';
-import 'package:task_hard/features/time_preference/data/datasources/time_preference_local_data_source.dart';
-import 'package:task_hard/features/time_preference/domain/entities/time_preference.dart';
-import 'package:task_hard/features/time_preference/domain/repositories/time_preference_repository.dart';
 import 'package:meta/meta.dart';
+
+import '../../../../core/error/failures.dart';
+import '../../domain/entities/time_preference.dart';
+import '../../domain/repositories/time_preference_repository.dart';
+import '../datasources/time_preference_local_data_source.dart';
 
 class TimePreferenceLocalDataSoureceRepositoryImpl
     implements TimePreferenceRepository {

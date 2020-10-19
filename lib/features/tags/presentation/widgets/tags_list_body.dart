@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_bloc.dart'
-    as sN;
 import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart'
     as hN;
 import 'package:task_hard/features/note/domain/entities/note.dart';

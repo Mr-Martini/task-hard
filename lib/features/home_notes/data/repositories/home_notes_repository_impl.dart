@@ -1,9 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:task_hard/core/error/failures.dart';
-import 'package:task_hard/features/home_notes/data/datasources/home_notes.datasource.dart';
-import 'package:task_hard/features/home_notes/domain/entities/home_notes.dart';
-import 'package:task_hard/features/home_notes/domain/repositories/home_notes_repository.dart';
 import 'package:meta/meta.dart';
+
+import '../../../../core/error/failures.dart';
+import '../../domain/entities/home_notes.dart';
+import '../../domain/repositories/home_notes_repository.dart';
+import '../datasources/home_notes.datasource.dart';
 
 class HomeNotesRepositoryImpl implements HomeNotesRepository {
   final HomeNotesDataSource dataSource;

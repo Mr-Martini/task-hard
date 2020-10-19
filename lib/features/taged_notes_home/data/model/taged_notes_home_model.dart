@@ -1,4 +1,4 @@
-import 'package:task_hard/features/taged_notes_home/domain/entities/taged_notes_home.dart';
+import '../../domain/entities/taged_notes_home.dart';
 
 class TagedNotesHomeModel extends TagedNotesHome {
   final bool should;

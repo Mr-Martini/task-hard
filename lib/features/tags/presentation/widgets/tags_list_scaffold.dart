@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_hard/dependency_container.dart';
-import 'package:task_hard/features/note/domain/entities/note.dart';
-import 'package:task_hard/features/tags/presentation/bloc/tags_bloc.dart';
-import 'package:task_hard/features/tags/presentation/widgets/tags_list_app_bar.dart';
-import 'package:task_hard/features/tags/presentation/widgets/tags_list_body.dart';
+
+import '../../../../dependency_container.dart';
+import '../../../note/domain/entities/note.dart';
+import '../bloc/tags_bloc.dart';
+import 'tags_list_app_bar.dart';
+import 'tags_list_body.dart';
 
 class TagsListScaffold extends StatefulWidget {
   final BuildContext selectedNotesContext;

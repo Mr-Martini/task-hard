@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:task_hard/components/icon-components/icon-generic.dart';
-import 'package:task_hard/controllers/repeat-controller/repeat-controller.dart';
-import 'package:task_hard/controllers/selectedValues-controller/selected-values-controller.dart';
-import 'package:task_hard/controllers/colors-controller/color-controller.dart';
-import 'package:task_hard/generated/l10n.dart';
+
+import '../../controllers/colors-controller/color-controller.dart';
+import '../../controllers/repeat-controller/repeat-controller.dart';
+import '../../controllers/selectedValues-controller/selected-values-controller.dart';
+import '../../generated/l10n.dart';
+import '../icon-components/icon-generic.dart';
 
 class CardNote extends StatefulWidget {
   final String color;

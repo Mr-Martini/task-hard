@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:task_hard/components/icon-components/icon-generic.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
-import 'package:task_hard/generated/l10n.dart';
+import 'package:flutter/material.dart';
+
+import '../../generated/l10n.dart';
+import '../icon-components/icon-generic.dart';
+import '../text-components/text-generic.dart';
 
 class InformationBox extends StatelessWidget {
   final String title;

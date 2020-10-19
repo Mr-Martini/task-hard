@@ -1,25 +1,26 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
-import 'package:task_hard/components/appbar-component/generica-app-bar.dart';
-import 'package:task_hard/components/decent-listtile-component/decent-listtile-component.dart';
-import 'package:task_hard/components/empty-folder-component/empty-folder.dart';
-import 'package:task_hard/components/notes-components/card-note-component.dart';
-import 'package:task_hard/controllers/common/notifications-common.dart';
-import 'package:task_hard/controllers/common/search-algorithm.dart';
-import 'package:task_hard/controllers/database-controller/hive-controller.dart';
-import 'package:task_hard/controllers/search-screen-focus/search-screen-focus.dart';
-import 'package:task_hard/controllers/view-controller/view-controller.dart';
-import 'package:task_hard/generated/l10n.dart';
-import 'package:task_hard/views/archive-screen/archive-screen.dart';
-import 'package:task_hard/views/new-task-screen/new-task-screen.dart';
-import 'package:task_hard/views/trash-screen/trash-screen.dart';
-import 'package:provider/provider.dart';
-import 'package:task_hard/controllers/selectedValues-controller/selected-values-controller.dart';
-import 'package:task_hard/views/home-screen/home-screen.dart' show Arguments;
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
+
+import '../../components/appbar-component/generica-app-bar.dart';
+import '../../components/decent-listtile-component/decent-listtile-component.dart';
+import '../../components/empty-folder-component/empty-folder.dart';
+import '../../components/notes-components/card-note-component.dart';
+import '../../controllers/common/notifications-common.dart';
+import '../../controllers/common/search-algorithm.dart';
+import '../../controllers/database-controller/hive-controller.dart';
+import '../../controllers/search-screen-focus/search-screen-focus.dart';
+import '../../controllers/selectedValues-controller/selected-values-controller.dart';
+import '../../controllers/view-controller/view-controller.dart';
+import '../../generated/l10n.dart';
+import '../archive-screen/archive-screen.dart';
+import '../home-screen/home-screen.dart' show Arguments;
+import '../new-task-screen/new-task-screen.dart';
+import '../trash-screen/trash-screen.dart';
 
 class SearchScreen extends StatefulWidget {
   static const String id = 'search_screen';

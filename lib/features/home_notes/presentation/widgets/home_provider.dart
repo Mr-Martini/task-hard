@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
-import 'package:task_hard/core/Utils/home_selected_notes.dart';
-import 'package:task_hard/features/visualization_option/presentation/bloc/visualizationoption_bloc.dart';
-import 'package:task_hard/features/visualization_option/presentation/widgets/staggered_grid_view.dart';
 
 import '../../../../components/empty-folder-component/empty-folder.dart';
 import '../../../../core/Utils/arguments.dart';
-import '../../../home_app_bar/presentation/widgets/material_card_app_bar_container.dart';
-import '../../../../dependency_container.dart';
+import '../../../../core/Utils/home_selected_notes.dart';
+import '../../../../core/Utils/write_on.dart';
 import '../../../../generated/l10n.dart';
 import '../../../home_app_bar/presentation/bloc/homeappbar_bloc.dart';
+import '../../../home_app_bar/presentation/widgets/material_card_app_bar_container.dart';
 import '../../../note/domain/entities/note.dart';
 import '../../../note/presentation/pages/task_container.dart';
+import '../../../visualization_option/presentation/widgets/staggered_grid_view.dart';
 import '../bloc/homenotes_bloc.dart' as hN;
 
 class HomeProvider extends StatefulWidget {
@@ -69,37 +67,48 @@ class _HomeProviderState extends State<HomeProvider> {
               toolTip: widget.translate.notes,
             );
           }
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CustomStaggeredGridView(
-              itemCount: state.notes.notes.length,
-              itemBuilder: (BuildContext context, int index) {
-                var note = state.notes.notes[index];
-                return MaterialCardAppBarContainer(
-                  note: note,
-                  onTap: (bool isSelected) {
-                    if (sN.getNotes.isEmpty) {
-                      Navigator.pushNamed(
-                        context,
-                        TaskContainer.id,
-                        arguments: Arguments(
-                          title: note.title,
-                          note: note.note,
-                          color: note.color ?? Theme.of(context).primaryColor,
-                          key: note.key,
-                          scaffoldKey: widget._scaffoldKey,
-                          context: context,
-                        ),
-                      );
-                    } else {
+          return WillPopScope(
+            onWillPop: () async {
+              if (sN.getNotes.isNotEmpty) {
+                sN.clear();
+                BlocProvider.of<HomeappbarBloc>(context).add(AddNote(selectedNotes: <Note>[]));
+                return false;
+              }
+              return true;
+            },
+                      child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomStaggeredGridView(
+                itemCount: state.notes.notes.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var note = state.notes.notes[index];
+                  return MaterialCardAppBarContainer(
+                    note: note,
+                    onTap: (bool isSelected) {
+                      if (sN.getNotes.isEmpty) {
+                        Navigator.pushNamed(
+                          context,
+                          TaskContainer.id,
+                          arguments: Arguments(
+                            title: note.title,
+                            note: note.note,
+                            color: note.color ?? Theme.of(context).primaryColor,
+                            key: note.key,
+                            scaffoldKey: widget._scaffoldKey,
+                            context: context,
+                            box: WriteOn.home,
+                          ),
+                        );
+                      } else {
+                        addOrRemoveNote(isSelected, note);
+                      }
+                    },
+                    onLongPress: (bool isSelected) {
                       addOrRemoveNote(isSelected, note);
-                    }
-                  },
-                  onLongPress: (bool isSelected) {
-                    addOrRemoveNote(isSelected, note);
-                  },
-                );
-              },
+                    },
+                  );
+                },
+              ),
             ),
           );
         }

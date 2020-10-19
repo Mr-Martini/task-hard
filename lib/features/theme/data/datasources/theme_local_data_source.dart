@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:task_hard/core/Utils/accent_colors.dart';
-import 'package:task_hard/features/theme/data/model/theme_model.dart';
 import 'package:meta/meta.dart';
+
+import '../../../../core/Utils/accent_colors.dart';
+import '../model/theme_model.dart';
 
 const String THEME_BOX = 'THEME_BOX';
 

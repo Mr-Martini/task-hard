@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:task_hard/features/time_preference/presentation/widgets/alert_reminder_container.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../Utils/Utils.dart';
@@ -14,6 +13,7 @@ import '../../controllers/common/notifications-common.dart';
 import '../../controllers/database-controller/hive-controller.dart';
 import '../../controllers/reminder-controller/reminder-controller.dart';
 import '../../controllers/selectedValues-controller/selected-values-controller.dart';
+import '../../features/time_preference/presentation/widgets/alert_reminder_container.dart';
 import '../../generated/l10n.dart';
 import '../../views/about-screen/about-screen.dart';
 import '../../views/profile-screen/profile-screen.dart';

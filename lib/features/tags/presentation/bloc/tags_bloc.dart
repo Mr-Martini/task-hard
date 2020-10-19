@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:task_hard/features/tags/domain/usecases/remove_tag_from_list_usecase.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
@@ -15,6 +14,7 @@ import '../../domain/usecases/add_tag_on_note.dart';
 import '../../domain/usecases/get_only_tags_usecase.dart';
 import '../../domain/usecases/get_tag_for_list_usecase.dart';
 import '../../domain/usecases/get_tags_usecase.dart';
+import '../../domain/usecases/remove_tag_from_list_usecase.dart';
 import '../../domain/usecases/remove_tag_from_note_usecase.dart';
 
 part 'tags_event.dart';

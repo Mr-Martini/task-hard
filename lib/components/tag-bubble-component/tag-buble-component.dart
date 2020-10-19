@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
-import 'package:task_hard/controllers/colors-controller/color-controller.dart';
-import 'package:task_hard/controllers/selectedValues-controller/selected-values-controller.dart';
+
+import '../../controllers/colors-controller/color-controller.dart';
+import '../../controllers/selectedValues-controller/selected-values-controller.dart';
+import '../text-components/text-generic.dart';
 
 class TagBubble extends StatefulWidget {
   final String title;

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/features/note/domain/repositories/note_repository.dart';
 import 'package:task_hard/features/note/domain/usecases/delete_note.dart';
@@ -34,11 +35,11 @@ void main() {
         expired: false,
       );
 
-      when(repository.deleteNote(any)).thenReturn(Right(model));
+      when(repository.deleteNote(any, any)).thenReturn(Right(model));
 
-      final result = useCase(DeleteNoteParams(key: 'key'));
+      final result = useCase(DeleteNoteParams(key: 'key', box: WriteOn.home));
 
-      verify(repository.deleteNote('key'));
+      verify(repository.deleteNote('key', WriteOn.home));
       verifyNoMoreInteractions(repository);
       expect(result, Right(model));
     },

@@ -4,8 +4,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
-import './features/time_preference/domain/usecases/time_preference_usecase_night.dart';
-import './features/time_preference/domain/usecases/time_preference_usecase_set_afternoon.dart';
 import 'features/home_app_bar/data/datasources/home_app_local_data_source.dart';
 import 'features/home_app_bar/data/repositories/home_app_bar_repository_impl.dart';
 import 'features/home_app_bar/domain/repositories/home_app_bar_repository.dart';
@@ -76,6 +74,8 @@ import 'features/time_preference/data/datasources/time_preference_local_data_sou
 import 'features/time_preference/data/repositories/time_preference_local_data_source_repository.dart';
 import 'features/time_preference/domain/repositories/time_preference_repository.dart';
 import 'features/time_preference/domain/usecases/time_preference_usecase_morning.dart';
+import 'features/time_preference/domain/usecases/time_preference_usecase_night.dart';
+import 'features/time_preference/domain/usecases/time_preference_usecase_set_afternoon.dart';
 import 'features/time_preference/domain/usecases/time_preference_usecase_set_noon.dart';
 import 'features/time_preference/domain/usecases/time_preference_usecase_set_preference_morning.dart';
 import 'features/time_preference/presentation/bloc/timepreference_bloc.dart';
@@ -296,7 +296,9 @@ Future<void> registerNote(List key) async {
   //datasources
   sl.registerLazySingleton<NoteLocalDataSource>(
     () => NoteLocalDataSourceImpl(
-      noteBox: sl.get(instanceName: 'notes'),
+      homeBox: sl.get(instanceName: 'notes'),
+      archiveBox: sl.get(instanceName: 'archive_notes'),
+      deleteBox: sl.get(instanceName: 'delete_notes'),
     ),
   );
 
@@ -304,6 +306,14 @@ Future<void> registerNote(List key) async {
   sl.registerSingletonAsync(
     () async => await Hive.openBox('notes', encryptionKey: key),
     instanceName: 'notes',
+  );
+  sl.registerSingletonAsync(
+    () async => await Hive.openBox('archive_notes', encryptionKey: key),
+    instanceName: 'archive_notes',
+  );
+  sl.registerSingletonAsync(
+    () async => await Hive.openBox('delete_notes', encryptionKey: key),
+    instanceName: 'delete_notes',
   );
 }
 

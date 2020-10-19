@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/core/Utils/accent_colors.dart';
-import 'package:task_hard/features/theme/domain/entities/theme_entity.dart';
+
+import '../../../../core/Utils/accent_colors.dart';
+import '../../domain/entities/theme_entity.dart';
 
 class ThemeModel extends Equatable implements ThemeEntity {
   final ThemeData themeData;

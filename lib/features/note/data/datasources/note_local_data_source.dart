@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
-import 'package:task_hard/controllers/reminder-controller/reminder-controller.dart';
-import 'package:uuid/uuid.dart';
 
+import '../../../../controllers/reminder-controller/reminder-controller.dart';
+import '../../../../core/Utils/write_on.dart';
 import '../model/note_model.dart';
 
 abstract class NoteLocalDataSource {
-  NoteModel getNoteByKey(String key);
-  NoteModel writeNoteContent(String content, String key);
-  NoteModel writeNoteTitle(String title, String key);
-  NoteModel writeNoteColor(Color color, String key);
+  NoteModel getNoteByKey(String key, WriteOn box);
+  NoteModel writeNoteContent(String content, String key, WriteOn box);
+  NoteModel writeNoteTitle(String title, String key, WriteOn box);
+  NoteModel writeNoteColor(Color color, String key, WriteOn box);
   NoteModel writeNoteReminder(
     DateTime reminder,
     TimeOfDay time,
@@ -18,21 +18,42 @@ abstract class NoteLocalDataSource {
     String key,
     String title,
     String message,
+    WriteOn box,
   );
-  NoteModel deleteNoteReminder(String key);
-  NoteModel deleteNote(String key);
-  NoteModel archiveNote(String key);
-  NoteModel copyNote(String key, String title, String content, Color color);
+  NoteModel deleteNoteReminder(String key, WriteOn box);
+  NoteModel deleteNote(String key, WriteOn box);
+  NoteModel archiveNote(String key, WriteOn box);
+  NoteModel copyNote(
+      String key, String title, String content, Color color, WriteOn box);
 }
 
 class NoteLocalDataSourceImpl implements NoteLocalDataSource {
-  final Box<dynamic> noteBox;
+  final Box<dynamic> homeBox;
+  final Box<dynamic> archiveBox;
+  final Box<dynamic> deleteBox;
 
-  NoteLocalDataSourceImpl({@required this.noteBox});
+  NoteLocalDataSourceImpl({
+    @required this.homeBox,
+    @required this.archiveBox,
+    @required this.deleteBox,
+  });
 
   @override
-  NoteModel getNoteByKey(String key) {
-    final map = noteBox.get(key, defaultValue: null);
+  NoteModel getNoteByKey(String key, WriteOn box) {
+    var map = {};
+
+    switch (box) {
+      case WriteOn.home:
+        map = homeBox.get(key, defaultValue: null);
+        break;
+      case WriteOn.archive:
+        map = archiveBox.get(key, defaultValue: null);
+        break;
+      case WriteOn.deleted:
+        map = deleteBox.get(key, defaultValue: null);
+        break;  
+      default:
+    }
 
     if (map != null) {
       return NoteModel.fromMap(map);
@@ -41,27 +62,21 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
   }
 
   @override
-  NoteModel writeNoteContent(String content, String key) {
-    final note = _addContent(key, content);
-    noteBox.put(key, note);
-
-    return NoteModel.fromMap(note);
+  NoteModel writeNoteContent(String content, String key, WriteOn box) {
+    final note = _addContent(key, content, box);
+    return note;
   }
 
   @override
-  NoteModel writeNoteTitle(String title, String key) {
-    final note = _addTitle(key, title);
-    noteBox.put(key, note);
-
-    return NoteModel.fromMap(note);
+  NoteModel writeNoteTitle(String title, String key, WriteOn box) {
+    final note = _addTitle(key, title, box);
+    return note;
   }
 
   @override
-  NoteModel writeNoteColor(Color color, String key) {
-    final note = _addColor(key, color);
-    noteBox.put(key, note);
-
-    return NoteModel.fromMap(note);
+  NoteModel writeNoteColor(Color color, String key, WriteOn box) {
+    final note = _addColor(key, color, box);
+    return note;
   }
 
   @override
@@ -72,20 +87,32 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
     String key,
     String title,
     String message,
+    WriteOn box,
   ) {
-    final note = _addReminder(key, time, repeat, reminder, title, message);
-    noteBox.put(key, note);
+    final note = _addReminder(key, time, repeat, reminder, title, message, box);
 
-    return NoteModel.fromMap(note);
+    return note;
   }
 
   @override
-  NoteModel deleteNoteReminder(String key) {
-    final note = noteBox.get(key, defaultValue: {});
+  NoteModel deleteNoteReminder(String key, WriteOn box) {
+    var note;
 
-    note['reminder'] = null;
-
-    noteBox.put(key, note);
+    switch (box) {
+      case WriteOn.home:
+        note = homeBox.get(key, defaultValue: {});
+        note['reminder'] = null;
+        note['expired'] = false;
+        homeBox.put(key, note);
+        break;
+      case WriteOn.archive:
+        note = archiveBox.get(key, defaultValue: {});
+        note['reminder'] = null;
+        note['expired'] = false;
+        archiveBox.put(key, note);
+        break;
+      default:
+    }
 
     ReminderController.cancel(key.hashCode);
 
@@ -93,31 +120,51 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
   }
 
   @override
-  NoteModel deleteNote(String key) {
-    final note = noteBox.get(key, defaultValue: {});
+  NoteModel deleteNote(String key, WriteOn box) {
+    var note;
 
-    noteBox.delete(key);
+    switch (box) {
+      case WriteOn.home:
+        note = homeBox.get(key, defaultValue: {});
+        homeBox.delete(key);
+        deleteBox.put(key, note);
+        break;
+      case WriteOn.archive:
+        note = archiveBox.get(key, defaultValue: {});
+        archiveBox.delete(key);
+        deleteBox.put(key, note);
+        break;
+      case WriteOn.deleted:
+        deleteBox.delete(key);
+        break;  
+      default:
+    }
 
     ReminderController.cancel(key.hashCode);
 
-    //TODO: put not on delete_notes box
+    return NoteModel.fromMap(note);
+  }
+
+  @override
+  NoteModel archiveNote(String key, WriteOn box) {
+    var note;
+
+    switch (box) {
+      case WriteOn.home:
+        note = homeBox.get(key, defaultValue: {});
+        homeBox.delete(key);
+        break;
+      default:
+    }
+
+    archiveBox.put(key, note);
 
     return NoteModel.fromMap(note);
   }
 
   @override
-  NoteModel archiveNote(String key) {
-    final note = noteBox.get(key, defaultValue: {});
-
-    noteBox.delete(key);
-
-    //TODO: put note on archived_notes box
-
-    return NoteModel.fromMap(note);
-  }
-
-  @override
-  NoteModel copyNote(String key, String title, String content, Color color) {
+  NoteModel copyNote(
+      String key, String title, String content, Color color, WriteOn box) {
     Map<String, dynamic> copy = <String, dynamic>{};
     copy['key'] = key;
     copy['title'] = title;
@@ -125,13 +172,32 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
     copy['color'] = color.value;
     copy['lastEdited'] = DateTime.now();
 
-    noteBox.put(key, copy);
+    switch (box) {
+      case WriteOn.home:
+        homeBox.put(key, copy);
+        break;
+      case WriteOn.archive:
+        archiveBox.put(key, copy);
+        break;
+      default:
+    }
 
     return NoteModel.fromMap(copy);
   }
 
-  dynamic _addContent(String key, String value) {
-    var note = noteBox.get(key, defaultValue: {});
+  NoteModel _addContent(String key, String value, WriteOn box) {
+    var note;
+
+    switch (box) {
+      case WriteOn.home:
+        note = homeBox.get(key, defaultValue: {});
+        break;
+      case WriteOn.archive:
+        note = archiveBox.get(key, defaultValue: {});
+        break;
+      default:
+        break;
+    }
 
     note['note'] = value;
     note['lastEdited'] = DateTime.now();
@@ -140,11 +206,33 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
     ReminderController.scheduleNotification(key, note['title'], note['note'],
         key.hashCode, note['reminder'], note['repeat']);
 
-    return note;
+    switch (box) {
+      case WriteOn.home:
+        homeBox.put(key, note);
+        break;
+      case WriteOn.archive:
+        archiveBox.put(key, note);
+        break;
+      default:
+        break;
+    }
+
+    return NoteModel.fromMap(note);
   }
 
-  dynamic _addTitle(String key, String value) {
-    var note = noteBox.get(key, defaultValue: {});
+  NoteModel _addTitle(String key, String value, WriteOn box) {
+    var note;
+
+    switch (box) {
+      case WriteOn.home:
+        note = homeBox.get(key, defaultValue: {});
+        break;
+      case WriteOn.archive:
+        note = archiveBox.get(key, defaultValue: {});
+        break;
+      default:
+        break;
+    }
 
     note['title'] = value;
     note['lastEdited'] = DateTime.now();
@@ -153,27 +241,61 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
     ReminderController.scheduleNotification(key, note['title'], note['note'],
         key.hashCode, note['reminder'], note['repeat']);
 
-    return note;
+    switch (box) {
+      case WriteOn.home:
+        homeBox.put(key, note);
+        break;
+      case WriteOn.archive:
+        archiveBox.put(key, note);
+        break;
+      default:
+        break;
+    }
+
+    return NoteModel.fromMap(note);
   }
 
-  dynamic _addColor(String key, Color color) {
-    var note = noteBox.get(key, defaultValue: {});
+  NoteModel _addColor(String key, Color color, WriteOn box) {
+    var note;
+
+    switch (box) {
+      case WriteOn.home:
+        note = homeBox.get(key, defaultValue: {});
+        break;
+      case WriteOn.archive:
+        note = archiveBox.get(key, defaultValue: {});
+        break;
+      default:
+        break;
+    }
 
     note['color'] = color.value;
     note['key'] = key;
 
-    return note;
+    return NoteModel.fromMap(note);
   }
 
-  dynamic _addReminder(
+  NoteModel _addReminder(
     String key,
     TimeOfDay time,
     String repeat,
     DateTime reminder,
     String title,
     String message,
+    WriteOn box,
   ) {
-    var note = noteBox.get(key, defaultValue: {});
+    var note;
+
+    switch (box) {
+      case WriteOn.home:
+        note = homeBox.get(key, defaultValue: {});
+        break;
+      case WriteOn.archive:
+        note = archiveBox.get(key, defaultValue: {});
+        break;
+      default:
+        break;
+    }
 
     DateTime aux = DateTime(
         reminder.year, reminder.month, reminder.day, time.hour, time.minute);
@@ -192,6 +314,17 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
     note['key'] = key;
     note['expired'] = false;
 
-    return note;
+    switch (box) {
+      case WriteOn.home:
+        homeBox.put(key, note);
+        break;
+      case WriteOn.archive:
+        archiveBox.put(key, note);
+        break;
+      default:
+        break;
+    }
+
+    return NoteModel.fromMap(note);
   }
 }

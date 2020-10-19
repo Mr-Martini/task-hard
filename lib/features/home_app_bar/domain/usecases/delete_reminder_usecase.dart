@@ -1,11 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:task_hard/core/error/failures.dart';
-import 'package:task_hard/core/usecases/usecases.dart';
-import 'package:task_hard/features/home_app_bar/domain/entities/home_app_bar_entity.dart';
-import 'package:task_hard/features/home_app_bar/domain/repositories/home_app_bar_repository.dart';
-import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:meta/meta.dart';
+
+import '../../../../core/error/failures.dart';
+import '../../../../core/usecases/usecases.dart';
+import '../../../note/domain/entities/note.dart';
+import '../entities/home_app_bar_entity.dart';
+import '../repositories/home_app_bar_repository.dart';
 
 class DeleteAppBarNoteReminderUseCase
     implements UseCases<HomeAppBarEntity, DeleteAppBarNoteReminderParams> {

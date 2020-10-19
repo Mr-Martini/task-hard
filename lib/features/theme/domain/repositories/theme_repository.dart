@@ -1,8 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:task_hard/core/error/failures.dart';
-import 'package:task_hard/features/theme/data/model/theme_model.dart';
-import 'package:task_hard/features/theme/domain/entities/theme_entity.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../core/error/failures.dart';
+import '../../data/model/theme_model.dart';
+import '../entities/theme_entity.dart';
 
 abstract class ThemeRepository {
   Either<Failure, ThemeEntity> getThemeData();

@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:task_hard/components/icon-components/icon-generic.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../icon-components/icon-generic.dart';
+import '../text-components/text-generic.dart';
 
 class DropDownMenu extends StatelessWidget {
   final String title;

@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
-import 'package:task_hard/controllers/reminder-controller/reminder-controller.dart';
-import 'package:task_hard/features/home_app_bar/data/model/home_app_bar_model.dart';
-import 'package:task_hard/features/note/data/model/note_model.dart';
-import 'package:task_hard/features/note/domain/entities/note.dart';
+
+import '../../../../controllers/reminder-controller/reminder-controller.dart';
+import '../../../note/data/model/note_model.dart';
+import '../../../note/domain/entities/note.dart';
+import '../model/home_app_bar_model.dart';
 
 abstract class HomeAppBarLocalDataSource {
   HomeAppBarModel addNote(List<Note> selectedNotes);

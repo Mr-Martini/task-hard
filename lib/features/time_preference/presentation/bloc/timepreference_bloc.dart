@@ -4,12 +4,12 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/features/time_preference/domain/usecases/time_preference_usecase_night.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
 import '../../domain/entities/time_preference.dart';
 import '../../domain/usecases/time_preference_usecase_morning.dart';
+import '../../domain/usecases/time_preference_usecase_night.dart';
 import '../../domain/usecases/time_preference_usecase_set_afternoon.dart';
 import '../../domain/usecases/time_preference_usecase_set_noon.dart';
 import '../../domain/usecases/time_preference_usecase_set_preference_morning.dart';

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_hard/dependency_container.dart';
-import 'package:task_hard/features/tags/presentation/bloc/tags_bloc.dart';
-import 'package:task_hard/generated/l10n.dart';
+
+import '../../../../dependency_container.dart';
+import '../../../../generated/l10n.dart';
+import '../bloc/tags_bloc.dart';
 
 class TagsListDrawer extends StatefulWidget {
   TagsListDrawer({Key key}) : super(key: key);

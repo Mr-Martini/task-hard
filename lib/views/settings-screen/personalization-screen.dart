@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/features/visualization_option/presentation/widgets/visualization_option_list_tile.dart';
+
 import '../../features/theme/presentation/widgets/theme_color_chooser.dart';
 import '../../features/theme/presentation/widgets/theme_provider.dart';
+import '../../features/visualization_option/presentation/widgets/visualization_option_list_tile.dart';
 import '../../generated/l10n.dart';
 
 class Personalization extends StatefulWidget {

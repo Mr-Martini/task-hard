@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:task_hard/components/icon-components/icon-generic.dart';
-import 'package:task_hard/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../../constants.dart';
+import '../icon-components/icon-generic.dart';
 
 class EmptyFolder extends StatelessWidget {
   final IconData androidIcon;

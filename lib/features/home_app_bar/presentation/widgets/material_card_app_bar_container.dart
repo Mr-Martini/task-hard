@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_hard/core/widgets/material_card.dart';
-import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_bloc.dart';
-import 'package:task_hard/features/note/domain/entities/note.dart';
+
+import '../../../../core/widgets/material_card.dart';
+import '../../../note/domain/entities/note.dart';
+import '../bloc/homeappbar_bloc.dart';
 
 class MaterialCardAppBarContainer extends StatelessWidget {
   final Note note;

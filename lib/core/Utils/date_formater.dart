@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:task_hard/controllers/repeat-controller/repeat-controller.dart';
-import 'package:task_hard/generated/l10n.dart';
+
+import '../../controllers/repeat-controller/repeat-controller.dart';
+import '../../generated/l10n.dart';
 
 abstract class DateFormater {
   static String format({

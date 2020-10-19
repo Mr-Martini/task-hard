@@ -6,15 +6,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:task_hard/controllers/repeat-controller/repeat-controller.dart';
-import 'package:task_hard/core/error/failures.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:task_hard/core/usecases/usecases.dart';
-import 'package:task_hard/features/home_notes/domain/usecases/expire_checker_usecase.dart';
-import 'package:task_hard/features/home_notes/domain/usecases/listen_notes_usecase.dart';
 
+import '../../../../controllers/repeat-controller/repeat-controller.dart';
+import '../../../../core/error/failures.dart';
+import '../../../../core/usecases/usecases.dart';
 import '../../domain/entities/home_notes.dart';
+import '../../domain/usecases/expire_checker_usecase.dart';
 import '../../domain/usecases/get_notes_usecase.dart';
+import '../../domain/usecases/listen_notes_usecase.dart';
 
 part 'homenotes_event.dart';
 part 'homenotes_state.dart';

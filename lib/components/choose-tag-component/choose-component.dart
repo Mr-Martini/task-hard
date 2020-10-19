@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/components/empty-folder-component/empty-folder.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
-import 'package:task_hard/constants.dart';
-import 'package:task_hard/controllers/database-controller/hive-controller.dart';
-import 'package:task_hard/generated/l10n.dart';
+
+import '../../constants.dart';
+import '../../controllers/database-controller/hive-controller.dart';
+import '../../generated/l10n.dart';
+import '../empty-folder-component/empty-folder.dart';
+import '../text-components/text-generic.dart';
 
 class ChooseTag extends StatefulWidget {
   final ValueChanged<String> updateTag;

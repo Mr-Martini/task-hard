@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
-import 'package:task_hard/features/home_notes/data/model/home_notes_model.dart';
 import 'package:meta/meta.dart';
+
+import '../model/home_notes_model.dart';
 
 abstract class HomeNotesDataSource {
   HomeNotesModel getNotes();

@@ -1,13 +1,14 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/components/icon-components/icon-generic.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
-import 'package:task_hard/components/tooltip-component/tooltip-component.dart';
-import 'package:task_hard/generated/l10n.dart';
-import 'package:task_hard/views/about-screen/about-screen.dart';
-import 'package:task_hard/views/profile-screen/profile-screen.dart';
-import 'package:task_hard/views/settings-screen/settings-screen.dart';
+
+import '../../components/icon-components/icon-generic.dart';
+import '../../components/text-components/text-generic.dart';
+import '../../components/tooltip-component/tooltip-component.dart';
+import '../../generated/l10n.dart';
+import '../../views/about-screen/about-screen.dart';
+import '../../views/profile-screen/profile-screen.dart';
+import '../../views/settings-screen/settings-screen.dart';
 
 class ProfileIconButton extends StatelessWidget {
   const ProfileIconButton({Key key}) : super(key: key);

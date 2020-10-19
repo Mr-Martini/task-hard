@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/features/note/domain/repositories/note_repository.dart';
 import 'package:task_hard/features/note/domain/usecases/copy_note_usecase.dart';
@@ -34,12 +35,12 @@ void main() {
   test(
     'should return Right<Note> when copy note is created',
     () {
-      when(repository.copyNote(any, any, any, any)).thenReturn(Right(model));
+      when(repository.copyNote(any, any, any, any, any)).thenReturn(Right(model));
 
       final result = useCase(CopyNoteParams(
-          key: 'key', title: 'title', content: 'content', color: Colors.amber));
+          key: 'key', title: 'title', content: 'content', color: Colors.amber, box: WriteOn.home));
 
-      verify(repository.copyNote('key', 'title', 'content', Colors.amber));
+      verify(repository.copyNote('key', 'title', 'content', Colors.amber, WriteOn.home));
       verifyNoMoreInteractions(repository);
       expect(result, Right(model));
     },

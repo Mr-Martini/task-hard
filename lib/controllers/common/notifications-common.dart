@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
-import 'package:task_hard/controllers/database-controller/hive-controller.dart';
-import 'package:task_hard/controllers/reminder-controller/reminder-controller.dart';
-import 'package:task_hard/controllers/selectedValues-controller/selected-values-controller.dart';
-import 'package:task_hard/generated/l10n.dart';
+
+import '../../components/text-components/text-generic.dart';
+import '../../generated/l10n.dart';
+import '../database-controller/hive-controller.dart';
+import '../reminder-controller/reminder-controller.dart';
+import '../selectedValues-controller/selected-values-controller.dart';
 
 class NotificationsCommon {
   Future<void> updateReminder(

@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_hard/core/Utils/date_formater.dart';
-import 'package:task_hard/features/note_reminder/presentation/bloc/notereminder_bloc.dart';
-import 'package:task_hard/generated/l10n.dart';
+
+import '../../../../core/Utils/date_formater.dart';
+import '../../../../generated/l10n.dart';
+import '../bloc/notereminder_bloc.dart';
 
 class TaskReminder extends StatefulWidget {
   final String noteKey;

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/icon-components/icon-generic.dart';
-import '../../components/text-components/text-generic.dart';
 import '../../constants.dart';
 import '../../generated/l10n.dart';
 import 'account.dart';

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:task_hard/controllers/repeat-controller/repeat-controller.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/features/note/domain/repositories/note_repository.dart';
 import 'package:task_hard/features/note/domain/usecases/get_note_by_key_usecase.dart';
@@ -37,11 +38,11 @@ void main() {
   test(
     'should return [Right<Note>] when getNoteByKey is called',
     () {
-      when(repository.getNoteByKey(any)).thenReturn(Right(model));
+      when(repository.getNoteByKey(any, any)).thenReturn(Right(model));
 
-      final result = useCase(GetNoteByKeyParams(key: 'dd'));
+      final result = useCase(GetNoteByKeyParams(key: 'dd', box: WriteOn.home));
 
-      verify(repository.getNoteByKey('dd'));
+      verify(repository.getNoteByKey('dd', WriteOn.home));
       expect(result, Right(model));
     },
   );

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:task_hard/features/note/data/model/note_model.dart';
 
+import '../../../note/data/model/note_model.dart';
 import '../../../note/domain/entities/note.dart';
 import '../../domain/entities/home_notes.dart';
 

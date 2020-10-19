@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
-import 'package:task_hard/generated/l10n.dart';
+
+import '../../generated/l10n.dart';
+import '../text-components/text-generic.dart';
 
 class UpdateTagInfo extends StatefulWidget {
   final ValueChanged<String> updateTag;

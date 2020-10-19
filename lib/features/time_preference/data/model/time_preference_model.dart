@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:task_hard/features/time_preference/domain/entities/time_preference.dart';
+
+import '../../domain/entities/time_preference.dart';
 
 class TimePreferenceModel extends Equatable implements TimePreference {
   final TimeOfDay morning;

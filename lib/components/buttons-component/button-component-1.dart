@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
-import 'package:task_hard/constants.dart';
+
+import '../../constants.dart';
+import '../text-components/text-generic.dart';
 
 class ButtonComponentOne extends StatelessWidget {
   final Function onPressed;

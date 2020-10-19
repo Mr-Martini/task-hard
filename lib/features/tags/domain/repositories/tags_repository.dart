@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:task_hard/features/note/domain/entities/note.dart';
 
 import '../../../../core/error/failures.dart';
+import '../../../note/domain/entities/note.dart';
 import '../entities/tags.dart';
 
 abstract class TagsRepository {

@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:io';
-import 'package:task_hard/generated/l10n.dart';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../../generated/l10n.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const String id = 'profile_screen';

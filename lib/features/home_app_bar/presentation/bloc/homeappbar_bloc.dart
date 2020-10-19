@@ -4,17 +4,17 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:task_hard/features/home_app_bar/domain/usecases/archive_note_usecase.dart';
-import 'package:task_hard/features/home_app_bar/domain/usecases/delete_reminder_usecase.dart';
-import 'package:task_hard/features/home_app_bar/domain/usecases/put_reminder_usecase.dart';
-import 'package:task_hard/features/home_app_bar/domain/usecases/undo_archive_usecase.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../note/domain/entities/note.dart';
 import '../../domain/entities/home_app_bar_entity.dart';
 import '../../domain/usecases/add_note_usecase.dart';
+import '../../domain/usecases/archive_note_usecase.dart';
 import '../../domain/usecases/change_color_usecase.dart';
 import '../../domain/usecases/delete_notes_usecase.dart';
+import '../../domain/usecases/delete_reminder_usecase.dart';
+import '../../domain/usecases/put_reminder_usecase.dart';
+import '../../domain/usecases/undo_archive_usecase.dart';
 import '../../domain/usecases/undo_delete_usecase.dart';
 
 part 'homeappbar_event.dart';

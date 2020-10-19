@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:task_hard/features/taged_notes_home/data/model/taged_notes_home_model.dart';
+
+import '../model/taged_notes_home_model.dart';
 
 const String TAGED_NOTES_HOME = 'TAGED_NOTES_HOME';
 

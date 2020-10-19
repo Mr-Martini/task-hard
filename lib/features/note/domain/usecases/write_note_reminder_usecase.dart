@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
@@ -23,6 +24,7 @@ class WriteNoteReminderUseCase
       params.key,
       params.title,
       params.message,
+      params.box,
     );
   }
 }
@@ -34,6 +36,7 @@ class WriteNoteReminderParams extends Equatable {
   final String key;
   final String title;
   final String message;
+  final WriteOn box;
 
   WriteNoteReminderParams({
     @required this.reminder,
@@ -42,8 +45,9 @@ class WriteNoteReminderParams extends Equatable {
     @required this.key,
     @required this.title,
     @required this.message,
+    @required this.box,
   });
 
   @override
-  List<Object> get props => [reminder, time, repeat, key];
+  List<Object> get props => [reminder, time, repeat, key, box];
 }

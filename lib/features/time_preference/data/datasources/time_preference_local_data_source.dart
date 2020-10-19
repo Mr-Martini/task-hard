@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:task_hard/features/time_preference/data/model/time_preference_model.dart';
 import 'package:meta/meta.dart';
+
+import '../model/time_preference_model.dart';
 
 abstract class TimePreferenceLocalDataSource {
   TimePreferenceModel getTimePreference();

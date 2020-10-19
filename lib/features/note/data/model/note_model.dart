@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/features/note/domain/entities/note.dart';
+
+import '../../domain/entities/note.dart';
 
 class NoteModel extends Equatable implements Note {
   final String key;

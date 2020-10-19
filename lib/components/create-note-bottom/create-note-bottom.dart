@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/components/all-notes-bottom-sheet/all-notes-bottom-sheet.dart';
-import 'package:task_hard/components/icon-components/icon-generic.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
-import 'package:task_hard/controllers/database-controller/hive-controller.dart';
-import 'package:task_hard/generated/l10n.dart';
-import 'package:task_hard/views/home-screen/home-screen.dart' show Arguments;
-import 'package:task_hard/views/new-task-screen/new-task-screen.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../controllers/database-controller/hive-controller.dart';
+import '../../generated/l10n.dart';
+import '../../views/home-screen/home-screen.dart' show Arguments;
+import '../../views/new-task-screen/new-task-screen.dart';
+import '../all-notes-bottom-sheet/all-notes-bottom-sheet.dart';
+import '../icon-components/icon-generic.dart';
+import '../text-components/text-generic.dart';
 
 class CreateNoteBottom extends StatelessWidget {
   final String tagName;

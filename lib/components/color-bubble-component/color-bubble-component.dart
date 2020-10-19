@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:task_hard/components/icon-components/icon-generic.dart';
+import 'package:flutter/material.dart';
+
+import '../icon-components/icon-generic.dart';
 
 class ColorBubbleComponent extends StatelessWidget {
   final Color color;

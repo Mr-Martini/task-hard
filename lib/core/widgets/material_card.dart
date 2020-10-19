@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:task_hard/core/Utils/date_formater.dart';
-import 'package:task_hard/features/note/domain/entities/note.dart';
-import 'package:task_hard/generated/l10n.dart';
+
+import '../../features/note/domain/entities/note.dart';
+import '../../generated/l10n.dart';
+import '../Utils/date_formater.dart';
 
 class MaterialCard extends StatelessWidget {
   final ValueChanged<bool> onTap;

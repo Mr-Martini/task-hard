@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart';
-import 'package:task_hard/features/note/domain/entities/note.dart';
-import 'package:task_hard/features/tags/presentation/bloc/tags_bloc.dart';
 
 import '../../../../generated/l10n.dart';
+import '../../../home_notes/presentation/bloc/homenotes_bloc.dart';
+import '../../../note/domain/entities/note.dart';
+import '../bloc/tags_bloc.dart';
 
 class TagsListAppBar extends StatefulWidget implements PreferredSizeWidget {
   final BuildContext selectedNotesContext;

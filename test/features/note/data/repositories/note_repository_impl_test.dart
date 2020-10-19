@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:task_hard/controllers/repeat-controller/repeat-controller.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/note/data/datasources/note_local_data_source.dart';
 import 'package:task_hard/features/note/data/model/note_model.dart';
 import 'package:task_hard/features/note/data/repositories/note_repository_impl.dart';
@@ -42,14 +43,14 @@ void main() {
       test(
         'should return Right<Note> when WriteNoteReminder is called',
         () {
-          when(dataSource.writeNoteReminder(any, any, any, any, any, any))
+          when(dataSource.writeNoteReminder(any, any, any, any, any, any, any))
               .thenReturn(note);
 
           final result = impl.writeNoteReminder(
-              reminder, now, Repeat.NO_REPEAT, key, null, null);
+              reminder, now, Repeat.NO_REPEAT, key, null, null, WriteOn.home);
 
           verify(dataSource.writeNoteReminder(
-              reminder, now, Repeat.NO_REPEAT, key, null, null));
+              reminder, now, Repeat.NO_REPEAT, key, null, null, WriteOn.home));
           verifyNoMoreInteractions(dataSource);
           expect(result, Right(note));
         },
@@ -58,11 +59,11 @@ void main() {
       test(
         'should return Right<Note> when ArchiveNoteUseCase is called',
         () {
-          when(dataSource.archiveNote(any)).thenReturn(note);
+          when(dataSource.archiveNote(any, any)).thenReturn(note);
 
-          final result = impl.archiveNote('key');
+          final result = impl.archiveNote('key', WriteOn.home);
 
-          verify(dataSource.archiveNote('key'));
+          verify(dataSource.archiveNote('key', WriteOn.home));
           verifyNoMoreInteractions(dataSource);
           expect(result, Right(note));
         },
@@ -71,11 +72,11 @@ void main() {
       test(
         'should return Right<Note> when CopyNoteUseCase is created',
         () {
-          when(dataSource.copyNote(any, any, any, any)).thenReturn(note);
+          when(dataSource.copyNote(any, any, any, any, any)).thenReturn(note);
 
-          final result = impl.copyNote(key, 'title', 'content', Colors.amber);
+          final result = impl.copyNote(key, 'title', 'content', Colors.amber, WriteOn.home);
 
-          verify(dataSource.copyNote(key, 'title', 'content', Colors.amber));
+          verify(dataSource.copyNote(key, 'title', 'content', Colors.amber, WriteOn.home));
           verifyNoMoreInteractions(dataSource);
           expect(result, Right(note));
         },

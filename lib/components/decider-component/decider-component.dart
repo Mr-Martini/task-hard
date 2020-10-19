@@ -1,8 +1,9 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/features/home_notes/presentation/pages/home_page.dart';
-import 'package:task_hard/views/search-screen/search-screen.dart';
-import 'package:task_hard/views/tags-screen/tags-screen.dart';
+
+import '../../features/home_notes/presentation/pages/home_page.dart';
+import '../../views/search-screen/search-screen.dart';
+import '../../views/tags-screen/tags-screen.dart';
 
 class Decider extends StatefulWidget {
   final selected;

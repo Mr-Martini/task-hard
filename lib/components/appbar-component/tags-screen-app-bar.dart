@@ -2,14 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:task_hard/Utils/Utils.dart';
-import 'package:task_hard/components/color-selector-component/color-selector-component.dart';
-import 'package:task_hard/components/edit-tag-component/update-tag-info.dart';
-import 'package:task_hard/components/icon-components/icon-generic.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
-import 'package:task_hard/controllers/database-controller/hive-controller.dart';
-import 'package:task_hard/controllers/selectedValues-controller/selected-values-controller.dart';
-import 'package:task_hard/generated/l10n.dart';
+
+import '../../Utils/Utils.dart';
+import '../../controllers/database-controller/hive-controller.dart';
+import '../../controllers/selectedValues-controller/selected-values-controller.dart';
+import '../../generated/l10n.dart';
+import '../color-selector-component/color-selector-component.dart';
+import '../edit-tag-component/update-tag-info.dart';
+import '../icon-components/icon-generic.dart';
+import '../text-components/text-generic.dart';
 
 class TagsAppBar extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => new Size.fromHeight(55);

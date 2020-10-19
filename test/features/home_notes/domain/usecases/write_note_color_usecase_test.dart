@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:task_hard/controllers/repeat-controller/repeat-controller.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/note/data/model/note_model.dart';
 import 'package:task_hard/features/note/domain/repositories/note_repository.dart';
 import 'package:task_hard/features/note/domain/usecases/write_note_color_usecase.dart';
@@ -37,12 +38,12 @@ void main() {
   test(
     'should return Right<NoteModel> when writeNoteColor is caled',
     () {
-      when(repository.writeNoteColor(any, any)).thenReturn(Right(model));
+      when(repository.writeNoteColor(any, any, any)).thenReturn(Right(model));
 
       final result =
-          useCase(WriteNoteColorParams(color: Colors.pink, key: 'key'));
+          useCase(WriteNoteColorParams(color: Colors.pink, key: 'key', box: WriteOn.home));
 
-      verify(repository.writeNoteColor(any, any));
+      verify(repository.writeNoteColor(any, any, any));
 
       expect(result, Right(model));
     },

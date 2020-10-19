@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../components/icon-components/icon-generic.dart';
-import '../../../../components/text-components/text-generic.dart';
 import '../bloc/timepreference_bloc.dart';
 
 class TimePreferenceListTile extends StatefulWidget {

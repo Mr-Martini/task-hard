@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:task_hard/controllers/day-controller/day-controller.dart';
-import 'package:task_hard/controllers/repeat-controller/repeat-controller.dart';
+
+import '../day-controller/day-controller.dart';
+import '../repeat-controller/repeat-controller.dart';
 
 abstract class ReminderController {
   static const _platform = const MethodChannel("notification_method");

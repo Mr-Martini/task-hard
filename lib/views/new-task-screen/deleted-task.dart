@@ -1,13 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:task_hard/Utils/Utils.dart';
-import 'package:task_hard/components/text-components/text-generic.dart';
-import 'package:task_hard/controllers/database-controller/hive-controller.dart';
-import 'package:task_hard/controllers/reminder-controller/reminder-controller.dart';
-import 'package:task_hard/generated/l10n.dart';
-import 'package:task_hard/views/home-screen/home-screen.dart' show Arguments;
-import 'package:task_hard/controllers/colors-controller/color-controller.dart';
-import 'package:task_hard/components/icon-components/icon-generic.dart';
+import 'package:flutter/material.dart';
+
+import '../../Utils/Utils.dart';
+import '../../components/icon-components/icon-generic.dart';
+import '../../components/text-components/text-generic.dart';
+import '../../controllers/colors-controller/color-controller.dart';
+import '../../controllers/database-controller/hive-controller.dart';
+import '../../controllers/reminder-controller/reminder-controller.dart';
+import '../../generated/l10n.dart';
+import '../home-screen/home-screen.dart' show Arguments;
 
 class DeletedTaskScreen extends StatefulWidget {
   static const String id = 'deleted_task_screen';

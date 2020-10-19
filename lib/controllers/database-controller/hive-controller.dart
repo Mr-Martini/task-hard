@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:task_hard/generated/l10n.dart';
+
+import '../../generated/l10n.dart';
 
 class HiveController {
   Box<dynamic> db = Hive.box('notes');

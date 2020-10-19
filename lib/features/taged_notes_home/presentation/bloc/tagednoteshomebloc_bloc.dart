@@ -4,11 +4,12 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/core/error/failures.dart';
-import 'package:task_hard/core/usecases/usecases.dart';
-import 'package:task_hard/features/taged_notes_home/domain/entities/taged_notes_home.dart';
-import 'package:task_hard/features/taged_notes_home/domain/usecases/taged_notes_home_get_preference.dart';
-import 'package:task_hard/features/taged_notes_home/domain/usecases/taged_notes_home_set_preferences.dart';
+
+import '../../../../core/error/failures.dart';
+import '../../../../core/usecases/usecases.dart';
+import '../../domain/entities/taged_notes_home.dart';
+import '../../domain/usecases/taged_notes_home_get_preference.dart';
+import '../../domain/usecases/taged_notes_home_set_preferences.dart';
 
 part 'tagednoteshomebloc_event.dart';
 part 'tagednoteshomebloc_state.dart';

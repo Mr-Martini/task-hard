@@ -1,12 +1,12 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/features/theme/presentation/widgets/theme_alert_dialog.dart';
 
 import '../../../../components/icon-components/icon-generic.dart';
 import '../../../../components/text-components/text-generic.dart';
 import '../../../../generated/l10n.dart';
 import '../../data/model/theme_model.dart';
+import 'theme_alert_dialog.dart';
 
 class ThemeListTile extends StatefulWidget {
   final String pref;

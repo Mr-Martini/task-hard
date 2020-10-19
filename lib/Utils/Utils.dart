@@ -1,8 +1,10 @@
-import 'package:animations/animations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:io';
-import 'package:task_hard/components/text-components/text-generic.dart';
+
+import 'package:animations/animations.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../components/text-components/text-generic.dart';
 
 class Utils {
   static SnackBar displaySnackBar(String message, BuildContext context,

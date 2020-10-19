@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:io';
 
-import 'package:task_hard/components/tooltip-component/tooltip-component.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../tooltip-component/tooltip-component.dart';
 
 class IconGeneric extends StatelessWidget {
   final IconData androidIcon;

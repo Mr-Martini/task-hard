@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:task_hard/core/Utils/accent_colors.dart';
 
 import '../../../../components/color-bubble-component/color-bubble-component.dart';
+import '../../../../core/Utils/accent_colors.dart';
 import '../bloc/theme_bloc.dart';
 
 class ThemeColorGridView extends StatefulWidget {

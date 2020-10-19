@@ -1,10 +1,11 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_hard/core/Utils/visualization_type.dart';
-import 'package:task_hard/features/visualization_option/presentation/bloc/visualizationoption_bloc.dart';
-import 'package:task_hard/features/visualization_option/presentation/widgets/alert_visualization_options.dart';
-import 'package:task_hard/generated/l10n.dart';
+
+import '../../../../core/Utils/visualization_type.dart';
+import '../../../../generated/l10n.dart';
+import '../bloc/visualizationoption_bloc.dart';
+import 'alert_visualization_options.dart';
 
 class VisualizationOptionListTile extends StatelessWidget {
   final S translate;

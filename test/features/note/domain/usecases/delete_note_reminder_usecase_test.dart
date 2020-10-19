@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:task_hard/controllers/repeat-controller/repeat-controller.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/features/note/domain/repositories/note_repository.dart';
 import 'package:task_hard/features/note/domain/usecases/delete_note_reminder_usecase.dart';
@@ -38,11 +39,11 @@ void main() {
   test(
     'should return Right<Note> when deleteNoteReminder is called',
     () {
-      when(repository.deleteNoteReminder(any)).thenReturn(Right(note));
+      when(repository.deleteNoteReminder(any, any)).thenReturn(Right(note));
 
-      final result = useCase(DeleteNoteReminderParams(key: 'key'));
+      final result = useCase(DeleteNoteReminderParams(key: 'key', box: WriteOn.home));
 
-      verify(repository.deleteNoteReminder('key'));
+      verify(repository.deleteNoteReminder('key', WriteOn.home));
 
       expect(result, Right(note));
     },

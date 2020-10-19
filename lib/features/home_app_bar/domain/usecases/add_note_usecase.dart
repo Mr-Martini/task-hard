@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:task_hard/features/home_app_bar/domain/entities/home_app_bar_entity.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
 import '../../../note/domain/entities/note.dart';
+import '../entities/home_app_bar_entity.dart';
 import '../repositories/home_app_bar_repository.dart';
 
 class AddNoteUseCase implements UseCases<HomeAppBarEntity, AddNoteParams> {

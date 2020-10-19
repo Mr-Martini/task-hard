@@ -1,9 +1,11 @@
-import 'package:task_hard/core/Utils/arguments.dart';
 import 'package:flutter/material.dart';
-import 'package:task_hard/features/note/presentation/pages/task_container.dart';
-import 'package:task_hard/generated/l10n.dart';
 import 'package:uuid/uuid.dart';
-import 'package:task_hard/page-transitions/slide_bottom_route.dart';
+
+import '../../../../core/Utils/arguments.dart';
+import '../../../../core/Utils/write_on.dart';
+import '../../../../generated/l10n.dart';
+import '../../../../page-transitions/slide_bottom_route.dart';
+import '../../../note/presentation/pages/task_container.dart';
 
 class HomeFloatingActionButton extends StatelessWidget {
   const HomeFloatingActionButton({
@@ -36,6 +38,7 @@ class HomeFloatingActionButton extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
                 key: key,
                 scaffoldKey: _scaffoldKey,
+                box: WriteOn.home,
               ),
             ),
           ),
