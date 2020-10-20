@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_hard/features/archive_notes/presentation/pages/archive_notes.dart';
 
 import 'features/home_notes/presentation/pages/home_page.dart';
 import 'features/note/presentation/pages/task_container.dart';
@@ -46,8 +47,8 @@ class AnnoyingRouteGenerator {
         return FadeRoute(page: Personalization(), settings: routeSettings);
       case Account.id:
         return FadeRoute(page: Account(), settings: routeSettings);
-      case ArchiveScreen.id:
-        return FadeRoute(page: ArchiveScreen(), settings: routeSettings);
+      case ArchivedNotesScreen.id:
+        return FadeRoute(page: ArchivedNotesScreen(), settings: routeSettings);
       case TrashScreen.id:
         return FadeRoute(page: TrashScreen(), settings: routeSettings);
       case GeneralScreen.id:

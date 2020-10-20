@@ -156,7 +156,6 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
         break;
       default:
     }
-
     archiveBox.put(key, note);
 
     return NoteModel.fromMap(note);

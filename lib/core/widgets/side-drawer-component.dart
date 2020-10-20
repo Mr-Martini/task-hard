@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../components/icon-components/icon-generic.dart';
 import '../../components/text-components/text-generic.dart';
+import '../../features/archive_notes/presentation/pages/archive_notes.dart';
 import '../../features/tags/presentation/widgets/tag_list_drawer.dart';
 import '../../generated/l10n.dart';
-import '../../views/archive-screen/archive-screen.dart';
 import '../../views/feedback-screen/feedback-screen.dart';
 import '../../views/trash-screen/trash-screen.dart';
 
@@ -52,7 +52,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
           InkWell(
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, ArchiveScreen.id);
+              Navigator.pushNamed(context, ArchivedNotesScreen.id);
             },
             child: ListTile(
               title: TextGeneric(

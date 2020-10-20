@@ -3,6 +3,11 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:task_hard/features/archive_notes/data/datasources/archive_notes_local_data_source.dart';
+import 'package:task_hard/features/archive_notes/data/repositories/archive_notes_repository_impl.dart';
+import 'package:task_hard/features/archive_notes/domain/repositories/archive_notes_repository.dart';
+import 'package:task_hard/features/archive_notes/domain/usecases/get_archive_notes_usecase.dart';
+import 'package:task_hard/features/archive_notes/presentation/bloc/archivednotes_bloc.dart';
 
 import 'features/home_app_bar/data/datasources/home_app_local_data_source.dart';
 import 'features/home_app_bar/data/repositories/home_app_bar_repository_impl.dart';
@@ -91,6 +96,7 @@ final sl = GetIt.instance;
 Future<void> init() async {
   List<int> key = await getEncKey();
   await registerHomeNotes(key);
+  await registerArchivedNotes(key);
   await registerTagedNotesHome();
   await registerTimePreference();
   await registerTheme();
@@ -100,6 +106,36 @@ Future<void> init() async {
   await registerNoteReminder(key);
   await registerNoteTags(key);
   await registerTags();
+}
+
+Future<void> registerArchivedNotes(List<int> key) async {
+  //bloc
+  sl.registerFactory(
+    () => ArchivedNotesBloc(
+      getArchivedNotes: sl(),
+    ),
+  );
+
+  //usecases
+  sl.registerLazySingleton(
+    () => GetArchiveNotesUseCase(
+      repository: sl(),
+    ),
+  );
+
+  //repositories
+  sl.registerLazySingleton<ArchiveNotesRepository>(
+    () => ArchivedNotesRepositoryImpl(
+      dataSource: sl(),
+    ),
+  );
+
+  //datasources
+  sl.registerLazySingleton<ArchivedNotesLocalDataSource>(
+    () => ArchivedNotesLocalDataSourceImpl(
+      archiveBox: sl.get(instanceName: 'archive_notes'),
+    ),
+  );
 }
 
 Future<void> registerTags() async {
@@ -550,8 +586,10 @@ Future<void> registerHomeAppBar(List<int> key) async {
   sl.registerLazySingleton<HomeAppBarLocalDataSource>(
     () => HomeAppBarLocalDataSourceImpl(
       noteBox: sl.get(
-        instanceName: 'home_notes_app_bar',
+        instanceName: 'home_notes_app_bar'
       ),
+      archiveBox: sl.get(instanceName: 'archive_notes'),
+      deleteBox: sl.get(instanceName: 'delete_notes'),
     ),
   );
 

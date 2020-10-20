@@ -3,10 +3,10 @@ import 'package:meta/meta.dart';
 
 import '../../../note/domain/entities/note.dart';
 
-class ArchiveNotes extends Equatable {
+class ArchivedNotes extends Equatable {
   final List<Note> notes;
 
-  ArchiveNotes({@required this.notes});
+  ArchivedNotes({@required this.notes});
 
   @override
   List<Object> get props => [notes];

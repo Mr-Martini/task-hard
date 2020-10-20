@@ -20,8 +20,14 @@ abstract class HomeAppBarLocalDataSource {
 
 class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
   final Box<dynamic> noteBox;
+  final Box<dynamic> archiveBox;
+  final Box<dynamic> deleteBox;
 
-  HomeAppBarLocalDataSourceImpl({@required this.noteBox});
+  HomeAppBarLocalDataSourceImpl({
+    @required this.noteBox,
+    @required this.archiveBox,
+    @required this.deleteBox,
+  });
 
   @override
   HomeAppBarModel addNote(List<Note> selectedNotes) {
@@ -43,8 +49,9 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
 
   @override
   HomeAppBarModel deleteNotes(List<Note> selectedNotes) {
-    for (Note note in selectedNotes) {
+    for (NoteModel note in selectedNotes) {
       noteBox.delete(note.key);
+      deleteBox.put(note.key, note.toMap());
       ReminderController.cancel(note.key.hashCode);
     }
     return HomeAppBarModel.fromList(<Note>[]);
@@ -54,6 +61,7 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
   HomeAppBarModel undoDeleteNotes(List<Note> selectedNotes) {
     for (NoteModel note in selectedNotes) {
       noteBox.put(note.key, note.toMap());
+      deleteBox.delete(note.key);
       ReminderController.scheduleNotification(note.key, note.title, note.note,
           note.key.hashCode, note.reminder, note.repeat);
     }
@@ -62,9 +70,10 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
 
   @override
   HomeAppBarModel archiveNotes(List<Note> selectedNotes) {
-    //TODO: put each note on archived_notes box
-    for (Note note in selectedNotes) {
+    
+    for (NoteModel note in selectedNotes) {
       noteBox.delete(note.key);
+      archiveBox.put(note.key, note.toMap());
     }
     return HomeAppBarModel.fromList(<Note>[]);
   }
@@ -73,6 +82,7 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
   HomeAppBarModel undoArchiveNotes(List<Note> selectedNotes) {
     for (NoteModel note in selectedNotes) {
       noteBox.put(note.key, note.toMap());
+      archiveBox.delete(note.key);
     }
     return HomeAppBarModel.fromList(selectedNotes);
   }
