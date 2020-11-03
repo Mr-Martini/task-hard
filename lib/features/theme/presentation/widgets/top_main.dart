@@ -7,18 +7,27 @@ import '../../../../generated/l10n.dart';
 import '../../../../views/main-screen/main-screen.dart';
 import '../bloc/theme_bloc.dart';
 
-class TopMain extends StatelessWidget {
+class TopMain extends StatefulWidget {
   const TopMain({
     Key key,
   }) : super(key: key);
 
   @override
+  _TopMainState createState() => _TopMainState();
+}
+
+class _TopMainState extends State<TopMain> {
+  @override
+  void didChangeDependencies() {
+    BlocProvider.of<ThemeBloc>(context).add(GetTheme());
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
-        if (state is ThemeInitial) {
-          BlocProvider.of<ThemeBloc>(context).add(GetTheme());
-        } else if (state is Loaded) {
+        if (state is Loaded) {
           return MaterialApp(
             localizationsDelegates: [
               GlobalMaterialLocalizations.delegate,

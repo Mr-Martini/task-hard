@@ -11,12 +11,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'controllers/selectedValues-controller/selected-values-controller.dart';
 import 'controllers/view-controller/view-controller.dart';
 import 'dependency_container.dart' as di;
 import 'dependency_container.dart';
+import 'features/home_notes/presentation/bloc/homenotes_bloc.dart';
 import 'features/taged_notes_home/presentation/bloc/tagednoteshomebloc_bloc.dart';
 import 'features/theme/presentation/bloc/theme_bloc.dart';
 import 'features/theme/presentation/widgets/top_main.dart';
@@ -84,26 +84,12 @@ class TaskHard extends StatefulWidget {
 
 class _TaskHardState extends State<TaskHard> with WidgetsBindingObserver {
   @override
-  void initState() {
-    super.initState();
-    getViewPreference();
-  }
-
-  void getViewPreference() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String sharedValue = prefs.getString('view') ?? 'Staggered';
-
-    ViewController viewController =
-        Provider.of<ViewController>(context, listen: false);
-
-    viewController.setValue = sharedValue;
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (_) => sl<HomenotesBloc>(),
+        ),
         BlocProvider(
           create: (_) => sl<ThemeBloc>(),
         ),

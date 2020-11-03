@@ -2264,6 +2264,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Unarchived selected(s) item(s)?`
+  String get unarchived_selected_items {
+    return Intl.message(
+      'Unarchived selected(s) item(s)?',
+      name: 'unarchived_selected_items',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

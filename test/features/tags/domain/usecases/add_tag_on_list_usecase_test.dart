@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/features/tags/domain/entities/tags.dart';
 import 'package:task_hard/features/tags/domain/repositories/tags_repository.dart';
@@ -26,12 +27,12 @@ void main() {
   test(
     'should return Right<TagsEntity> when useCase is called',
     () {
-      when(repository.addTagOnList(any, any)).thenReturn(Right(model));
+      when(repository.addTagOnList(any, any, WriteOn.home)).thenReturn(Right(model));
 
       final result =
-          useCase(AddTagOnListParams(notes: notes, tagName: tagName));
+          useCase(AddTagOnListParams(notes: notes, tagName: tagName, box: WriteOn.home));
 
-      verify(repository.addTagOnList(notes, tagName));
+      verify(repository.addTagOnList(notes, tagName, WriteOn.home));
       verifyNoMoreInteractions(repository);
       expect(result, Right(model));
     },

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:task_hard/controllers/repeat-controller/repeat-controller.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/home_app_bar/domain/entities/home_app_bar_entity.dart';
 import 'package:task_hard/features/home_app_bar/domain/repositories/home_app_bar_repository.dart';
 import 'package:task_hard/features/home_app_bar/domain/usecases/put_reminder_usecase.dart';
@@ -26,17 +27,18 @@ void main() {
   test(
     'should return Right<HomeAppBarEntity> when PutReminderAppBarUseCase is called',
     () {
-      when(repository.putReminder(any, any, any)).thenReturn(Right(model));
+      when(repository.putReminder(any, any, any, WriteOn.home)).thenReturn(Right(model));
 
       final result = useCase(
         PutReminderAppBarParams(
           selectedNotes: <Note>[],
           scheduledDate: scheduledDate,
           repeat: repeat,
+          box: WriteOn.home,
         ),
       );
 
-      verify(repository.putReminder(<Note>[], scheduledDate, repeat));
+      verify(repository.putReminder(<Note>[], scheduledDate, repeat, WriteOn.home));
       verifyNoMoreInteractions(repository);
       expect(result, Right(model));
     },

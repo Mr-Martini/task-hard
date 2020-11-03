@@ -1,6 +1,9 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart';
 
+import '../../dependency_container.dart';
 import '../../features/home_notes/presentation/pages/home_page.dart';
 import '../../views/search-screen/search-screen.dart';
 import '../../views/tags-screen/tags-screen.dart';

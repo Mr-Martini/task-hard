@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:task_hard/core/Utils/archive_selected_notes.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
+import 'package:task_hard/features/archive_notes/presentation/bloc/archivednotes_bloc.dart'
+    as aN;
 import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart'
     as hN;
 import 'package:task_hard/features/note/domain/entities/note.dart';
@@ -23,17 +27,20 @@ enum HomeAppBarPoUpMenuOption {
   delete,
   archive,
   select_all,
-  tags
+  tags,
+  reminder,
 }
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final S translate;
+  final WriteOn box;
   final BuildContext alertContext;
 
   HomeAppBar({
     Key key,
     @required this.translate,
     @required this.alertContext,
+    @required this.box,
   }) : super(key: key);
 
   @override
@@ -64,24 +71,117 @@ class _HomeAppBarState extends State<HomeAppBar>
     super.dispose();
   }
 
-  List<Note> getAllNotes() {
-    hN.HomenotesState state = BlocProvider.of<hN.HomenotesBloc>(context).state;
-
-    if (state is hN.HomenotesInitial) {
-      return <Note>[];
-    } else if (state is hN.Loaded) {
-      Provider.of<HomeSelectedNotes>(context, listen: false).setList =
-          List<Note>.from(state.notes.notes);
-      return state.notes.notes;
+  List<Note> getSelectedItems() {
+    switch (widget.box) {
+      case WriteOn.home:
+        HomeSelectedNotes homeProvider =
+            Provider.of<HomeSelectedNotes>(context, listen: false);
+        return List<Note>.from(homeProvider.getNotes);
+      case WriteOn.archive:
+        ArchiveSelectedNotes archiveProvider =
+            Provider.of<ArchiveSelectedNotes>(context, listen: false);
+        return List<Note>.from(archiveProvider.getNotes);
+      default:
+        return <Note>[];
     }
-    return <Note>[];
+  }
+
+  void listen(HomeAppBarPoUpMenuOption option) {
+    switch (widget.box) {
+      case WriteOn.home:
+        BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
+        break;
+      case WriteOn.archive:
+        BlocProvider.of<aN.ArchivedNotesBloc>(context)
+            .add(aN.GetArchivedNotes());
+        if (shouldUpdateHome(option)) {
+          BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
+        }
+        break;
+      default:
+    }
+  }
+
+  bool shouldUpdateHome(HomeAppBarPoUpMenuOption option) {
+    switch (option) {
+      case HomeAppBarPoUpMenuOption.delete:
+        return true;
+        break;
+      case HomeAppBarPoUpMenuOption.archive:
+        return true;
+        break;
+      case HomeAppBarPoUpMenuOption.reminder:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  void clearSelectedItems() {
+    switch (widget.box) {
+      case WriteOn.home:
+        HomeSelectedNotes homeProvider =
+            Provider.of<HomeSelectedNotes>(context, listen: false);
+        homeProvider.clear();
+        break;
+      case WriteOn.archive:
+        ArchiveSelectedNotes archiveProvider =
+            Provider.of<ArchiveSelectedNotes>(context, listen: false);
+        archiveProvider.clear();
+        break;
+      default:
+    }
+  }
+
+  String getAppBarTitle() {
+    switch (widget.box) {
+      case WriteOn.home:
+        return widget.translate.app_name;
+      case WriteOn.archive:
+        return widget.translate.archive;
+      case WriteOn.deleted:
+        return widget.translate.trash;
+      default:
+        return widget.translate.app_name;
+    }
+  }
+
+  List<Note> getAllNotes() {
+    switch (widget.box) {
+      case WriteOn.home:
+        hN.HomenotesState state =
+            BlocProvider.of<hN.HomenotesBloc>(context).state;
+
+        if (state is hN.HomenotesInitial) {
+          return <Note>[];
+        } else if (state is hN.Loaded) {
+          Provider.of<HomeSelectedNotes>(context, listen: false).setList =
+              List<Note>.from(state.notes.notes);
+          return state.notes.notes;
+        }
+        return <Note>[];
+        break;
+      case WriteOn.archive:
+        final aN.ArchivedNotesState state =
+            BlocProvider.of<aN.ArchivedNotesBloc>(context).state;
+
+        if (state is aN.ArchivedNotesInitial) {
+          return <Note>[];
+        } else if (state is aN.Loaded) {
+          Provider.of<ArchiveSelectedNotes>(context, listen: false).setList =
+              List<Note>.from(state.notes);
+          return state.notes;
+        }
+        return <Note>[];
+        break;
+      default:
+        return <Note>[];
+    }
   }
 
   void manageTags() {
-    HomeSelectedNotes provider =
-        Provider.of<HomeSelectedNotes>(context, listen: false);
-    List<Note> selectedNotes = List<Note>.from(provider.getNotes);
-    provider.clear();
+    List<Note> selectedNotes = getSelectedItems();
+    clearSelectedItems();
     BlocProvider.of<HomeappbarBloc>(context).add(
       AddNote(
         selectedNotes: <Note>[],
@@ -93,6 +193,7 @@ class _HomeAppBarState extends State<HomeAppBar>
         return TagsListScaffold(
           selectedNotesContext: context,
           notes: selectedNotes,
+          box: widget.box,
         );
       },
     );
@@ -107,9 +208,7 @@ class _HomeAppBarState extends State<HomeAppBar>
   }
 
   void showReminder() {
-    HomeSelectedNotes provider =
-        Provider.of<HomeSelectedNotes>(context, listen: false);
-    List<Note> selectedNotes = List<Note>.from(provider.getNotes);
+    List<Note> selectedNotes = getSelectedItems();
     bool hasReminder = selectedNotes.any((element) => element.reminder != null);
     showModal(
       context: context,
@@ -122,11 +221,12 @@ class _HomeAppBarState extends State<HomeAppBar>
               ..add(
                 DeleteReminder(
                   selectedNotes: selectedNotes,
+                  box: widget.box,
                 ),
               )
               ..add(AddNote(selectedNotes: <Note>[]));
-            BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
-            provider.clear();
+            listen(HomeAppBarPoUpMenuOption.reminder);
+            clearSelectedItems();
           },
           updateReminder: (AlertReminderParams params) {
             BlocProvider.of<HomeappbarBloc>(context)
@@ -135,11 +235,12 @@ class _HomeAppBarState extends State<HomeAppBar>
                   selectedNotes: selectedNotes,
                   scheduledDate: params.scheduledDate,
                   repeat: params.repeat,
+                  box: widget.box,
                 ),
               )
               ..add(AddNote(selectedNotes: <Note>[]));
-            BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
-            provider.clear();
+            listen(HomeAppBarPoUpMenuOption.reminder);
+            clearSelectedItems();
           },
         );
       },
@@ -147,21 +248,21 @@ class _HomeAppBarState extends State<HomeAppBar>
   }
 
   void deleteNotes() {
-    HomeSelectedNotes provider =
-        Provider.of<HomeSelectedNotes>(context, listen: false);
-    List<Note> selectedNotes = List<Note>.from(provider.getNotes);
+    List<Note> selectedNotes = getSelectedItems();
     ShowDialog.alertDialog(
       context: context,
       flatText: widget.translate.cancel,
-      title: widget.translate.delete_selected_notes,
+      title: widget.box != WriteOn.deleted
+          ? widget.translate.delete_selected_notes
+          : widget.translate.move_note_to_trash,
       raisedOnPressed: () {
         BlocProvider.of<HomeappbarBloc>(context)
-          ..add(DeleteNotes(selectedNotes: selectedNotes))
+          ..add(DeleteNotes(selectedNotes: selectedNotes, box: widget.box))
           ..add(AddNote(selectedNotes: <Note>[]));
-        BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
-        provider.clear();
+        listen(HomeAppBarPoUpMenuOption.delete);
+        clearSelectedItems();
         ShowSnackBar.show(
-          context: widget.alertContext,
+          context: context,
           title: widget.translate.done,
           actionMessage: widget.translate.undo,
           action: () {
@@ -169,6 +270,7 @@ class _HomeAppBarState extends State<HomeAppBar>
               ..add(
                 UndoDeleteNotes(
                   selectedNotes: selectedNotes,
+                  box: widget.box,
                 ),
               )
               ..add(
@@ -176,7 +278,7 @@ class _HomeAppBarState extends State<HomeAppBar>
                   selectedNotes: <Note>[],
                 ),
               );
-            BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
+            listen(HomeAppBarPoUpMenuOption.delete);
           },
         );
         Navigator.pop(context);
@@ -187,18 +289,19 @@ class _HomeAppBarState extends State<HomeAppBar>
   }
 
   void archiveNotes() {
-    HomeSelectedNotes provider =
-        Provider.of<HomeSelectedNotes>(context, listen: false);
-    List<Note> selectedNotes = List<Note>.from(provider.getNotes);
+    List<Note> selectedNotes = getSelectedItems();
     ShowDialog.alertDialog(
       context: context,
       flatText: widget.translate.cancel,
-      title: widget.translate.archive_selected_notes,
+      title: widget.box == WriteOn.home
+          ? widget.translate.archive_selected_notes
+          : widget.translate.unarchived_selected_items,
       raisedOnPressed: () {
         BlocProvider.of<HomeappbarBloc>(context)
           ..add(
             ArchiveNotes(
               selectedNotes: selectedNotes,
+              box: widget.box,
             ),
           )
           ..add(
@@ -206,11 +309,11 @@ class _HomeAppBarState extends State<HomeAppBar>
               selectedNotes: <Note>[],
             ),
           );
-        BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
-        provider.clear();
+        listen(HomeAppBarPoUpMenuOption.archive);
+        clearSelectedItems();
         Navigator.pop(context);
         ShowSnackBar.show(
-          context: widget.alertContext,
+          context: context,
           title: widget.translate.done,
           actionMessage: widget.translate.undo,
           action: () {
@@ -218,6 +321,7 @@ class _HomeAppBarState extends State<HomeAppBar>
               ..add(
                 UndoArchiveNotes(
                   selectedNotes: selectedNotes,
+                  box: widget.box,
                 ),
               )
               ..add(
@@ -225,11 +329,13 @@ class _HomeAppBarState extends State<HomeAppBar>
                   selectedNotes: <Note>[],
                 ),
               );
-            BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
+            listen(HomeAppBarPoUpMenuOption.archive);
           },
         );
       },
-      raisedText: widget.translate.archive,
+      raisedText: widget.box != WriteOn.archive
+          ? widget.translate.archive
+          : widget.translate.unarchive,
       icon: Icons.archive,
       material: true,
     );
@@ -249,17 +355,16 @@ class _HomeAppBarState extends State<HomeAppBar>
         return ColorSelector(
           onTap: (Color color) {
             Navigator.pop(context);
-            HomeSelectedNotes provider =
-                Provider.of<HomeSelectedNotes>(context, listen: false);
-            List<Note> selectedNotes = List<Note>.from(provider.getNotes);
+            List<Note> selectedNotes = getSelectedItems();
             BlocProvider.of<HomeappbarBloc>(context)
               ..add(ChangeColor(
                 selectedNotes: selectedNotes,
                 color: color,
+                box: widget.box,
               ))
               ..add(AddNote(selectedNotes: <Note>[]));
-            BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
-            provider.clear();
+            listen(HomeAppBarPoUpMenuOption.change_color);
+            clearSelectedItems();
           },
         );
       },
@@ -293,13 +398,21 @@ class _HomeAppBarState extends State<HomeAppBar>
       builder: (context, state) {
         if (state is HomeappbarInitial) {
           return AppBar(
+            leading: widget.box == WriteOn.home
+                ? IconButton(
+                    icon: Icon(Icons.menu),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                  )
+                : BackButton(),
             iconTheme: IconThemeData(
               color: Theme.of(context).iconTheme.color,
             ),
             elevation: 0,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             title: Text(
-              widget.translate.app_name,
+              getAppBarTitle(),
               style: TextStyle(
                 color: Theme.of(context).textTheme.headline6.color,
                 fontWeight: FontWeight.bold,
@@ -328,11 +441,15 @@ class _HomeAppBarState extends State<HomeAppBar>
                       selectedNotes: <Note>[],
                     ),
                   );
-                  Provider.of<HomeSelectedNotes>(context, listen: false)
-                      .clear();
+                  clearSelectedItems();
                 },
               ),
-              title: Text(notes.length.toString()),
+              title: Text(
+                notes.length.toString(),
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.headline6.color,
+                ),
+              ),
               actions: [
                 IconButton(
                   icon: Icon(Icons.add_alert),
@@ -392,17 +509,19 @@ class _HomeAppBarState extends State<HomeAppBar>
             iconTheme: IconThemeData(
               color: Theme.of(context).iconTheme.color,
             ),
-            leading: IconButton(
-              icon: AnimatedIcon(
-                icon: AnimatedIcons.menu_close,
-                progress: leadingAnimation,
-              ),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            ),
+            leading: widget.box == WriteOn.home
+                ? IconButton(
+                    icon: AnimatedIcon(
+                      icon: AnimatedIcons.menu_close,
+                      progress: leadingAnimation,
+                    ),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  )
+                : BackButton(),
             elevation: 0,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             title: Text(
-              widget.translate.app_name,
+              getAppBarTitle(),
               style: TextStyle(
                 color: Theme.of(context).textTheme.headline6.color,
                 fontWeight: FontWeight.bold,

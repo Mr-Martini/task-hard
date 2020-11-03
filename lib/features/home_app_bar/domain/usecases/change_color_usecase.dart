@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../../../core/Utils/write_on.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
 import '../../../note/domain/entities/note.dart';
@@ -16,16 +17,21 @@ class ChangeColorUseCase
 
   @override
   Either<Failure, HomeAppBarEntity> call(ChangeColorParams params) {
-    return repository.changeColor(params.color, params.notes);
+    return repository.changeColor(params.color, params.notes, params.box);
   }
 }
 
 class ChangeColorParams extends Equatable {
   final List<Note> notes;
   final Color color;
+  final WriteOn box;
 
-  ChangeColorParams({@required this.notes, @required this.color});
+  ChangeColorParams({
+    @required this.notes,
+    @required this.color,
+    @required this.box,
+  });
 
   @override
-  List<Object> get props => [notes, color];
+  List<Object> get props => [notes, color, box];
 }

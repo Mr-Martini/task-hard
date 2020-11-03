@@ -7,9 +7,12 @@ import '../../features/archive_notes/presentation/pages/archive_notes.dart';
 import '../../features/tags/presentation/widgets/tag_list_drawer.dart';
 import '../../generated/l10n.dart';
 import '../../views/feedback-screen/feedback-screen.dart';
-import '../../views/trash-screen/trash-screen.dart';
 
 class DrawerComponent extends StatefulWidget {
+
+
+  const DrawerComponent({Key key}) : super(key: key);
+
   @override
   _DrawerComponentState createState() => _DrawerComponentState();
 }
@@ -69,7 +72,10 @@ class _DrawerComponentState extends State<DrawerComponent> {
           InkWell(
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, TrashScreen.id);
+              Navigator.pushNamed(
+                context,
+                ArchivedNotesScreen.id
+              );
             },
             child: ListTile(
               title: TextGeneric(

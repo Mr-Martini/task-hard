@@ -221,5 +221,6 @@
   "choose_a_option": "Escolha uma opção",
   "move_note_to_trash": "Mover nota para lixeira?",
   "archive_selected_notes": "Arquivar notas selectionadas?",
-  "empty_note_discarted": "Nota vazia descartada"
+  "empty_note_discarted": "Nota vazia descartada",
+  "unarchived_selected_items": "Desarquivar item(s) selecionado(s)?"
 }

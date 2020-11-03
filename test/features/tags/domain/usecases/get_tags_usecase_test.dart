@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:task_hard/core/usecases/usecases.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/features/tags/domain/entities/tags.dart';
 import 'package:task_hard/features/tags/domain/repositories/tags_repository.dart';
@@ -25,11 +25,11 @@ void main() {
   test(
     'should return Right<TagsEntity> when GetTagsUseCase is called',
     () {
-      when(repository.getTags('key')).thenReturn(Right(model));
+      when(repository.getTags('key', WriteOn.home)).thenReturn(Right(model));
 
-      final result = useCase(GetTagsParams(noteKey: 'key'));
+      final result = useCase(GetTagsParams(noteKey: 'key', box: WriteOn.home));
 
-      verify(repository.getTags('key'));
+      verify(repository.getTags('key', WriteOn.home));
       verifyNoMoreInteractions(repository);
       expect(result, Right(model));
     },

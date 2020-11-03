@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
@@ -14,16 +15,21 @@ class AddTagOnNoteUseCase implements UseCases<TagsEntity, AddTagOnNoteParams> {
 
   @override
   Either<Failure, TagsEntity> call(AddTagOnNoteParams params) {
-    return repository.addTagOnNote(params.noteKey, params.tagName);
+    return repository.addTagOnNote(params.noteKey, params.tagName, params.box);
   }
 }
 
 class AddTagOnNoteParams extends Equatable {
   final String tagName;
   final String noteKey;
+  final WriteOn box;
 
-  AddTagOnNoteParams({@required this.tagName, @required this.noteKey});
+  AddTagOnNoteParams({
+    @required this.tagName,
+    @required this.noteKey,
+    @required this.box,
+  });
 
   @override
-  List<Object> get props => [tagName, noteKey];
+  List<Object> get props => [tagName, noteKey, box];
 }

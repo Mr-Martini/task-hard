@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
@@ -14,15 +15,16 @@ class GetTagsUseCase implements UseCases<TagsEntity, GetTagsParams> {
 
   @override
   Either<Failure, TagsEntity> call(GetTagsParams params) {
-    return repository.getTags(params.noteKey);
+    return repository.getTags(params.noteKey, params.box);
   }
 }
 
 class GetTagsParams extends Equatable {
   final String noteKey;
+  final WriteOn box;
 
-  GetTagsParams({@required this.noteKey});
+  GetTagsParams({@required this.noteKey, @required this.box});
 
   @override
-  List<Object> get props => [noteKey];
+  List<Object> get props => [noteKey, box];
 }

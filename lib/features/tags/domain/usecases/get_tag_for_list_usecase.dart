@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
@@ -16,15 +17,16 @@ class GetTagForListUseCase
 
   @override
   Either<Failure, TagsEntity> call(GetTagForListParams params) {
-    return repository.getTagsForList(params.notes);
+    return repository.getTagsForList(params.notes, params.box);
   }
 }
 
 class GetTagForListParams extends Equatable {
   final List<Note> notes;
+  final WriteOn box;
 
-  GetTagForListParams({@required this.notes});
+  GetTagForListParams({@required this.notes, @required this.box,});
 
   @override
-  List<Object> get props => [notes];
+  List<Object> get props => [notes, box];
 }

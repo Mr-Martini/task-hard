@@ -234,6 +234,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "type_a_new_tag" : MessageLookupByLibrary.simpleMessage("Type a new tag"),
     "type_a_tag" : MessageLookupByLibrary.simpleMessage("Type a tag"),
     "unarchive" : MessageLookupByLibrary.simpleMessage("Unarchive"),
+    "unarchived_selected_items" : MessageLookupByLibrary.simpleMessage("Unarchived selected(s) item(s)?"),
     "undo" : MessageLookupByLibrary.simpleMessage("Undo"),
     "update_reminder" : MessageLookupByLibrary.simpleMessage("Update reminder"),
     "update_tag" : MessageLookupByLibrary.simpleMessage("Update tag"),

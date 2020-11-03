@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/home_app_bar/domain/entities/home_app_bar_entity.dart';
 import 'package:task_hard/features/home_app_bar/domain/repositories/home_app_bar_repository.dart';
 import 'package:task_hard/features/home_app_bar/domain/usecases/undo_archive_usecase.dart';
@@ -24,11 +25,11 @@ void main() {
   test(
     'should return Right<HomeAppBarEntity> when UndoArchiveAppBarUseCase is called',
     () {
-      when(repository.undoArchive(any)).thenReturn(Right(model));
+      when(repository.undoArchive(any, WriteOn.home)).thenReturn(Right(model));
 
-      final result = useCase(UndoArchiveAppBarParams(selectedNotes: <Note>[]));
+      final result = useCase(UndoArchiveAppBarParams(selectedNotes: <Note>[], box: WriteOn.home));
 
-      verify(repository.undoArchive(<Note>[]));
+      verify(repository.undoArchive(<Note>[], WriteOn.home));
       verifyNoMoreInteractions(repository);
       expect(result, Right(model));
     },

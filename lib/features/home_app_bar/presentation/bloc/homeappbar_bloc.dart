@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../note/domain/entities/note.dart';
@@ -53,6 +54,7 @@ class HomeappbarBloc extends Bloc<HomeappbarEvent, HomeappbarState> {
         ChangeColorParams(
           notes: event.selectedNotes,
           color: event.color,
+          box: event.box,
         ),
       );
       yield* _eitherFailureOrSuccess(list);
@@ -60,6 +62,7 @@ class HomeappbarBloc extends Bloc<HomeappbarEvent, HomeappbarState> {
       final list = deleteNotes(
         DeleteNoteAppBarParams(
           notes: event.selectedNotes,
+          box: event.box,
         ),
       );
       yield* _eitherFailureOrSuccess(list);
@@ -67,6 +70,7 @@ class HomeappbarBloc extends Bloc<HomeappbarEvent, HomeappbarState> {
       final list = undoDelete(
         UndoDeleteNotesAppBarParams(
           selectedNotes: event.selectedNotes,
+          box: event.box,
         ),
       );
       yield* _eitherFailureOrSuccess(list);
@@ -74,6 +78,7 @@ class HomeappbarBloc extends Bloc<HomeappbarEvent, HomeappbarState> {
       final list = archiveNote(
         ArchiveNoteAppBarParams(
           selectedNotes: event.selectedNotes,
+          box: event.box,
         ),
       );
       yield* _eitherFailureOrSuccess(list);
@@ -81,6 +86,7 @@ class HomeappbarBloc extends Bloc<HomeappbarEvent, HomeappbarState> {
       final list = undoArchive(
         UndoArchiveAppBarParams(
           selectedNotes: event.selectedNotes,
+          box: event.box,
         ),
       );
       yield* _eitherFailureOrSuccess(list);
@@ -93,6 +99,7 @@ class HomeappbarBloc extends Bloc<HomeappbarEvent, HomeappbarState> {
           selectedNotes: selectedNotes,
           scheduledDate: scheduledDate,
           repeat: repeat,
+          box: event.box,
         ),
       );
       yield* _eitherFailureOrSuccess(list);
@@ -100,6 +107,7 @@ class HomeappbarBloc extends Bloc<HomeappbarEvent, HomeappbarState> {
       final list = deleteReminder(
         DeleteAppBarNoteReminderParams(
           selectedNotes: event.selectedNotes,
+          box: event.box,
         ),
       );
       yield* _eitherFailureOrSuccess(list);

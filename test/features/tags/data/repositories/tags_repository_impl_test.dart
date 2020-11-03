@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/features/tags/data/datasources/tags_local_data_source.dart';
 import 'package:task_hard/features/tags/data/model/tags_model.dart';
@@ -25,11 +26,11 @@ void main() {
   test(
     'should return Right<TagsModel> when getTags is called',
     () {
-      when(dataSource.getTags('key')).thenReturn(model);
+      when(dataSource.getTags('key', WriteOn.home)).thenReturn(model);
 
-      final result = impl.getTags('key');
+      final result = impl.getTags('key', WriteOn.home);
 
-      verify(dataSource.getTags('key'));
+      verify(dataSource.getTags('key', WriteOn.home));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(model));
     },
@@ -41,11 +42,11 @@ void main() {
   test(
     'should return Right<TagsModel> with the correct data when addTagOnNote is called',
     () {
-      when(dataSource.addTagOnNote(any, any)).thenReturn(modelForAddTagOnNote);
+      when(dataSource.addTagOnNote(any, any, WriteOn.home)).thenReturn(modelForAddTagOnNote);
 
-      final result = impl.addTagOnNote('noteKey', 'car');
+      final result = impl.addTagOnNote('noteKey', 'car', WriteOn.home);
 
-      verify(dataSource.addTagOnNote('noteKey', 'car'));
+      verify(dataSource.addTagOnNote('noteKey', 'car', WriteOn.home));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForAddTagOnNote));
     },
@@ -58,11 +59,11 @@ void main() {
   test(
     'should return Right<TagsModel> with the correct data when removeTagFromNote is called',
     () {
-      when(dataSource.removeTagFronNote(any, any)).thenReturn(modelForRemove);
+      when(dataSource.removeTagFromNote(any, any, WriteOn.home)).thenReturn(modelForRemove);
 
-      final result = impl.removeTagFromNote('noteKey', 'plane');
+      final result = impl.removeTagFromNote('noteKey', 'plane', WriteOn.home);
 
-      verify(dataSource.removeTagFronNote('noteKey', 'plane'));
+      verify(dataSource.removeTagFromNote('noteKey', 'plane', WriteOn.home));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForRemove));
     },
@@ -73,11 +74,11 @@ void main() {
   test(
     'should return Right<TagsModel> with the correct data when addTagOnList is called',
     () {
-      when(dataSource.addTagOnList(any, any)).thenReturn(modelForAddTagList);
+      when(dataSource.addTagOnList(any, any, WriteOn.home)).thenReturn(modelForAddTagList);
 
-      final result = impl.addTagOnList(<Note>[], 'tagName');
+      final result = impl.addTagOnList(<Note>[], 'tagName', WriteOn.home);
 
-      verify(dataSource.addTagOnList(<Note>[], 'tagName'));
+      verify(dataSource.addTagOnList(<Note>[], 'tagName', WriteOn.home));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForAddTagList));
     },
@@ -89,12 +90,12 @@ void main() {
   test(
     'should return Right<TagsModel> with the correct data when removeTagFromList is called',
     () {
-      when(dataSource.removeTagFromList(any, any))
+      when(dataSource.removeTagFromList(any, any, WriteOn.home))
           .thenReturn(modelForRemoveTagFromList);
 
-      final result = impl.removeTagFromList(<Note>[], 'tagName');
+      final result = impl.removeTagFromList(<Note>[], 'tagName', WriteOn.home);
 
-      verify(dataSource.removeTagFromList(<Note>[], 'tagName'));
+      verify(dataSource.removeTagFromList(<Note>[], 'tagName', WriteOn.home));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForRemoveTagFromList));
     },

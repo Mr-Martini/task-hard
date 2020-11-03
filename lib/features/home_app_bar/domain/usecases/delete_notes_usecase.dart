@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/Utils/write_on.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
 import '../../../note/domain/entities/note.dart';
@@ -16,15 +17,16 @@ class DeleteNotesAppBarUseCase
 
   @override
   Either<Failure, HomeAppBarEntity> call(DeleteNoteAppBarParams params) {
-    return repository.deleteNotes(params.notes);
+    return repository.deleteNotes(params.notes, params.box);
   }
 }
 
 class DeleteNoteAppBarParams extends Equatable {
   final List<Note> notes;
+  final WriteOn box;
 
-  DeleteNoteAppBarParams({@required this.notes});
+  DeleteNoteAppBarParams({@required this.notes, @required this.box,});
 
   @override
-  List<Object> get props => [notes];
+  List<Object> get props => [notes, box];
 }

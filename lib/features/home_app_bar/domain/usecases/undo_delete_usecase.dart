@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/Utils/write_on.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
 import '../../../note/domain/entities/note.dart';
@@ -16,15 +17,16 @@ class UndoDeleteNotesAppBarUseCase
 
   @override
   Either<Failure, HomeAppBarEntity> call(UndoDeleteNotesAppBarParams params) {
-    return repository.undoDelete(params.selectedNotes);
+    return repository.undoDelete(params.selectedNotes, params.box);
   }
 }
 
 class UndoDeleteNotesAppBarParams extends Equatable {
   final List<Note> selectedNotes;
+  final WriteOn box;
 
-  UndoDeleteNotesAppBarParams({@required this.selectedNotes});
+  UndoDeleteNotesAppBarParams({@required this.selectedNotes, @required this.box,});
 
   @override
-  List<Object> get props => [selectedNotes];
+  List<Object> get props => [selectedNotes, box];
 }

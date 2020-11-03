@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/note_tags/presentation/bloc/notetags_bloc.dart'
     as nT;
 
@@ -10,9 +11,12 @@ import '../bloc/tags_bloc.dart';
 class TagsList extends StatefulWidget {
   final BuildContext blocsContext;
   final String noteKey;
+  final WriteOn box;
+
   const TagsList({
     @required this.blocsContext,
     @required this.noteKey,
+    @required this.box,
     Key key,
   }) : super(key: key);
 
@@ -27,6 +31,7 @@ class _TagsListState extends State<TagsList> {
         AddTagOnNote(
           tagName: tagName,
           noteKey: widget.noteKey,
+          box: widget.box,
         ),
       );
       BlocProvider.of<nT.NoteTagsBloc>(widget.blocsContext).add(
@@ -39,6 +44,7 @@ class _TagsListState extends State<TagsList> {
         RemoveTagFromNote(
           tagName: tagName,
           noteKey: widget.noteKey,
+          box: widget.box,
         ),
       );
       BlocProvider.of<nT.NoteTagsBloc>(widget.blocsContext).add(
@@ -57,7 +63,7 @@ class _TagsListState extends State<TagsList> {
       builder: (context, state) {
         if (state is TagsInitial) {
           BlocProvider.of<TagsBloc>(context)
-              .add(GetTags(noteKey: widget.noteKey));
+              .add(GetTags(noteKey: widget.noteKey, box: widget.box));
         } else if (state is Loaded) {
           List<String> tags = state.tags;
           List<String> noteTags = state.noteTags;

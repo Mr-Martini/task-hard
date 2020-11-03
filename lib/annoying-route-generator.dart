@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_hard/features/archive_notes/presentation/pages/archive_notes.dart';
 
+import 'features/archive_notes/presentation/pages/archive_notes.dart';
 import 'features/home_notes/presentation/pages/home_page.dart';
 import 'features/note/presentation/pages/task_container.dart';
 import 'page-transitions/fade.dart';
@@ -9,7 +9,6 @@ import 'page-transitions/shared-axis-horizontal.dart';
 import 'page-transitions/slide-right-route.dart';
 import 'page-transitions/slide_bottom_route.dart';
 import 'views/about-screen/about-screen.dart';
-import 'views/archive-screen/archive-screen.dart';
 import 'views/feedback-screen/feedback-screen.dart';
 import 'views/main-screen/main-screen.dart';
 import 'views/new-task-screen/deleted-task.dart';

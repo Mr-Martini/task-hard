@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:task_hard/controllers/repeat-controller/repeat-controller.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/home_app_bar/data/datasources/home_app_local_data_source.dart';
 import 'package:task_hard/features/home_app_bar/data/model/home_app_bar_model.dart';
 import 'package:task_hard/features/home_app_bar/data/repositories/home_app_bar_repository_impl.dart';
@@ -58,11 +59,11 @@ void main() {
   test(
     'should return HomeAppBarModel with the specified color on each note',
     () {
-      when(dataSource.changeColor(any, any)).thenReturn(modelForChangeColor);
+      when(dataSource.changeColor(any, any, WriteOn.home)).thenReturn(modelForChangeColor);
 
-      final result = impl.changeColor(Colors.pink, notes);
+      final result = impl.changeColor(Colors.pink, notes, WriteOn.home);
 
-      verify(dataSource.changeColor(notes, Colors.pink));
+      verify(dataSource.changeColor(notes, Colors.pink, WriteOn.home));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForChangeColor));
     },
@@ -73,11 +74,11 @@ void main() {
   test(
     'should return HomeAppBarEntity with no notes when deleteNote is called',
     () {
-      when(dataSource.deleteNotes(any)).thenReturn(modelForDelete);
+      when(dataSource.deleteNotes(any, WriteOn.home)).thenReturn(modelForDelete);
 
-      final result = impl.deleteNotes(<Note>[]);
+      final result = impl.deleteNotes(<Note>[], WriteOn.home);
 
-      verify(dataSource.deleteNotes(<Note>[]));
+      verify(dataSource.deleteNotes(<Note>[], WriteOn.home));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForDelete));
     },
@@ -104,11 +105,11 @@ void main() {
     '''should return HomeAppBarEntity with the 
     specified notes when undoDelete is called''',
     () {
-      when(dataSource.undoDeleteNotes(any)).thenReturn(modelForUndoDelete);
+      when(dataSource.undoDeleteNotes(any, WriteOn.home)).thenReturn(modelForUndoDelete);
 
-      final result = impl.undoDelete(<Note>[noteForUndoDelete]);
+      final result = impl.undoDelete(<Note>[noteForUndoDelete], WriteOn.home);
 
-      verify(dataSource.undoDeleteNotes(<Note>[noteForUndoDelete]));
+      verify(dataSource.undoDeleteNotes(<Note>[noteForUndoDelete], WriteOn.home));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForUndoDelete));
     },
@@ -134,11 +135,11 @@ void main() {
   test(
     'should return a empty instance of HomeAppBarEntity when archiveNote is called',
     () {
-      when(dataSource.archiveNotes(any)).thenReturn(modelForArchiveNotes);
+      when(dataSource.archiveNotes(any, WriteOn.home)).thenReturn(modelForArchiveNotes);
 
-      final result = impl.archiveNotes(<Note>[noteForArchiveNotes]);
+      final result = impl.archiveNotes(<Note>[noteForArchiveNotes], WriteOn.home);
 
-      verify(dataSource.archiveNotes(<Note>[noteForArchiveNotes]));
+      verify(dataSource.archiveNotes(<Note>[noteForArchiveNotes], WriteOn.home));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForArchiveNotes));
     },
@@ -165,12 +166,12 @@ void main() {
     '''should return HomeAppBarEntity with the 
     specified notes when undoArchive is called''',
     () {
-      when(dataSource.undoArchiveNotes(any))
+      when(dataSource.undoArchiveNotes(any, WriteOn.home))
           .thenReturn(modelForUndoArchiveNotes);
 
-      final result = impl.undoArchive(<Note>[noteForUndoArchiveNotes]);
+      final result = impl.undoArchive(<Note>[noteForUndoArchiveNotes], WriteOn.home);
 
-      verify(dataSource.undoArchiveNotes(<Note>[noteForUndoArchiveNotes]));
+      verify(dataSource.undoArchiveNotes(<Note>[noteForUndoArchiveNotes], WriteOn.home));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForUndoArchiveNotes));
     },
@@ -200,14 +201,14 @@ void main() {
     '''should return HomeAppBarEntity with the 
     specified notes when putReminder is called''',
     () {
-      when(dataSource.putReminder(any, any, any))
+      when(dataSource.putReminder(any, any, any, WriteOn.home))
           .thenReturn(modelForPutReminder);
 
       final result =
-          impl.putReminder(<Note>[noteForPutReminder], reminder, repeat);
+          impl.putReminder(<Note>[noteForPutReminder], reminder, repeat, WriteOn.home);
 
       verify(
-          dataSource.putReminder(<Note>[noteForPutReminder], reminder, repeat));
+          dataSource.putReminder(<Note>[noteForPutReminder], reminder, repeat, WriteOn.home));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForPutReminder));
     },
@@ -233,11 +234,11 @@ void main() {
     '''should return HomeAppBarEntity with the 
     specified notes when deleteReminder is called''',
     () {
-      when(dataSource.deleteReminder(any)).thenReturn(modelForDeleteReminder);
+      when(dataSource.deleteReminder(any, WriteOn.home)).thenReturn(modelForDeleteReminder);
 
-      final result = impl.deleteReminder(<Note>[noteForDeleteReminder]);
+      final result = impl.deleteReminder(<Note>[noteForDeleteReminder], WriteOn.home);
 
-      verify(dataSource.deleteReminder(<Note>[noteForDeleteReminder]));
+      verify(dataSource.deleteReminder(<Note>[noteForDeleteReminder], WriteOn.home));
       verifyNoMoreInteractions(dataSource);
       expect(result, Right(modelForDeleteReminder));
     },

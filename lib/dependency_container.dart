@@ -199,8 +199,10 @@ Future<void> registerTags() async {
   //datasources
   sl.registerLazySingleton<TagsLocalDataSouce>(
     () => TagsLocalDataSouceImpl(
-      box: sl.get(instanceName: 'tags_box'),
+      tagBox: sl.get(instanceName: 'tags_box'),
       noteBox: sl.get(instanceName: 'home_notes'),
+      archiveBox: sl.get(instanceName: 'archive_notes'),
+      deletedBox: sl.get(instanceName: 'delete_notes'),
     ),
   );
 
@@ -677,7 +679,7 @@ Future<void> registerNoteReminder(List<int> key) async {
   );
 }
 
-Future<void> registerNoteTags(List<int> key) {
+Future<void> registerNoteTags(List<int> key) async {
   //bloc
   sl.registerFactory(
     () => NoteTagsBloc(

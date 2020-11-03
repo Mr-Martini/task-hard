@@ -71,12 +71,13 @@ class _HomeProviderState extends State<HomeProvider> {
             onWillPop: () async {
               if (sN.getNotes.isNotEmpty) {
                 sN.clear();
-                BlocProvider.of<HomeappbarBloc>(context).add(AddNote(selectedNotes: <Note>[]));
+                BlocProvider.of<HomeappbarBloc>(context)
+                    .add(AddNote(selectedNotes: <Note>[]));
                 return false;
               }
               return true;
             },
-                      child: Padding(
+            child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: CustomStaggeredGridView(
                 itemCount: state.notes.notes.length,

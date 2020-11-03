@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/note_tags/presentation/bloc/notetags_bloc.dart'
     as nT;
 import 'package:task_hard/features/tags/presentation/bloc/tags_bloc.dart';
@@ -8,10 +9,13 @@ import 'package:task_hard/generated/l10n.dart';
 class AddTagAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String noteKey;
   final BuildContext blocsContext;
+  final WriteOn box;
+
   AddTagAppBar({
     Key key,
     @required this.noteKey,
     @required this.blocsContext,
+    @required this.box,
   }) : super(key: key);
 
   @override
@@ -31,6 +35,7 @@ class _AddTagAppBarState extends State<AddTagAppBar> {
       AddTagOnNote(
         tagName: _text.trim(),
         noteKey: widget.noteKey,
+        box: widget.box,
       ),
     );
     BlocProvider.of<nT.NoteTagsBloc>(widget.blocsContext).add(

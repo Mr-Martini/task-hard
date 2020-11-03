@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/Utils/write_on.dart';
 import '../../../../core/error/failures.dart';
 import '../../../note/domain/entities/note.dart';
 import '../../domain/entities/tags.dart';
@@ -13,9 +14,9 @@ class TagsRepositoryImpl implements TagsRepository {
   TagsRepositoryImpl({@required this.dataSource});
 
   @override
-  Either<Failure, TagsEntity> getTags(String noteKey) {
+  Either<Failure, TagsEntity> getTags(String noteKey, WriteOn box) {
     try {
-      final tagEntity = dataSource.getTags(noteKey);
+      final tagEntity = dataSource.getTags(noteKey, box);
       return Right(tagEntity);
     } catch (e) {
       print(e);
@@ -24,9 +25,9 @@ class TagsRepositoryImpl implements TagsRepository {
   }
 
   @override
-  Either<Failure, TagsEntity> addTagOnNote(String noteKey, String tagName) {
+  Either<Failure, TagsEntity> addTagOnNote(String noteKey, String tagName, WriteOn box) {
     try {
-      final tagEntity = dataSource.addTagOnNote(noteKey, tagName);
+      final tagEntity = dataSource.addTagOnNote(noteKey, tagName, box);
       return Right(tagEntity);
     } catch (e) {
       print(e);
@@ -36,9 +37,9 @@ class TagsRepositoryImpl implements TagsRepository {
 
   @override
   Either<Failure, TagsEntity> removeTagFromNote(
-      String noteKey, String tagName) {
+      String noteKey, String tagName, WriteOn box) {
     try {
-      final tagEntity = dataSource.removeTagFronNote(noteKey, tagName);
+      final tagEntity = dataSource.removeTagFromNote(noteKey, tagName, box);
       return Right(tagEntity);
     } catch (e) {
       print(e);
@@ -58,9 +59,9 @@ class TagsRepositoryImpl implements TagsRepository {
   }
 
   @override
-  Either<Failure, TagsEntity> addTagOnList(List<Note> notes, String tagName) {
+  Either<Failure, TagsEntity> addTagOnList(List<Note> notes, String tagName, WriteOn box) {
     try {
-      final tagEntity = dataSource.addTagOnList(notes, tagName);
+      final tagEntity = dataSource.addTagOnList(notes, tagName, box);
       return Right(tagEntity);
     } catch (e) {
       print(e);
@@ -69,9 +70,9 @@ class TagsRepositoryImpl implements TagsRepository {
   }
 
   @override
-  Either<Failure, TagsEntity> getTagsForList(List<Note> notes) {
+  Either<Failure, TagsEntity> getTagsForList(List<Note> notes, WriteOn box) {
     try {
-      final tagEntity = dataSource.getTagForList(notes);
+      final tagEntity = dataSource.getTagForList(notes, box);
       return Right(tagEntity);
     } catch (e) {
       print(e);
@@ -81,9 +82,9 @@ class TagsRepositoryImpl implements TagsRepository {
 
   @override
   Either<Failure, TagsEntity> removeTagFromList(
-      List<Note> notes, String tagName) {
+      List<Note> notes, String tagName, WriteOn box) {
     try {
-      final tagEntity = dataSource.removeTagFromList(notes, tagName);
+      final tagEntity = dataSource.removeTagFromList(notes, tagName, box);
       return Right(tagEntity);
     } catch (e) {
       print(e);

@@ -9,7 +9,6 @@ abstract class ShowSnackBar {
   }) {
     final snackbar = SnackBar(
       behavior: SnackBarBehavior.floating,
-      duration: Duration(seconds: 10),
       content: Text(
         title,
         style: TextStyle(

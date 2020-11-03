@@ -221,5 +221,6 @@
   "choose_a_option": "Choose a option",
   "move_note_to_trash": "Move note to trash?",
   "archive_selected_notes": "Archive selected notes?",
-  "empty_note_discarted": "Empty note discarted"
+  "empty_note_discarted": "Empty note discarted",
+  "unarchived_selected_items": "Unarchived selected(s) item(s)?"
 }

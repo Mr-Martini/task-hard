@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:task_hard/features/archive_notes/presentation/bloc/archivednotes_bloc.dart'
+    as aN;
 import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart'
     as hN;
 import 'package:task_hard/features/note/presentation/bloc/note_bloc.dart';
@@ -202,6 +204,20 @@ class _TaskState extends State<Task> {
     return false;
   }
 
+  void updateNoteOnExit() {
+    switch (widget.box) {
+      case WriteOn.home:
+        BlocProvider.of<hN.HomenotesBloc>(widget.scaffoldKey.currentContext)
+            .add(hN.GetHomeNotes());
+        break;
+      case WriteOn.archive:
+        BlocProvider.of<aN.ArchivedNotesBloc>(widget.scaffoldKey.currentContext)
+            .add(aN.GetArchivedNotes());
+        break;
+      default:
+    }
+  }
+
   void archiveNote(S translate) {
     ShowDialog.alertDialog(
       context: context,
@@ -307,8 +323,7 @@ class _TaskState extends State<Task> {
             context: widget.scaffoldKey.currentContext,
           );
         } else {
-          BlocProvider.of<hN.HomenotesBloc>(widget.scaffoldKey.currentContext)
-              .add(hN.GetHomeNotes());
+          updateNoteOnExit();
         }
         return true;
       },
@@ -499,6 +514,7 @@ class _TaskState extends State<Task> {
                               builder: (context) => AddTag(
                                 blocsContext: blocsContext,
                                 noteKey: widget.noteKey,
+                                box: widget.box,
                               ),
                             );
                           },

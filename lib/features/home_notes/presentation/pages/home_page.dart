@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/Utils/home_selected_notes.dart';
+import '../../../../core/Utils/write_on.dart';
 import '../../../../core/widgets/side-drawer-component.dart';
 import '../../../../dependency_container.dart';
 import '../../../../generated/l10n.dart';
@@ -36,26 +37,19 @@ class _HomePageState extends State<HomePage> {
           BlocProvider(
             create: (context) => sl<HomeappbarBloc>(),
           ),
-          BlocProvider(
-            create: (context) => sl<HomenotesBloc>(),
-          ),
         ],
-        child: GestureDetector(
-          onTap: () {
-            Scaffold.of(context).hideCurrentSnackBar();
-          },
-          child: Scaffold(
-            key: _scaffoldKey,
-            appBar: HomeAppBar(
-              alertContext: context,
-              translate: translate,
-            ),
-            drawer: DrawerComponent(),
-            body: HomeProvider(translate: translate, scaffoldKey: _scaffoldKey),
-            floatingActionButton: HomeFloatingActionButton(
-              translate: translate,
-              scaffoldKey: _scaffoldKey,
-            ),
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: HomeAppBar(
+            alertContext: context,
+            translate: translate,
+            box: WriteOn.home,
+          ),
+          drawer: DrawerComponent(),
+          body: HomeProvider(translate: translate, scaffoldKey: _scaffoldKey),
+          floatingActionButton: HomeFloatingActionButton(
+            translate: translate,
+            scaffoldKey: _scaffoldKey,
           ),
         ),
       ),

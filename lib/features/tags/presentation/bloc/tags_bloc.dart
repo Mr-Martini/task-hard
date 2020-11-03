@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
@@ -43,13 +44,19 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     TagsEvent event,
   ) async* {
     if (event is GetTags) {
-      final tags = getTags(GetTagsParams(noteKey: event.noteKey));
+      final tags = getTags(
+        GetTagsParams(
+          noteKey: event.noteKey,
+          box: event.box,
+        ),
+      );
       yield* _eitherLoadOrError(tags);
     } else if (event is AddTagOnNote) {
       final tagEntity = addTagOnNote(
         AddTagOnNoteParams(
           tagName: event.tagName,
           noteKey: event.noteKey,
+          box: event.box,
         ),
       );
       yield* _eitherLoadOrError(tagEntity);
@@ -58,6 +65,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
         RemoveTagFromNoteParams(
           noteKey: event.noteKey,
           tagName: event.tagName,
+          box: event.box,
         ),
       );
       yield* _eitherLoadOrError(tagEntity);
@@ -69,6 +77,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
         AddTagOnListParams(
           notes: event.notes,
           tagName: event.tagName,
+          box: event.box,
         ),
       );
       yield* _eitherLoadOrError(tagEntity);
@@ -76,6 +85,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
       final tagEntity = getTagForList(
         GetTagForListParams(
           notes: event.notes,
+          box: event.box,
         ),
       );
       yield* _eitherLoadOrError(tagEntity);
@@ -84,6 +94,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
         RemoveTagFromListParams(
           notes: event.notes,
           tagName: event.tagName,
+          box: event.box,
         ),
       );
       yield* _eitherLoadOrError(tagEntity);

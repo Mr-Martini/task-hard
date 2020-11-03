@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/note/domain/entities/note.dart';
 import 'package:task_hard/features/tags/domain/entities/tags.dart';
 import 'package:task_hard/features/tags/domain/repositories/tags_repository.dart';
@@ -25,12 +26,12 @@ void main() {
   test(
     'should return Right<TagsEntity> when AddTagOnNoteUseCase is called',
     () {
-      when(repository.addTagOnNote(any, any)).thenReturn(Right(model));
+      when(repository.addTagOnNote(any, any, WriteOn.home)).thenReturn(Right(model));
 
       final result =
-          useCase(AddTagOnNoteParams(tagName: 'null', noteKey: 'null'));
+          useCase(AddTagOnNoteParams(tagName: 'null', noteKey: 'null', box: WriteOn.home));
 
-      verify(repository.addTagOnNote('null', 'null'));
+      verify(repository.addTagOnNote('null', 'null', WriteOn.home));
       verifyNoMoreInteractions(repository);
       expect(result, Right(model));
     },

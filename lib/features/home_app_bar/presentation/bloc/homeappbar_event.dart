@@ -19,69 +19,81 @@ class AddNote extends HomeappbarEvent {
 class ChangeColor extends HomeappbarEvent {
   final List<Note> selectedNotes;
   final Color color;
+  final WriteOn box;
 
-  ChangeColor({@required this.selectedNotes, @required this.color});
+  ChangeColor({
+    @required this.selectedNotes,
+    @required this.color,
+    @required this.box,
+  });
 
   @override
-  List<Object> get props => [selectedNotes, color];
+  List<Object> get props => [selectedNotes, color, box];
 }
 
 class DeleteNotes extends HomeappbarEvent {
   final List<Note> selectedNotes;
+  final WriteOn box;
 
-  DeleteNotes({@required this.selectedNotes});
+  DeleteNotes({@required this.selectedNotes, @required this.box,});
 
   @override
-  List<Object> get props => [selectedNotes];
+  List<Object> get props => [selectedNotes, box];
 }
 
 class UndoDeleteNotes extends HomeappbarEvent {
   final List<Note> selectedNotes;
+  final WriteOn box;
 
-  UndoDeleteNotes({@required this.selectedNotes});
+  UndoDeleteNotes({@required this.selectedNotes, @required this.box});
 
   @override
-  List<Object> get props => [selectedNotes];
+  List<Object> get props => [selectedNotes, box];
 }
 
 class ArchiveNotes extends HomeappbarEvent {
   final List<Note> selectedNotes;
+  final WriteOn box;
 
-  ArchiveNotes({@required this.selectedNotes});
+  ArchiveNotes({@required this.selectedNotes, @required this.box});
 
   @override
-  List<Object> get props => [selectedNotes];
+  List<Object> get props => [selectedNotes, box];
 }
 
 class UndoArchiveNotes extends HomeappbarEvent {
   final List<Note> selectedNotes;
+  final WriteOn box;
 
-  UndoArchiveNotes({@required this.selectedNotes});
+  UndoArchiveNotes({@required this.selectedNotes, @required this.box});
 
   @override
-  List<Object> get props => [selectedNotes];
+  List<Object> get props => [selectedNotes, box];
 }
 
 class PutReminder extends HomeappbarEvent {
   final List<Note> selectedNotes;
   final DateTime scheduledDate;
   final String repeat;
+  final WriteOn box;
 
   PutReminder({
     @required this.selectedNotes,
     @required this.scheduledDate,
     @required this.repeat,
+    @required this.box,
   });
 
   @override
-  List<Object> get props => [selectedNotes, scheduledDate, repeat];
+  List<Object> get props => [selectedNotes, scheduledDate, repeat, box];
 }
 
 class DeleteReminder extends HomeappbarEvent {
   final List<Note> selectedNotes;
+  final WriteOn box;
 
-  DeleteReminder({@required this.selectedNotes});
+  DeleteReminder({@required this.selectedNotes, @required this.box,});
 
   @override
-  List<Object> get props => [selectedNotes];
+  List<Object> get props => [selectedNotes, box];
 }

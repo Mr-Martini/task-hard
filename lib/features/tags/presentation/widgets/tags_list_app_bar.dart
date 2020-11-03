@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_hard/features/archive_notes/presentation/bloc/archivednotes_bloc.dart';
 
+import '../../../../core/Utils/write_on.dart';
 import '../../../../generated/l10n.dart';
 import '../../../home_notes/presentation/bloc/homenotes_bloc.dart';
 import '../../../note/domain/entities/note.dart';
@@ -9,10 +11,12 @@ import '../bloc/tags_bloc.dart';
 class TagsListAppBar extends StatefulWidget implements PreferredSizeWidget {
   final BuildContext selectedNotesContext;
   final List<Note> notes;
+  final WriteOn box;
   TagsListAppBar({
     Key key,
     @required this.selectedNotesContext,
     @required this.notes,
+    @required this.box,
   }) : super(key: key);
 
   @override
@@ -34,10 +38,20 @@ class _TagsListAppBarState extends State<TagsListAppBar> {
       AddTagOnList(
         tagName: _text.trim(),
         notes: widget.notes,
+        box: widget.box,
       ),
     );
-    BlocProvider.of<HomenotesBloc>(widget.selectedNotesContext)
-        .add(GetHomeNotes());
+    switch (widget.box) {
+      case WriteOn.home:
+        BlocProvider.of<HomenotesBloc>(widget.selectedNotesContext)
+            .add(GetHomeNotes());
+        break;
+      case WriteOn.archive:
+        BlocProvider.of<ArchivedNotesBloc>(widget.selectedNotesContext)
+            .add(GetArchivedNotes());
+        break;
+      default:
+    }
   }
 
   void onChanged(String newText) {

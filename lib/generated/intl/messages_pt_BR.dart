@@ -234,6 +234,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "type_a_new_tag" : MessageLookupByLibrary.simpleMessage("Digite um novo marcador"),
     "type_a_tag" : MessageLookupByLibrary.simpleMessage("Digite um marcador"),
     "unarchive" : MessageLookupByLibrary.simpleMessage("Desarquivar"),
+    "unarchived_selected_items" : MessageLookupByLibrary.simpleMessage("Desarquivar item(s) selecionado(s)?"),
     "undo" : MessageLookupByLibrary.simpleMessage("Desfazer"),
     "update_reminder" : MessageLookupByLibrary.simpleMessage("Atualizar lembrete"),
     "update_tag" : MessageLookupByLibrary.simpleMessage("Atualizar marcador"),
