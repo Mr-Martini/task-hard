@@ -21,5 +21,15 @@ class ArchivedNotesRepositoryImpl implements ArchiveNotesRepository {
       return Left(CacheFailure());
     }
   }
+
+  @override
+  Either<Failure, ArchivedNotes> expireCheckerArchive(Iterable<dynamic> iterable) {
+    try {
+      final notes = dataSource.expireCheckerArchive(iterable);
+      return Right(notes);
+    } catch (e) {
+      return Left(CacheFailure());
+    }
+  }
   
 }

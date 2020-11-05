@@ -12,7 +12,9 @@ abstract class HomeNotesDataSource {
 class HomeNotesDataSourceImpl implements HomeNotesDataSource {
   final Box<dynamic> homeNotesBox;
 
-  HomeNotesDataSourceImpl({@required this.homeNotesBox});
+  HomeNotesDataSourceImpl({
+    @required this.homeNotesBox,
+  });
 
   @override
   HomeNotesModel getNotes() {

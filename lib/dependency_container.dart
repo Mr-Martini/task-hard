@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:task_hard/features/archive_notes/data/datasources/archive_notes_local_data_source.dart';
 import 'package:task_hard/features/archive_notes/data/repositories/archive_notes_repository_impl.dart';
 import 'package:task_hard/features/archive_notes/domain/repositories/archive_notes_repository.dart';
+import 'package:task_hard/features/archive_notes/domain/usecases/archive_expire_checker.dart';
 import 'package:task_hard/features/archive_notes/domain/usecases/get_archive_notes_usecase.dart';
 import 'package:task_hard/features/archive_notes/presentation/bloc/archivednotes_bloc.dart';
 
@@ -113,12 +114,18 @@ Future<void> registerArchivedNotes(List<int> key) async {
   sl.registerFactory(
     () => ArchivedNotesBloc(
       getArchivedNotes: sl(),
+      expireChecker: sl(),
     ),
   );
 
   //usecases
   sl.registerLazySingleton(
     () => GetArchiveNotesUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => ExpireCheckerArchiveUseCase(
       repository: sl(),
     ),
   );
@@ -587,9 +594,7 @@ Future<void> registerHomeAppBar(List<int> key) async {
   //dataSources
   sl.registerLazySingleton<HomeAppBarLocalDataSource>(
     () => HomeAppBarLocalDataSourceImpl(
-      noteBox: sl.get(
-        instanceName: 'home_notes_app_bar'
-      ),
+      noteBox: sl.get(instanceName: 'home_notes_app_bar'),
       archiveBox: sl.get(instanceName: 'archive_notes'),
       deleteBox: sl.get(instanceName: 'delete_notes'),
     ),

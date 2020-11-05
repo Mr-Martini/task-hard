@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:dartz/dartz.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/theme_entity.dart';
@@ -19,6 +20,7 @@ class ThemeRepositoryImpl implements ThemeRepository {
       final theme = dataSource.getTheme();
       return Right(theme);
     } catch (e) {
+      FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
       return Left(CacheFailure());
     }
   }
@@ -29,6 +31,7 @@ class ThemeRepositoryImpl implements ThemeRepository {
       final theme = dataSource.setTheme(preference);
       return Right(theme);
     } catch (e) {
+      FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
       return Left(CacheFailure());
     }
   }
@@ -39,6 +42,7 @@ class ThemeRepositoryImpl implements ThemeRepository {
       final theme = dataSource.setColor(color);
       return Right(theme);
     } catch (e) {
+      FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
       return Left(CacheFailure());
     }
   }

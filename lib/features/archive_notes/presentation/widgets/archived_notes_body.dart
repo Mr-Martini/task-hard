@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:task_hard/core/Utils/archive_selected_notes.dart';
 import 'package:task_hard/core/Utils/arguments.dart';
+import 'package:task_hard/core/Utils/input_validation.dart';
 import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_bloc.dart'
     as hA;
@@ -77,24 +78,24 @@ class _ArchivedNotesBodyState extends State<ArchivedNotesBody> {
                     addOrRemove(value, note);
                   },
                   onTap: (bool isSelected) {
-                      if (aSN.getNotes.isEmpty) {
-                        Navigator.pushNamed(
-                          context,
-                          TaskContainer.id,
-                          arguments: Arguments(
-                            title: note.title,
-                            note: note.note,
-                            color: note.color ?? Theme.of(context).primaryColor,
-                            key: note.key,
-                            scaffoldKey: widget.scaffoldKey,
-                            context: context,
-                            box: WriteOn.archive,
-                          ),
-                        );
-                      } else {
-                        addOrRemove(isSelected, note);
-                      }
-                    },
+                    if (aSN.getNotes.isEmpty) {
+                      Navigator.pushNamed(
+                        context,
+                        TaskContainer.id,
+                        arguments: Arguments(
+                          title: note.title,
+                          note: note.note,
+                          color: note.color ?? Theme.of(context).primaryColor,
+                          key: note.key,
+                          scaffoldKey: widget.scaffoldKey,
+                          context: context,
+                          box: WriteOn.archive,
+                        ),
+                      );
+                    } else {
+                      addOrRemove(isSelected, note);
+                    }
+                  },
                 );
               },
             ),

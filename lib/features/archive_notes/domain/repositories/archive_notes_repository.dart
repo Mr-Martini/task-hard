@@ -5,4 +5,5 @@ import '../entities/archive_notes.dart';
 
 abstract class ArchiveNotesRepository {
   Either<Failure, ArchivedNotes> getArchiveNotes();
+  Either<Failure, ArchivedNotes> expireCheckerArchive(Iterable<dynamic> notes);
 }

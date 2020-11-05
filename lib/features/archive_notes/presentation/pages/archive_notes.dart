@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../core/Utils/archive_selected_notes.dart';
+import '../../../../core/Utils/arguments.dart';
 import '../../../../core/Utils/write_on.dart';
 import '../../../../core/widgets/side-drawer-component.dart';
 import '../../../../dependency_container.dart';
 import '../../../../generated/l10n.dart';
 import '../../../home_app_bar/presentation/bloc/homeappbar_bloc.dart';
 import '../../../home_app_bar/presentation/widgets/home_app_bar.dart';
+import '../../../note/presentation/pages/task_container.dart';
 import '../bloc/archivednotes_bloc.dart';
 import '../widgets/archived_notes_body.dart';
 
@@ -48,6 +51,25 @@ class _ArchivedNotesScreenState extends State<ArchivedNotesScreen> {
           body: ArchivedNotesBody(
             translate: translate,
             scaffoldKey: _scaffoldKey,
+          ),
+          floatingActionButton: FloatingActionButton(
+            tooltip: translate.new_note,
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                TaskContainer.id,
+                arguments: Arguments(
+                  box: WriteOn.archive,
+                  title: null,
+                  note: null,
+                  scaffoldKey: _scaffoldKey,
+                  color: Theme.of(context).primaryColor,
+                  context: context,
+                  key: Uuid().v4(),
+                ),
+              );
+            },
+            child: Icon(Icons.edit),
           ),
         ),
       ),
