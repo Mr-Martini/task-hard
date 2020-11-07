@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
-import 'package:task_hard/features/archive_notes/data/datasources/archive_notes_local_data_source.dart';
-import 'package:task_hard/features/archive_notes/data/repositories/archive_notes_repository_impl.dart';
-import 'package:task_hard/features/archive_notes/domain/repositories/archive_notes_repository.dart';
-import 'package:task_hard/features/archive_notes/domain/usecases/archive_expire_checker.dart';
-import 'package:task_hard/features/archive_notes/domain/usecases/get_archive_notes_usecase.dart';
-import 'package:task_hard/features/archive_notes/presentation/bloc/archivednotes_bloc.dart';
 
+import 'features/archive_notes/data/datasources/archive_notes_local_data_source.dart';
+import 'features/archive_notes/data/repositories/archive_notes_repository_impl.dart';
+import 'features/archive_notes/domain/repositories/archive_notes_repository.dart';
+import 'features/archive_notes/domain/usecases/archive_expire_checker.dart';
+import 'features/archive_notes/domain/usecases/delete_empty_notes_usecase.dart';
+import 'features/archive_notes/domain/usecases/get_archive_notes_usecase.dart';
+import 'features/archive_notes/presentation/bloc/archivednotes_bloc.dart';
 import 'features/home_app_bar/data/datasources/home_app_local_data_source.dart';
 import 'features/home_app_bar/data/repositories/home_app_bar_repository_impl.dart';
 import 'features/home_app_bar/domain/repositories/home_app_bar_repository.dart';
@@ -25,6 +26,7 @@ import 'features/home_app_bar/presentation/bloc/homeappbar_bloc.dart';
 import 'features/home_notes/data/datasources/home_notes.datasource.dart';
 import 'features/home_notes/data/repositories/home_notes_repository_impl.dart';
 import 'features/home_notes/domain/repositories/home_notes_repository.dart';
+import 'features/home_notes/domain/usecases/delete_empty_notes_usecase.dart';
 import 'features/home_notes/domain/usecases/expire_checker_usecase.dart';
 import 'features/home_notes/domain/usecases/get_notes_usecase.dart';
 import 'features/home_notes/domain/usecases/listen_notes_usecase.dart';
@@ -115,6 +117,7 @@ Future<void> registerArchivedNotes(List<int> key) async {
     () => ArchivedNotesBloc(
       getArchivedNotes: sl(),
       expireChecker: sl(),
+      deleteEmptyNotesArchive: sl(),
     ),
   );
 
@@ -126,6 +129,11 @@ Future<void> registerArchivedNotes(List<int> key) async {
   );
   sl.registerLazySingleton(
     () => ExpireCheckerArchiveUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => DeleteEmptyNotesArchiveUseCase(
       repository: sl(),
     ),
   );
@@ -227,6 +235,7 @@ Future<void> registerHomeNotes(List key) async {
       getNotes: sl(),
       listenNotes: sl(),
       expireChecker: sl(),
+      deleteEmptyNotes: sl(),
     ),
   );
 
@@ -243,6 +252,11 @@ Future<void> registerHomeNotes(List key) async {
   );
   sl.registerLazySingleton(
     () => ExpireCheckerUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => DeleteEmptyNotesUseCase(
       repository: sl(),
     ),
   );
@@ -424,42 +438,42 @@ Future<void> registerTimePreference() async {
 
 Future<void> registerTheme() async {
   //Bloc theme
-  sl.registerLazySingleton(
-    () => ThemeBloc(
-      getTheme: sl(),
-      setTheme: sl(),
-      setColor: sl(),
+  sl.registerLazySingletonAsync(
+    () async => ThemeBloc(
+      getTheme: await sl.getAsync(),
+      setTheme: await sl.getAsync(),
+      setColor: await sl.getAsync(),
     ),
   );
 
   //usecases
-  sl.registerLazySingleton(
-    () => GetThemeDataUseCase(
-      sl(),
+  sl.registerLazySingletonAsync(
+    () async => GetThemeDataUseCase(
+      await sl.getAsync(),
     ),
   );
-  sl.registerLazySingleton(
-    () => SetThemeUseCase(
-      sl(),
+  sl.registerLazySingletonAsync(
+    () async => SetThemeUseCase(
+      await sl.getAsync(),
     ),
   );
-  sl.registerLazySingleton(
-    () => SetMainColorUseCase(
-      sl(),
+  sl.registerLazySingletonAsync(
+    () async => SetMainColorUseCase(
+      await sl.getAsync(),
     ),
   );
 
   //repository
-  sl.registerLazySingleton<ThemeRepository>(
-    () => ThemeRepositoryImpl(
-      sl(),
+  sl.registerLazySingletonAsync<ThemeRepository>(
+    () async => ThemeRepositoryImpl(
+      await sl.getAsync(),
     ),
   );
 
   //datasources
-  sl.registerLazySingleton<ThemeLocalDataSource>(
-    () => ThemeLocalDataSourceImpl(
-      themeBox: sl.get(instanceName: 'theme_preferences'),
+  sl.registerLazySingletonAsync<ThemeLocalDataSource>(
+    () async => ThemeLocalDataSourceImpl(
+      themeBox: await sl.getAsync(instanceName: 'theme_preferences'),
     ),
   );
 

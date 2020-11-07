@@ -16,3 +16,11 @@ class ExpireCheckerArchive extends ArchivedNotesEvent {
   @override
   List<Object> get props => [notes];
 }
+
+class DeleteEmptyNotesArchive extends ArchivedNotesEvent {
+  final Iterable<dynamic> notes;
+
+  DeleteEmptyNotesArchive({@required this.notes});
+  @override
+  List<Object> get props => [notes];
+}

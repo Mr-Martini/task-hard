@@ -304,27 +304,7 @@ class _TaskState extends State<Task> {
 
     return WillPopScope(
       onWillPop: () async {
-        if (InputValidation.isEmpty(title) && InputValidation.isEmpty(note)) {
-          BlocProvider.of<NoteBloc>(context)
-            ..add(
-              DeleteNoteReminder(
-                key: widget.noteKey,
-                box: widget.box,
-              ),
-            )
-            ..add(
-              DeleteNote(
-                key: widget.noteKey,
-                box: widget.box,
-              ),
-            );
-          ShowSnackBar.show(
-            title: translate.empty_note_discarted,
-            context: widget.scaffoldKey.currentContext,
-          );
-        } else {
-          updateNoteOnExit();
-        }
+        updateNoteOnExit();
         return true;
       },
       child: GestureDetector(

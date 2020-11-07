@@ -26,3 +26,12 @@ class ExpireChecker extends HomenotesEvent {
   @override
   List<Object> get props => [notes];
 }
+
+class DeleteEmptyNotes extends HomenotesEvent {
+  final Iterable<Note> notes;
+
+  DeleteEmptyNotes({@required this.notes});
+
+  @override
+  List<Object> get props => [notes];
+}

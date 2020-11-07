@@ -13,6 +13,7 @@ import '../../../../dependency_container.dart';
 import '../../../note/domain/entities/note.dart';
 import '../../domain/entities/archive_notes.dart';
 import '../../domain/usecases/archive_expire_checker.dart';
+import '../../domain/usecases/delete_empty_notes_usecase.dart';
 import '../../domain/usecases/get_archive_notes_usecase.dart';
 
 part 'archivednotes_event.dart';
@@ -21,9 +22,12 @@ part 'archivednotes_state.dart';
 class ArchivedNotesBloc extends Bloc<ArchivedNotesEvent, ArchivedNotesState> {
   final GetArchiveNotesUseCase getArchivedNotes;
   final ExpireCheckerArchiveUseCase expireChecker;
-  ArchivedNotesBloc(
-      {@required this.getArchivedNotes, @required this.expireChecker})
-      : super(ArchivedNotesInitial());
+  final DeleteEmptyNotesArchiveUseCase deleteEmptyNotesArchive;
+  ArchivedNotesBloc({
+    @required this.getArchivedNotes,
+    @required this.expireChecker,
+    @required this.deleteEmptyNotesArchive,
+  }) : super(ArchivedNotesInitial());
 
   Timer _timer;
 
@@ -36,7 +40,12 @@ class ArchivedNotesBloc extends Bloc<ArchivedNotesEvent, ArchivedNotesState> {
       final notes = getArchivedNotes(NoParams());
       yield* _eitherLoadedOrError(notes);
     } else if (event is ExpireCheckerArchive) {
-      final notes = expireChecker(ExpireCheckerArchiveParams(notes: event.notes));
+      final notes =
+          expireChecker(ExpireCheckerArchiveParams(notes: event.notes));
+      yield* _eitherLoadedOrError(notes);
+    } else if (event is DeleteEmptyNotesArchive) {
+      final notes = deleteEmptyNotesArchive(
+          DeleteEmptyNotesArchiveParams(notes: event.notes));
       yield* _eitherLoadedOrError(notes);
     }
   }

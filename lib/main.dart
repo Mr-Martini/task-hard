@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -37,44 +35,7 @@ Future<void> main() async {
 
   await di.init();
 
-  FlutterSecureStorage storage = FlutterSecureStorage();
-
-  String keyAsString = await storage.read(key: 'key');
-
-  List<int> key = [];
-
-  if (keyAsString == null) {
-    key = Hive.generateSecureKey();
-    String encKey = jsonEncode(key);
-    await storage.write(key: 'key', value: encKey);
-  } else {
-    List<dynamic> aux = jsonDecode(keyAsString);
-    key = List<int>.from(aux);
-  }
-
-  var futures = <Future>[];
-
-  futures.addAll([
-    Hive.openBox('notes', encryptionKey: key),
-    Hive.openBox('tags'),
-  ]);
-
-  await Future.wait(futures);
-
-  runApp(HigherProvider());
-}
-
-class HigherProvider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => SelectedValuesController()),
-        ChangeNotifierProvider(create: (_) => ViewController()),
-      ],
-      child: TaskHard(),
-    );
-  }
+  runApp(TaskHard());
 }
 
 class TaskHard extends StatefulWidget {
@@ -85,25 +46,36 @@ class TaskHard extends StatefulWidget {
 class _TaskHardState extends State<TaskHard> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => sl<HomenotesBloc>(),
-        ),
-        BlocProvider(
-          create: (_) => sl<ThemeBloc>(),
-        ),
-        BlocProvider(
-          create: (_) => sl<TimepreferenceBloc>(),
-        ),
-        BlocProvider(
-          create: (_) => sl<TagednoteshomeblocBloc>(),
-        ),
-        BlocProvider(
-          create: (_) => sl<VisualizationOptionBloc>(),
-        ),
-      ],
-      child: TopMain(),
+    return FutureBuilder(
+      future: di.sl.getAsync<ThemeBloc>(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => sl<HomenotesBloc>(),
+                ),
+                BlocProvider(
+                  create: (_) => sl<TimepreferenceBloc>(),
+                ),
+                BlocProvider<ThemeBloc>(
+                  create: (_) => snapshot.data,
+                ),
+                BlocProvider(
+                  create: (_) => sl<TagednoteshomeblocBloc>(),
+                ),
+                BlocProvider(
+                  create: (_) => sl<VisualizationOptionBloc>(),
+                ),
+              ],
+              child: TopMain(),
+            );
+          }
+          return Container();
+        }
+        return Container();
+      },
     );
   }
 }

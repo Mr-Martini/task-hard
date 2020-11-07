@@ -51,7 +51,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   Stream<ThemeState> _eitherFailureOrSuccess(
       Either<Failure, ThemeEntity> theme) async* {
     yield theme.fold(
-      (failure) => Error(message: CACHE_FAILURE),
+      (failure) => Error(message: 'Something went wrong'),
       (theme) => Loaded(theme: theme),
     );
   }

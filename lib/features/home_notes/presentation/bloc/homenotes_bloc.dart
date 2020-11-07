@@ -10,7 +10,10 @@ import 'package:hive/hive.dart';
 import '../../../../controllers/repeat-controller/repeat-controller.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecases.dart';
+import '../../../../dependency_container.dart';
+import '../../../note/domain/entities/note.dart';
 import '../../domain/entities/home_notes.dart';
+import '../../domain/usecases/delete_empty_notes_usecase.dart';
 import '../../domain/usecases/expire_checker_usecase.dart';
 import '../../domain/usecases/get_notes_usecase.dart';
 import '../../domain/usecases/listen_notes_usecase.dart';
@@ -22,6 +25,7 @@ class HomenotesBloc extends Bloc<HomenotesEvent, HomenotesState> {
   final GetNotesUseCase getNotes;
   final ListenNotesUseCase listenNotes;
   final ExpireCheckerUseCase expireChecker;
+  final DeleteEmptyNotesUseCase deleteEmptyNotes;
 
   Timer _timer;
 
@@ -29,6 +33,7 @@ class HomenotesBloc extends Bloc<HomenotesEvent, HomenotesState> {
     @required this.getNotes,
     @required this.listenNotes,
     @required this.expireChecker,
+    @required this.deleteEmptyNotes,
   }) : super(HomenotesInitial());
 
   @override
@@ -44,6 +49,9 @@ class HomenotesBloc extends Bloc<HomenotesEvent, HomenotesState> {
       yield* _eitherFailureOrSuccess(list);
     } else if (event is ExpireChecker) {
       final list = expireChecker(ExpireCheckerParams(notes: event.notes));
+      yield* _eitherFailureOrSuccess(list);
+    } else if (event is DeleteEmptyNotes) {
+      final list = deleteEmptyNotes(DeleteEmptyNotesParams(notes: event.notes));
       yield* _eitherFailureOrSuccess(list);
     }
   }
@@ -61,8 +69,7 @@ class HomenotesBloc extends Bloc<HomenotesEvent, HomenotesState> {
     _timer = Timer.periodic(
       Duration(seconds: 4),
       (timer) async {
-        await Hive.openBox('notes');
-        Box<dynamic> box = Hive.box('notes');
+        Box<dynamic> box = sl.get(instanceName: 'home_notes');
         Iterable<dynamic> notes = box.values;
         Iterable<dynamic> filtered = notes.where(
           (element) {

@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../../../components/empty-folder-component/empty-folder.dart';
 import '../../../../core/Utils/arguments.dart';
 import '../../../../core/Utils/home_selected_notes.dart';
+import '../../../../core/Utils/input_validation.dart';
+import '../../../../core/Utils/snackbar_context.dart';
 import '../../../../core/Utils/write_on.dart';
 import '../../../../generated/l10n.dart';
 import '../../../home_app_bar/presentation/bloc/homeappbar_bloc.dart';
@@ -32,6 +34,12 @@ class HomeProvider extends StatefulWidget {
 class _HomeProviderState extends State<HomeProvider> {
   HomeSelectedNotes sN;
 
+  @override
+  void didChangeDependencies() {
+    BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
+    super.didChangeDependencies();
+  }
+
   void addOrRemoveNote(bool isSelected, Note note) {
     if (!isSelected) {
       sN.addNote = note;
@@ -56,9 +64,7 @@ class _HomeProviderState extends State<HomeProvider> {
 
     return BlocBuilder<hN.HomenotesBloc, hN.HomenotesState>(
       builder: (context, state) {
-        if (state is hN.HomenotesInitial) {
-          BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
-        } else if (state is hN.Loaded) {
+        if (state is hN.Loaded) {
           if (state.notes.notes.isEmpty) {
             return EmptyFolder(
               androidIcon: Icons.note,
@@ -66,6 +72,19 @@ class _HomeProviderState extends State<HomeProvider> {
               iOSIcon: Icons.note,
               toolTip: widget.translate.notes,
             );
+          }
+          Iterable<Note> emptyNotes = state.notes.notes.where((element) =>
+              InputValidation.isEmpty(element.title) &&
+              InputValidation.isEmpty(element.note));
+          if (emptyNotes.isNotEmpty) {
+            BlocProvider.of<hN.HomenotesBloc>(context)
+                .add(hN.DeleteEmptyNotes(notes: emptyNotes));
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              ShowSnackBar.show(
+                context: context,
+                title: widget.translate.empty_note_discarted,
+              );
+            });
           }
           return WillPopScope(
             onWillPop: () async {

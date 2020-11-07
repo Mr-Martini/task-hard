@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:task_hard/core/Utils/archive_selected_notes.dart';
-import 'package:task_hard/core/Utils/arguments.dart';
-import 'package:task_hard/core/Utils/input_validation.dart';
-import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/home_app_bar/presentation/bloc/homeappbar_bloc.dart'
     as hA;
 import 'package:task_hard/features/home_app_bar/presentation/widgets/material_card_app_bar_container.dart';
 import 'package:task_hard/features/note/presentation/pages/task_container.dart';
 
 import '../../../../components/empty-folder-component/empty-folder.dart';
+import '../../../../core/Utils/archive_selected_notes.dart';
+import '../../../../core/Utils/arguments.dart';
+import '../../../../core/Utils/input_validation.dart';
+import '../../../../core/Utils/snackbar_context.dart';
+import '../../../../core/Utils/write_on.dart';
 import '../../../../generated/l10n.dart';
 import '../../../note/domain/entities/note.dart';
 import '../../../visualization_option/presentation/widgets/staggered_grid_view.dart';
@@ -65,6 +66,19 @@ class _ArchivedNotesBodyState extends State<ArchivedNotesBody> {
               iOSIcon: Icons.archive,
               toolTip: widget.translate.no_notes_archived,
             );
+          }
+          Iterable<Note> emptyNotes = state.notes.where((element) =>
+              InputValidation.isEmpty(element.title) &&
+              InputValidation.isEmpty(element.note));
+          if (emptyNotes.isNotEmpty) {
+            BlocProvider.of<ArchivedNotesBloc>(context)
+                .add(DeleteEmptyNotesArchive(notes: emptyNotes.toList()));
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              ShowSnackBar.show(
+                context: context,
+                title: widget.translate.empty_note_discarted,
+              );
+            });
           }
           return Padding(
             padding: EdgeInsets.all(8),
