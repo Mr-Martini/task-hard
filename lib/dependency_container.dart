@@ -11,6 +11,11 @@ import 'features/archive_notes/domain/usecases/archive_expire_checker.dart';
 import 'features/archive_notes/domain/usecases/delete_empty_notes_usecase.dart';
 import 'features/archive_notes/domain/usecases/get_archive_notes_usecase.dart';
 import 'features/archive_notes/presentation/bloc/archivednotes_bloc.dart';
+import 'features/delete_notes/data/datasources/deleted_notes_local_data_source.dart';
+import 'features/delete_notes/data/repositories/deleted_notes_repository_impl.dart';
+import 'features/delete_notes/domain/repositories/deleted_notes_repository.dart';
+import 'features/delete_notes/domain/usecases/get_notes_usecase.dart';
+import 'features/delete_notes/presentation/bloc/deletednotes_bloc.dart';
 import 'features/home_app_bar/data/datasources/home_app_local_data_source.dart';
 import 'features/home_app_bar/data/repositories/home_app_bar_repository_impl.dart';
 import 'features/home_app_bar/domain/repositories/home_app_bar_repository.dart';
@@ -100,6 +105,7 @@ Future<void> init() async {
   List<int> key = await getEncKey();
   await registerHomeNotes(key);
   await registerArchivedNotes(key);
+  await registerDeletedNotes(key);
   await registerTagedNotesHome();
   await registerTimePreference();
   await registerTheme();
@@ -109,6 +115,40 @@ Future<void> init() async {
   await registerNoteReminder(key);
   await registerNoteTags(key);
   await registerTags();
+}
+
+Future<void> registerDeletedNotes(List<int> key) async {
+  //bloc
+  sl.registerFactory(
+    () => DeletedNotesBloc(
+      getDeletedNotes: sl(),
+    ),
+  );
+
+  //usecases
+  sl.registerLazySingleton(
+    () => GetDeletedNotesUseCase(
+      repository: sl(),
+    ),
+  );
+
+  //repository
+  sl.registerLazySingleton<DeletedNotesRepository>(
+    () => DeletedNotesRepositoryImpl(
+      dataSource: sl(),
+    ),
+  );
+
+  //dataSource
+  sl.registerLazySingleton<DeletedNotesLocalDataSource>(
+    () => DeletedNotesLocalDataSourceImpl(
+      archiveBox: sl.get(instanceName: 'archive_notes'),
+      deleteBox: sl.get(instanceName: 'delete_notes'),
+      homeBox: sl.get(instanceName: 'home_notes'),
+    ),
+  );
+
+  //external
 }
 
 Future<void> registerArchivedNotes(List<int> key) async {
