@@ -154,6 +154,11 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
         note = homeBox.get(key, defaultValue: {});
         homeBox.delete(key);
         break;
+      case WriteOn.archive:
+        note = archiveBox.get(key, defaultValue: {});
+        homeBox.put(key, note);
+        archiveBox.delete(key);
+        break;  
       default:
     }
     archiveBox.put(key, note);

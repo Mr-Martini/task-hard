@@ -133,117 +133,124 @@ class _DeletedTaskState extends State<DeletedTask> {
         updateNoteOnExit();
         return true;
       },
-      child: GestureDetector(
-        onTap: () {
-          ShowSnackBar.show(
-              context: context, title: translate.restore_to_edited);
-        },
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            floatingActionButtonTheme: FloatingActionButtonThemeData(
-              backgroundColor: getFABcolor(),
-            ),
-            scaffoldBackgroundColor: getScaffoldColor(),
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: getFABcolor(),
+          ),
+          scaffoldBackgroundColor: getScaffoldColor(),
+          iconTheme: IconThemeData(
+            color: getIconsColor(),
+          ),
+          appBarTheme: AppBarTheme(
+            color: getScaffoldColor(),
             iconTheme: IconThemeData(
               color: getIconsColor(),
             ),
-            appBarTheme: AppBarTheme(
-              color: getScaffoldColor(),
-              iconTheme: IconThemeData(
-                color: getIconsColor(),
-              ),
-            ),
-            bottomAppBarColor: getScaffoldColor(),
-            textTheme: getTextColor(),
           ),
-          child: Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              leading: BackButton(),
-              title: NoteTags(
-                chipBackgroundColor: getFABcolor(),
-                textColor: getFABchildColor(),
-                noteKey: widget.noteKey,
-                box: widget.box,
-              ),
-              actions: [],
+          bottomAppBarColor: getScaffoldColor(),
+          textTheme: getTextColor(),
+        ),
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            leading: BackButton(),
+            title: NoteTags(
+              chipBackgroundColor: getFABcolor(),
+              textColor: getFABchildColor(),
+              noteKey: widget.noteKey,
+              box: widget.box,
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    TextField(
-                      textCapitalization: TextCapitalization.sentences,
-                      style: TextStyle(
-                        fontSize: 25,
-                      ),
-                      autofocus: false,
-                      autocorrect: true,
-                      enabled: false,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      onSubmitted: (value) {
-                        _noteFocusNode.requestFocus();
-                      },
-                      controller: _titleController,
-                      decoration: InputDecoration(
-                        hintText: translate.note_title,
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
+            actions: [],
+          ),
+          body: Builder(
+            builder: (context) => GestureDetector(
+              onTap: () {
+                Scaffold.of(context).hideCurrentSnackBar();
+                ShowSnackBar.show(
+                  context: context,
+                  title: translate.restore_to_edited,
+                  color: color == Colors.white ? Colors.black87 : null,
+                  textColor: color == Colors.white ? Colors.white : null,
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      TextField(
+                        textCapitalization: TextCapitalization.sentences,
+                        style: TextStyle(
                           fontSize: 25,
-                          color: Colors.grey,
                         ),
-                      ),
-                      minLines: 1,
-                      maxLines: null,
-                    ),
-                    Divider(),
-                    TextField(
-                      textCapitalization: TextCapitalization.sentences,
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                      autofocus: false,
-                      autocorrect: true,
-                      enabled: false,
-                      focusNode: _noteFocusNode,
-                      controller: _noteController,
-                      textInputAction: TextInputAction.newline,
-                      decoration: InputDecoration(
-                        hintText: translate.note_note,
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
+                        autofocus: false,
+                        autocorrect: true,
+                        enabled: false,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        onSubmitted: (value) {
+                          _noteFocusNode.requestFocus();
+                        },
+                        controller: _titleController,
+                        decoration: InputDecoration(
+                          hintText: translate.note_title,
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                            fontSize: 25,
+                            color: Colors.grey,
+                          ),
                         ),
+                        minLines: 1,
+                        maxLines: null,
                       ),
-                      minLines: 1,
-                      maxLines: null,
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    TaskReminder(
-                      noteKey: widget.noteKey,
-                      fabChildColor: getFABchildColor(),
-                      fabColor: getFABcolor(),
-                      translate: translate,
-                      box: widget.box,
-                    ),
-                  ],
+                      Divider(),
+                      TextField(
+                        textCapitalization: TextCapitalization.sentences,
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                        autofocus: false,
+                        autocorrect: true,
+                        enabled: false,
+                        focusNode: _noteFocusNode,
+                        controller: _noteController,
+                        textInputAction: TextInputAction.newline,
+                        decoration: InputDecoration(
+                          hintText: translate.note_note,
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        minLines: 1,
+                        maxLines: null,
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      TaskReminder(
+                        noteKey: widget.noteKey,
+                        fabChildColor: getFABchildColor(),
+                        fabColor: getFABcolor(),
+                        translate: translate,
+                        box: widget.box,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {},
-              child: IconGeneric(
-                androidIcon: Icons.restore_from_trash,
-                iOSIcon: Icons.restore_from_trash,
-                semanticLabel: translate.restore,
-                toolTip: translate.restore,
-                color: getFABchildColor(),
-              ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {},
+            child: IconGeneric(
+              androidIcon: Icons.restore_from_trash,
+              iOSIcon: Icons.restore_from_trash,
+              semanticLabel: translate.restore,
+              toolTip: translate.restore,
+              color: getFABchildColor(),
             ),
           ),
         ),

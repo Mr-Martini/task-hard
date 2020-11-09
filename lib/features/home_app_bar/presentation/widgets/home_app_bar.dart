@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:task_hard/core/Utils/archive_selected_notes.dart';
-import 'package:task_hard/core/Utils/write_on.dart';
 import 'package:task_hard/features/archive_notes/presentation/bloc/archivednotes_bloc.dart'
     as aN;
+import 'package:task_hard/features/delete_notes/presentation/bloc/deletednotes_bloc.dart';
 import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart'
     as hN;
 import 'package:task_hard/features/note/domain/entities/note.dart';
@@ -17,8 +16,11 @@ import 'package:task_hard/generated/l10n.dart';
 import '../../../../components/color-selector-component/color-selector-component.dart';
 import '../../../../core/Utils/alert_dialog.dart';
 import '../../../../core/Utils/alert_reminder_params.dart';
+import '../../../../core/Utils/archive_selected_notes.dart';
+import '../../../../core/Utils/deleted_selected_notes.dart';
 import '../../../../core/Utils/home_selected_notes.dart';
 import '../../../../core/Utils/snackbar_context.dart';
+import '../../../../core/Utils/write_on.dart';
 import '../../../../core/widgets/profile_icon_button.dart';
 import '../bloc/homeappbar_bloc.dart';
 
@@ -81,6 +83,10 @@ class _HomeAppBarState extends State<HomeAppBar>
         ArchiveSelectedNotes archiveProvider =
             Provider.of<ArchiveSelectedNotes>(context, listen: false);
         return List<Note>.from(archiveProvider.getNotes);
+      case WriteOn.deleted:
+        DeletedSelectedNotes trashProvider =
+            Provider.of<DeletedSelectedNotes>(context, listen: false);
+        return List<Note>.from(trashProvider.getNotes);
       default:
         return <Note>[];
     }
@@ -97,6 +103,9 @@ class _HomeAppBarState extends State<HomeAppBar>
         if (shouldUpdateHome(option)) {
           BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
         }
+        break;
+      case WriteOn.deleted:
+        BlocProvider.of<DeletedNotesBloc>(context).add(GetDeletedNotes());
         break;
       default:
     }
@@ -128,6 +137,11 @@ class _HomeAppBarState extends State<HomeAppBar>
         ArchiveSelectedNotes archiveProvider =
             Provider.of<ArchiveSelectedNotes>(context, listen: false);
         archiveProvider.clear();
+        break;
+      case WriteOn.deleted:
+        DeletedSelectedNotes trashProvider =
+            Provider.of<DeletedSelectedNotes>(context, listen: false);
+        trashProvider.clear();
         break;
       default:
     }
@@ -169,6 +183,19 @@ class _HomeAppBarState extends State<HomeAppBar>
           return <Note>[];
         } else if (state is aN.Loaded) {
           Provider.of<ArchiveSelectedNotes>(context, listen: false).setList =
+              List<Note>.from(state.notes);
+          return state.notes;
+        }
+        return <Note>[];
+        break;
+      case WriteOn.deleted:
+        final DeletedNotesState state =
+            BlocProvider.of<DeletedNotesBloc>(context).state;
+
+        if (state is DeletedNotesInitial) {
+          return <Note>[];
+        } else if (state is DeletedNotesLoaded) {
+          Provider.of<DeletedSelectedNotes>(context, listen: false).setList =
               List<Note>.from(state.notes);
           return state.notes;
         }
@@ -252,7 +279,7 @@ class _HomeAppBarState extends State<HomeAppBar>
     ShowDialog.alertDialog(
       context: context,
       flatText: widget.translate.cancel,
-      title: widget.box != WriteOn.deleted
+      title: widget.box == WriteOn.deleted
           ? widget.translate.delete_selected_notes
           : widget.translate.move_note_to_trash,
       raisedOnPressed: () {
@@ -392,6 +419,72 @@ class _HomeAppBarState extends State<HomeAppBar>
     }
   }
 
+  List<Widget> actions() {
+    if (widget.box == WriteOn.deleted) {
+      return <Widget>[
+        IconButton(
+          icon: Icon(Icons.restore_from_trash),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(Icons.delete_forever),
+          onPressed: deleteNotes,
+        ),
+      ];
+    }
+    return <Widget>[
+      IconButton(
+        icon: Icon(Icons.add_alert),
+        onPressed: showReminder,
+      ),
+      PopupMenuButton<HomeAppBarPoUpMenuOption>(
+        onSelected: onSelected,
+        itemBuilder: (context) => <PopupMenuEntry<HomeAppBarPoUpMenuOption>>[
+          PopupMenuItem<HomeAppBarPoUpMenuOption>(
+            value: HomeAppBarPoUpMenuOption.change_color,
+            child: ListTile(
+              leading: Icon(Icons.palette),
+              title: Text(widget.translate.change_color),
+              subtitle: Divider(),
+            ),
+          ),
+          PopupMenuItem<HomeAppBarPoUpMenuOption>(
+            value: HomeAppBarPoUpMenuOption.delete,
+            child: ListTile(
+              leading: Icon(Icons.delete),
+              title: Text(widget.translate.delete),
+              subtitle: Divider(),
+            ),
+          ),
+          PopupMenuItem<HomeAppBarPoUpMenuOption>(
+            value: HomeAppBarPoUpMenuOption.archive,
+            child: ListTile(
+              leading: Icon(Icons.archive),
+              title: Text(widget.translate.archive),
+              subtitle: Divider(),
+            ),
+          ),
+          PopupMenuItem<HomeAppBarPoUpMenuOption>(
+            value: HomeAppBarPoUpMenuOption.select_all,
+            child: ListTile(
+              leading: Icon(Icons.select_all),
+              title: Text(widget.translate.select_all),
+              subtitle: Divider(),
+            ),
+          ),
+          PopupMenuItem<HomeAppBarPoUpMenuOption>(
+            value: HomeAppBarPoUpMenuOption.tags,
+            child: ListTile(
+              leading: Icon(Icons.label),
+              title: Text(widget.translate.tags),
+              subtitle: Divider(),
+            ),
+          ),
+        ],
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeappbarBloc, HomeappbarState>(
@@ -450,58 +543,7 @@ class _HomeAppBarState extends State<HomeAppBar>
                   color: Theme.of(context).textTheme.headline6.color,
                 ),
               ),
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.add_alert),
-                  onPressed: showReminder,
-                ),
-                PopupMenuButton<HomeAppBarPoUpMenuOption>(
-                  onSelected: onSelected,
-                  itemBuilder: (context) =>
-                      <PopupMenuEntry<HomeAppBarPoUpMenuOption>>[
-                    PopupMenuItem<HomeAppBarPoUpMenuOption>(
-                      value: HomeAppBarPoUpMenuOption.change_color,
-                      child: ListTile(
-                        leading: Icon(Icons.palette),
-                        title: Text(widget.translate.change_color),
-                        subtitle: Divider(),
-                      ),
-                    ),
-                    PopupMenuItem<HomeAppBarPoUpMenuOption>(
-                      value: HomeAppBarPoUpMenuOption.delete,
-                      child: ListTile(
-                        leading: Icon(Icons.delete),
-                        title: Text(widget.translate.delete),
-                        subtitle: Divider(),
-                      ),
-                    ),
-                    PopupMenuItem<HomeAppBarPoUpMenuOption>(
-                      value: HomeAppBarPoUpMenuOption.archive,
-                      child: ListTile(
-                        leading: Icon(Icons.archive),
-                        title: Text(widget.translate.archive),
-                        subtitle: Divider(),
-                      ),
-                    ),
-                    PopupMenuItem<HomeAppBarPoUpMenuOption>(
-                      value: HomeAppBarPoUpMenuOption.select_all,
-                      child: ListTile(
-                        leading: Icon(Icons.select_all),
-                        title: Text(widget.translate.select_all),
-                        subtitle: Divider(),
-                      ),
-                    ),
-                    PopupMenuItem<HomeAppBarPoUpMenuOption>(
-                      value: HomeAppBarPoUpMenuOption.tags,
-                      child: ListTile(
-                        leading: Icon(Icons.label),
-                        title: Text(widget.translate.tags),
-                        subtitle: Divider(),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+              actions: actions(),
             );
           }
           leadingAnimation.reverse();

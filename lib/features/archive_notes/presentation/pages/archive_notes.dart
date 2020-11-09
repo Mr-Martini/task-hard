@@ -54,6 +54,7 @@ class _ArchivedNotesScreenState extends State<ArchivedNotesScreen> {
           ),
           floatingActionButton: FloatingActionButton(
             tooltip: translate.new_note,
+            backgroundColor: Theme.of(context).buttonColor,
             onPressed: () {
               Navigator.pushNamed(
                 context,

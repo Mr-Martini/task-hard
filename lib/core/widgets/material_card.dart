@@ -22,19 +22,19 @@ class MaterialCard extends StatelessWidget {
     if (note.tags == null || note.tags.isEmpty) {
       return Container();
     }
+
     return ListView.builder(
       padding: EdgeInsets.symmetric(horizontal: 16),
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       itemCount: note.tags.length,
       itemBuilder: (context, index) {
-        Color cardColor =
-            note.color ?? Theme.of(context).scaffoldBackgroundColor;
+        Color cardColor = note.color ?? Theme.of(context).primaryColor;
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Chip(
-              elevation: 8,
+              elevation: 2,
               backgroundColor: isSelected ? Colors.grey : cardColor,
               label: Text(
                 note.tags[index],

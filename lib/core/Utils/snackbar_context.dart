@@ -6,17 +6,19 @@ abstract class ShowSnackBar {
     @required String title,
     String actionMessage,
     VoidCallback action,
+    Color color,
+    Color textColor,
   }) {
     final snackbar = SnackBar(
       behavior: SnackBarBehavior.floating,
       content: Text(
         title,
         style: TextStyle(
-          color: Theme.of(context).textTheme.headline6.color,
+          color: textColor ?? Theme.of(context).textTheme.headline6.color,
         ),
       ),
       elevation: 12,
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: color ?? Theme.of(context).primaryColor,
       action: actionMessage != null
           ? SnackBarAction(
               label: actionMessage,

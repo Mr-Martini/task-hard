@@ -82,7 +82,7 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
           deleteBox.put(note.key, note.toMap());
           break;
         case WriteOn.deleted:
-          deleteBox.put(note.key, note.toMap());
+          deleteBox.delete(note.key);
           break;
         default:
       }
@@ -103,7 +103,7 @@ class HomeAppBarLocalDataSourceImpl implements HomeAppBarLocalDataSource {
           archiveBox.put(note.key, note.toMap());
           deleteBox.delete(note.key);
           break;
-        case WriteOn.archive:
+        case WriteOn.deleted:
           deleteBox.put(note.key, note.toMap());
           break;
         default:
