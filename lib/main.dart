@@ -8,10 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
 
-import 'controllers/selectedValues-controller/selected-values-controller.dart';
-import 'controllers/view-controller/view-controller.dart';
 import 'dependency_container.dart' as di;
 import 'dependency_container.dart';
 import 'features/home_notes/presentation/bloc/homenotes_bloc.dart';

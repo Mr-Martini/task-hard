@@ -9,9 +9,13 @@ abstract class NoteReminderEvent extends Equatable {
 
 class GetNoteReminder extends NoteReminderEvent {
   final String noteKey;
+  final WriteOn box;
 
-  GetNoteReminder({@required this.noteKey});
+  GetNoteReminder({
+    @required this.noteKey,
+    @required this.box,
+  });
 
   @override
-  List<Object> get props => [noteKey];
+  List<Object> get props => [noteKey, box];
 }

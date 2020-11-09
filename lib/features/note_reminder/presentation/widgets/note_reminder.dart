@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 
 import '../../../../core/Utils/date_formater.dart';
 import '../../../../generated/l10n.dart';
@@ -12,12 +13,14 @@ class TaskReminder extends StatefulWidget {
   final Color fabColor;
   final Color fabChildColor;
   final S translate;
+  final WriteOn box;
   const TaskReminder({
     Key key,
     @required this.noteKey,
     @required this.fabChildColor,
     @required this.fabColor,
     @required this.translate,
+    @required this.box,
   }) : super(key: key);
 
   @override
@@ -40,6 +43,7 @@ class _TaskReminderState extends State<TaskReminder> {
           BlocProvider.of<NoteReminderBloc>(context).add(
             GetNoteReminder(
               noteKey: widget.noteKey,
+              box: widget.box,
             ),
           );
         },
@@ -61,6 +65,7 @@ class _TaskReminderState extends State<TaskReminder> {
           BlocProvider.of<NoteReminderBloc>(context).add(
             GetNoteReminder(
               noteKey: widget.noteKey,
+              box: widget.box,
             ),
           );
         }

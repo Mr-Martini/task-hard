@@ -12,6 +12,7 @@ import 'package:task_hard/generated/l10n.dart';
 
 import '../../../../components/icon-components/icon-generic.dart';
 import '../../../../controllers/colors-controller/color-controller.dart';
+import '../../../../core/Utils/snackbar_context.dart';
 import '../../../../core/Utils/write_on.dart';
 
 class DeletedTask extends StatefulWidget {
@@ -134,9 +135,8 @@ class _DeletedTaskState extends State<DeletedTask> {
       },
       child: GestureDetector(
         onTap: () {
-          _noteFocusNode.unfocus();
-          _titleFocusNode.unfocus();
-          Scaffold.of(context).hideCurrentSnackBar();
+          ShowSnackBar.show(
+              context: context, title: translate.restore_to_edited);
         },
         child: Theme(
           data: Theme.of(context).copyWith(
@@ -229,6 +229,7 @@ class _DeletedTaskState extends State<DeletedTask> {
                       fabChildColor: getFABchildColor(),
                       fabColor: getFABcolor(),
                       translate: translate,
+                      box: widget.box,
                     ),
                   ],
                 ),

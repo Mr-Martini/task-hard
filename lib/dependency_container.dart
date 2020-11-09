@@ -727,7 +727,9 @@ Future<void> registerNoteReminder(List<int> key) async {
   //dataSources
   sl.registerLazySingleton<NoteReminderLocalDataSource>(
     () => NoteReminderLocalDataSourceImpl(
-      box: sl.get(instanceName: 'note_reminder'),
+      homeBox: sl.get(instanceName: 'home_notes'),
+      archiveBox: sl.get(instanceName: 'archive_notes'),
+      trashBox: sl.get(instanceName: 'delete_notes'),
     ),
   );
 

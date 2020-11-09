@@ -48,7 +48,6 @@ class HomeNotesRepositoryImpl implements HomeNotesRepository {
   Either<Failure, HomeNotes> deleteEmptyNotes(Iterable<Note> notes) {
     try {
       final list = dataSource.deleteEmptyNotes(notes);
-      (notes);
       return Right(list);
     } catch (e) {
       print(e);

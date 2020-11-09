@@ -10,7 +10,6 @@ import '../../../../dependency_container.dart';
 import '../../../../generated/l10n.dart';
 import '../../../home_app_bar/presentation/bloc/homeappbar_bloc.dart';
 import '../../../home_app_bar/presentation/widgets/home_app_bar.dart';
-import '../bloc/homenotes_bloc.dart';
 import '../widgets/home_floating_action_button.dart';
 import '../widgets/home_provider.dart';
 

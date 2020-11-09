@@ -51,29 +51,6 @@ void main() {
       );
 
       test(
-        'should return the expectedMap when Daiy_Repeat is called',
-        () async {
-          final time = DateTime.now().add(Duration(hours: 4));
-
-          final expectedMap = <String, dynamic>{
-            "title": "title",
-            "message": "message",
-            "id": "key".hashCode,
-            "time": time.millisecondsSinceEpoch,
-          };
-
-          final result = await ReminderController.scheduleNotification(
-            'key',
-            'title',
-            'message',
-            'key'.hashCode,
-            time,
-            Repeat.DAILY_REPEAT,
-          );
-        },
-      );
-
-      test(
         'should add 1 day if time is outdated when daily_repeat',
         () async {
           final now = DateTime.now();

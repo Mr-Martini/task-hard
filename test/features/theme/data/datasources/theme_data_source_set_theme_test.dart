@@ -48,33 +48,4 @@ void main() {
       expect(result, expectedModel);
     },
   );
-
-  final expectedColorModel = ThemeModel(
-    themeData: ThemeData().copyWith(
-      buttonColor: Colors.blue,
-      primaryColor: Colors.white,
-      textTheme: Typography.blackRedmond,
-      appBarTheme: AppBarTheme(
-        iconTheme: IconThemeData(
-          color: Typography.blackRedmond.headline6.color,
-        ),
-      ),
-    ),
-    preference: themePreference.automatic.toString(),
-    mainColor: Colors.blue,
-    darkTheme: ThemeData.dark().copyWith(
-      buttonColor: Colors.blue,
-      textTheme: Typography.whiteRedmond,
-      appBarTheme: AppBarTheme(
-        iconTheme: IconThemeData(
-          color: Typography.whiteRedmond.headline6.color,
-        ),
-      ),
-    ),
-  );
-
-  final colorModel = {
-    'theme': themePreference.automatic.toString(),
-    'color': 'blue',
-  };
 }

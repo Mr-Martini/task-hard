@@ -95,6 +95,7 @@ class _TaskState extends State<Task> {
     BlocProvider.of<nR.NoteReminderBloc>(context).add(
       nR.GetNoteReminder(
         noteKey: widget.noteKey,
+        box: widget.box,
       ),
     );
   }
@@ -109,6 +110,7 @@ class _TaskState extends State<Task> {
     BlocProvider.of<nR.NoteReminderBloc>(context).add(
       nR.GetNoteReminder(
         noteKey: widget.noteKey,
+        box: widget.box,
       ),
     );
   }
@@ -453,6 +455,7 @@ class _TaskState extends State<Task> {
                       fabChildColor: getFABchildColor(),
                       fabColor: getFABcolor(),
                       translate: translate,
+                      box: widget.box,
                     ),
                   ],
                 ),

@@ -31,6 +31,7 @@ abstract class ReminderController {
         return data;
       } on PlatformException catch (e) {
         debugPrint(e.toString());
+        return {};
       }
     } else if (repeat == Repeat.DAILY_REPEAT) {
       if (scheduledDate.isBefore(now)) {
@@ -58,6 +59,7 @@ abstract class ReminderController {
         return data;
       } on PlatformException catch (e) {
         debugPrint(e.toString());
+        return {};
       }
     } else if (repeat == Repeat.WEEKLY_REPEAT) {
       if (scheduledDate.isBefore(now)) {
@@ -99,8 +101,10 @@ abstract class ReminderController {
         return data;
       } on PlatformException catch (e) {
         debugPrint(e.toString());
+        return {};
       }
     }
+    return {};
   }
 
   static void cancel(int id) async {

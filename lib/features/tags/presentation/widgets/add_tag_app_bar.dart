@@ -41,6 +41,7 @@ class _AddTagAppBarState extends State<AddTagAppBar> {
     BlocProvider.of<nT.NoteTagsBloc>(widget.blocsContext).add(
       nT.GetTags(
         noteKey: widget.noteKey,
+        box: widget.box,
       ),
     );
   }

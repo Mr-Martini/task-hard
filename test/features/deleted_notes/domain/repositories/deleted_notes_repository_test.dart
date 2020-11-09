@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:task_hard/core/error/exceptions.dart';
 import 'package:task_hard/core/error/failures.dart';
 import 'package:task_hard/features/delete_notes/domain/entities/deleted_notes.dart';
 import 'package:task_hard/features/delete_notes/domain/repositories/deleted_notes_repository.dart';

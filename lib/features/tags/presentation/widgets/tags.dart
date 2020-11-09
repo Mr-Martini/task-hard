@@ -37,6 +37,7 @@ class _TagsListState extends State<TagsList> {
       BlocProvider.of<nT.NoteTagsBloc>(widget.blocsContext).add(
         nT.GetTags(
           noteKey: widget.noteKey,
+          box: widget.box,
         ),
       );
     } else {
@@ -50,6 +51,7 @@ class _TagsListState extends State<TagsList> {
       BlocProvider.of<nT.NoteTagsBloc>(widget.blocsContext).add(
         nT.GetTags(
           noteKey: widget.noteKey,
+          box: widget.box,
         ),
       );
     }

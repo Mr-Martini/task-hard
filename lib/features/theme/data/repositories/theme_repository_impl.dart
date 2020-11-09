@@ -19,7 +19,7 @@ class ThemeRepositoryImpl implements ThemeRepository {
     try {
       final theme = dataSource.getTheme();
       return Right(theme);
-    } on NoSuchMethodError catch (e) {
+    } on NoSuchMethodError{
       return Left(ThemeBlocNotReady());
     } catch (e) {
       FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
