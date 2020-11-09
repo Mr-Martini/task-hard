@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:task_hard/features/home_notes/presentation/bloc/homenotes_bloc.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/Utils/archive_selected_notes.dart';
@@ -33,44 +34,50 @@ class _ArchivedNotesScreenState extends State<ArchivedNotesScreen> {
   Widget build(BuildContext context) {
     S translate = S.of(context);
 
-    return ChangeNotifierProvider(
-      create: (_) => ArchiveSelectedNotes(),
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => sl<ArchivedNotesBloc>()),
-          BlocProvider(create: (context) => sl<HomeappbarBloc>()),
-        ],
-        child: Scaffold(
-          key: _scaffoldKey,
-          drawer: DrawerComponent(),
-          appBar: HomeAppBar(
-            alertContext: context,
-            translate: translate,
-            box: WriteOn.archive,
-          ),
-          body: ArchivedNotesBody(
-            translate: translate,
-            scaffoldKey: _scaffoldKey,
-          ),
-          floatingActionButton: FloatingActionButton(
-            tooltip: translate.new_note,
-            backgroundColor: Theme.of(context).buttonColor,
-            onPressed: () {
-              Navigator.pushNamed(
-                context,
-                TaskContainer.id,
-                arguments: Arguments(
-                  box: WriteOn.archive,
-                  title: null,
-                  note: null,
-                  scaffoldKey: _scaffoldKey,
-                  color: Theme.of(context).primaryColor,
-                  context: context,
-                  key: Uuid().v4(),
-                ),
-              );
-            },
-            child: Icon(Icons.edit),
+    return WillPopScope(
+      onWillPop: () async {
+        BlocProvider.of<HomenotesBloc>(context).add(GetHomeNotes());
+        return true;
+      },
+      child: ChangeNotifierProvider(
+        create: (_) => ArchiveSelectedNotes(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => sl<ArchivedNotesBloc>()),
+            BlocProvider(create: (context) => sl<HomeappbarBloc>()),
+          ],
+          child: Scaffold(
+            key: _scaffoldKey,
+            drawer: DrawerComponent(),
+            appBar: HomeAppBar(
+              alertContext: context,
+              translate: translate,
+              box: WriteOn.archive,
+            ),
+            body: ArchivedNotesBody(
+              translate: translate,
+              scaffoldKey: _scaffoldKey,
+            ),
+            floatingActionButton: FloatingActionButton(
+              tooltip: translate.new_note,
+              backgroundColor: Theme.of(context).buttonColor,
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  TaskContainer.id,
+                  arguments: Arguments(
+                    box: WriteOn.archive,
+                    title: null,
+                    note: null,
+                    scaffoldKey: _scaffoldKey,
+                    color: Theme.of(context).primaryColor,
+                    context: context,
+                    key: Uuid().v4(),
+                  ),
+                );
+              },
+              child: Icon(Icons.edit),
+            ),
           ),
         ),
       ),

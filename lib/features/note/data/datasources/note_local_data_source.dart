@@ -152,6 +152,7 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
     switch (box) {
       case WriteOn.home:
         note = homeBox.get(key, defaultValue: {});
+        archiveBox.put(key, note);
         homeBox.delete(key);
         break;
       case WriteOn.archive:
@@ -161,7 +162,6 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
         break;  
       default:
     }
-    archiveBox.put(key, note);
 
     return NoteModel.fromMap(note);
   }

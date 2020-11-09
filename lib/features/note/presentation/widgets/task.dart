@@ -206,7 +206,7 @@ class _TaskState extends State<Task> {
     return false;
   }
 
-  void updateNoteOnExit() {
+  void listen() {
     switch (widget.box) {
       case WriteOn.home:
         BlocProvider.of<hN.HomenotesBloc>(widget.scaffoldKey.currentContext)
@@ -226,7 +226,9 @@ class _TaskState extends State<Task> {
       flatText: translate.cancel,
       icon: Icons.archive,
       material: true,
-      title: translate.archive_note_question,
+      title: widget.box == WriteOn.archive
+          ? translate.unarchive + ' ' + translate.note_note + '?'
+          : translate.archive_note_question,
       raisedOnPressed: () {
         BlocProvider.of<NoteBloc>(context).add(
           ArchiveNote(
@@ -234,9 +236,8 @@ class _TaskState extends State<Task> {
             box: widget.box,
           ),
         );
-        BlocProvider.of<hN.HomenotesBloc>(widget.scaffoldKey.currentContext)
-            .add(hN.GetHomeNotes());
         Navigator.pop(context);
+        listen();
         Navigator.pop(context);
       },
       raisedText: translate.Ok,
@@ -306,7 +307,7 @@ class _TaskState extends State<Task> {
 
     return WillPopScope(
       onWillPop: () async {
-        updateNoteOnExit();
+        listen();
         return true;
       },
       child: GestureDetector(
