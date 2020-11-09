@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'features/archive_notes/presentation/pages/archive_notes.dart';
+import 'features/delete_notes/presentation/pages/deleted_note_container.dart';
+import 'features/delete_notes/presentation/pages/deleted_notes_page.dart';
 import 'features/home_notes/presentation/pages/home_page.dart';
 import 'features/note/presentation/pages/task_container.dart';
 import 'page-transitions/fade.dart';
@@ -11,7 +13,6 @@ import 'page-transitions/slide_bottom_route.dart';
 import 'views/about-screen/about-screen.dart';
 import 'views/feedback-screen/feedback-screen.dart';
 import 'views/main-screen/main-screen.dart';
-import 'views/new-task-screen/deleted-task.dart';
 import 'views/new-task-screen/new-task-screen.dart';
 import 'views/profile-screen/profile-screen.dart';
 import 'views/search-screen/search-screen.dart';
@@ -21,7 +22,6 @@ import 'views/settings-screen/personalization-screen.dart';
 import 'views/settings-screen/settings-screen.dart';
 import 'views/tags-screen/tag-screen.dart';
 import 'views/tags-screen/tags-screen.dart';
-import 'views/trash-screen/trash-screen.dart';
 
 class AnnoyingRouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -48,16 +48,16 @@ class AnnoyingRouteGenerator {
         return FadeRoute(page: Account(), settings: routeSettings);
       case ArchivedNotesScreen.id:
         return FadeRoute(page: ArchivedNotesScreen(), settings: routeSettings);
-      case TrashScreen.id:
-        return FadeRoute(page: TrashScreen(), settings: routeSettings);
+      case DeletedNotesPage.id:
+        return FadeRoute(page: DeletedNotesPage(), settings: routeSettings);
       case GeneralScreen.id:
         return FadeRoute(page: GeneralScreen(), settings: routeSettings);
       case TagsScreen.id:
         return FadeRoute(page: TagsScreen(), settings: routeSettings);
       case TagScreen.id:
         return FadeRoute(page: TagScreen(), settings: routeSettings);
-      case DeletedTaskScreen.id:
-        return ScaleRoute(page: DeletedTaskScreen(), settings: routeSettings);
+      case DeletedTaskContainer.id:
+        return ScaleRoute(page: DeletedTaskContainer(), settings: routeSettings);
       case AboutScreen.id:
         return SlideRightRoute(page: AboutScreen(), settings: routeSettings);
       case TaskContainer.id:

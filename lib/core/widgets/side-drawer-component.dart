@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../components/icon-components/icon-generic.dart';
 import '../../components/text-components/text-generic.dart';
 import '../../features/archive_notes/presentation/pages/archive_notes.dart';
+import '../../features/delete_notes/presentation/pages/deleted_notes_page.dart';
 import '../../features/tags/presentation/widgets/tag_list_drawer.dart';
 import '../../generated/l10n.dart';
 import '../../views/feedback-screen/feedback-screen.dart';
@@ -74,7 +75,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
               Navigator.pop(context);
               Navigator.pushNamed(
                 context,
-                ArchivedNotesScreen.id
+                DeletedNotesPage.id
               );
             },
             child: ListTile(
