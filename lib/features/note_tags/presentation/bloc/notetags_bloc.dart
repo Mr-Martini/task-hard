@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:task_hard/core/Utils/write_on.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/note_tags.dart';
@@ -22,7 +23,12 @@ class NoteTagsBloc extends Bloc<NoteTagsEvent, NoteTagsState> {
     NoteTagsEvent event,
   ) async* {
     if (event is GetTags) {
-      final tags = getNoteTags(GetNoteTagsParams(noteKey: event.noteKey));
+      final tags = getNoteTags(
+        GetNoteTagsParams(
+          noteKey: event.noteKey,
+          box: event.box,
+        ),
+      );
       yield* _eitherLoadOrError(tags);
     }
   }

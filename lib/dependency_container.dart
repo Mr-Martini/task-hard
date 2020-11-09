@@ -763,7 +763,9 @@ Future<void> registerNoteTags(List<int> key) async {
   //datasources
   sl.registerLazySingleton<NoteTagsLocalDataSource>(
     () => NoteTagsLocalDataSourceImpl(
-      box: sl.get(instanceName: 'note_tags'),
+      homeBox: sl.get(instanceName: 'note_tags'),
+      archiveBox: sl.get(instanceName: 'archive_notes'),
+      trashBox: sl.get(instanceName: 'delete_notes'),
     ),
   );
 

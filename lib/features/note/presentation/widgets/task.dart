@@ -339,6 +339,7 @@ class _TaskState extends State<Task> {
                 chipBackgroundColor: getFABcolor(),
                 textColor: getFABchildColor(),
                 noteKey: widget.noteKey,
+                box: widget.box,
               ),
               actions: [
                 IconButton(

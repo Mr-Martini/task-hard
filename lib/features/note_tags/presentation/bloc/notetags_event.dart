@@ -9,9 +9,13 @@ abstract class NoteTagsEvent extends Equatable {
 
 class GetTags extends NoteTagsEvent {
   final String noteKey;
+  final WriteOn box;
 
-  GetTags({@required this.noteKey});
+  GetTags({
+    @required this.noteKey,
+    @required this.box,
+  });
 
   @override
-  List<Object> get props => [noteKey];
+  List<Object> get props => [noteKey, box];
 }

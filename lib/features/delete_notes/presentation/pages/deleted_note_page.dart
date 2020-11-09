@@ -164,6 +164,7 @@ class _DeletedTaskState extends State<DeletedTask> {
                 chipBackgroundColor: getFABcolor(),
                 textColor: getFABchildColor(),
                 noteKey: widget.noteKey,
+                box: widget.box,
               ),
               actions: [],
             ),
