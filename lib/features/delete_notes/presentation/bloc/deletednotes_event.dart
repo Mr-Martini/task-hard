@@ -8,3 +8,12 @@ abstract class DeletedNotesEvent extends Equatable {
 }
 
 class GetDeletedNotes extends DeletedNotesEvent {}
+
+class RestoreNotes extends DeletedNotesEvent {
+  final List<Note> notes;
+
+  RestoreNotes({@required this.notes});
+
+  @override
+  List<Object> get props => [notes];
+}

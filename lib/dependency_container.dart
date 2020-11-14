@@ -15,6 +15,7 @@ import 'features/delete_notes/data/datasources/deleted_notes_local_data_source.d
 import 'features/delete_notes/data/repositories/deleted_notes_repository_impl.dart';
 import 'features/delete_notes/domain/repositories/deleted_notes_repository.dart';
 import 'features/delete_notes/domain/usecases/get_notes_usecase.dart';
+import 'features/delete_notes/domain/usecases/restore_notes_usecase.dart';
 import 'features/delete_notes/presentation/bloc/deletednotes_bloc.dart';
 import 'features/home_app_bar/data/datasources/home_app_local_data_source.dart';
 import 'features/home_app_bar/data/repositories/home_app_bar_repository_impl.dart';
@@ -122,12 +123,18 @@ Future<void> registerDeletedNotes(List<int> key) async {
   sl.registerFactory(
     () => DeletedNotesBloc(
       getDeletedNotes: sl(),
+      restoreNotes: sl(),
     ),
   );
 
   //usecases
   sl.registerLazySingleton(
     () => GetDeletedNotesUseCase(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => RestoreNotesUseCase(
       repository: sl(),
     ),
   );

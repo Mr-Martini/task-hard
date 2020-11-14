@@ -31,6 +31,7 @@ enum HomeAppBarPoUpMenuOption {
   select_all,
   tags,
   reminder,
+  restore,
 }
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -106,6 +107,9 @@ class _HomeAppBarState extends State<HomeAppBar>
         break;
       case WriteOn.deleted:
         BlocProvider.of<DeletedNotesBloc>(context).add(GetDeletedNotes());
+        if (shouldUpdateHome(option)) {
+          BlocProvider.of<hN.HomenotesBloc>(context).add(hN.GetHomeNotes());
+        }
         break;
       default:
     }
@@ -121,6 +125,8 @@ class _HomeAppBarState extends State<HomeAppBar>
         break;
       case HomeAppBarPoUpMenuOption.reminder:
         return true;
+      case HomeAppBarPoUpMenuOption.restore:
+        return true;  
       default:
         return false;
     }
@@ -270,6 +276,28 @@ class _HomeAppBarState extends State<HomeAppBar>
             clearSelectedItems();
           },
         );
+      },
+    );
+  }
+
+  void restoreNotes() {
+    List<Note> selectedNotes = getSelectedItems();
+    clearSelectedItems();
+    ShowDialog.alertDialog(
+      context: context,
+      flatText: widget.translate.cancel,
+      title: widget.translate.restore_all_notes_question,
+      raisedText: widget.translate.restore,
+      raisedOnPressed: () {
+        BlocProvider.of<DeletedNotesBloc>(context).add(
+          RestoreNotes(
+            notes: selectedNotes,
+          ),
+        );
+        BlocProvider.of<HomeappbarBloc>(context)
+            .add(AddNote(selectedNotes: <Note>[]));
+        Navigator.pop(context);
+        listen(HomeAppBarPoUpMenuOption.restore);
       },
     );
   }
@@ -424,7 +452,7 @@ class _HomeAppBarState extends State<HomeAppBar>
       return <Widget>[
         IconButton(
           icon: Icon(Icons.restore_from_trash),
-          onPressed: () {},
+          onPressed: restoreNotes,
         ),
         IconButton(
           icon: Icon(Icons.delete_forever),

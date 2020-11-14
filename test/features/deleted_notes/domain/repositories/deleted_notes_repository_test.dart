@@ -23,6 +23,7 @@ void main() {
     () {
       final rightModel = DeletedNotes(notes: <Note>[]);
       final leftModel = CacheFailure();
+      final notes = <Note>[];
 
       test(
         'Should return Right<DeletedNotes> when getNotes is successfully called',
@@ -45,6 +46,20 @@ void main() {
           final result = repository.getNotes();
 
           verify(repository.getNotes());
+          verifyNoMoreInteractions(repository);
+          expect(result, Left(leftModel));
+        },
+      );
+
+      
+      test(
+        'should return Left<Failure> when restoreNotes is unsuccessfully called',
+        () {
+          when(repository.restoreNotes(notes)).thenReturn(Left(leftModel));
+
+          final result = repository.restoreNotes(notes);
+
+          verify(repository.restoreNotes(notes));
           verifyNoMoreInteractions(repository);
           expect(result, Left(leftModel));
         },
